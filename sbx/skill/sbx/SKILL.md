@@ -5,7 +5,7 @@ description: Run code, builds, tests, dev servers, or a browser in a disposable,
 
 # sbx
 
-`sbx` creates Firecracker microVMs in about 30 ms. Each one is a Debian machine with Node.js 24 and pnpm, Go, Python 3.13 and uv, build tools, ffmpeg, ImageMagick, Chromium, and CJK fonts. It reaches the internet but not the LAN. Commands run as `user` with passwordless sudo, in `/home/user`.
+`sbx` creates Firecracker microVMs in about 30 ms. Each one is a Debian machine with Node.js 24 and pnpm, Go, Python 3.13 and uv, build tools, ffmpeg, ImageMagick, Chromium, CJK fonts, and a desktop. It reaches the internet but not the LAN. Commands run as `user` with passwordless sudo, in `/home/user`.
 
 Run `sbx --help` and `sbx <command> --help` for every option.
 
@@ -31,10 +31,14 @@ One-off command: `sbx run -- python3 -c 'print(1)'` creates, runs, and removes a
 - Sandboxes are removed after 1 hour without activity. Change it with `sbx ttl $id 4h`, or `0` to keep. Remove sandboxes you no longer need.
 - Save a prepared machine with `sbx snapshot $id NAME`, then `sbx create NAME`. Try alternatives from one state with `sbx fork $id`.
 
+## Screen
+
+Every sandbox has a desktop, and GUI programs you start appear on it. When the user wants to watch, create with `sbx create --view`, or run `sbx view $id` later. It opens a small window on the user's screen and returns at once.
+
 ## Browser
 
 ```sh
-id=$(sbx create browser)                 # Chromium is already running
+id=$(sbx create browser --view)          # Chromium is already open; the user watches it
 sbx forward $id 9222 &                   # DevTools protocol on 127.0.0.1:9222
 ```
 
