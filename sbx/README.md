@@ -11,6 +11,8 @@ sbx expose $id 5173                    # http://sbx-host:30000
 sbx rm $id
 ```
 
+[ARCH.md](ARCH.md) explains the design, with diagrams of every flow.
+
 `sbx --help` is written for agents: every command has examples, `create` prints only the ID, `exec` exits with the command's own exit code, and read commands take `--json`. To give an agent sbx, install the CLI where it runs and copy `skill/sbx/` to `~/.claude/skills/`, which Claude Code and Grok both read.
 
 ## Requirements
