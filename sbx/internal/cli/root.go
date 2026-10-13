@@ -437,7 +437,7 @@ func loginCmd() *cobra.Command {
 		Use:     "login URL",
 		Short:   "Save the sbxd address and API token",
 		Long:    "Save the address and token to " + configPath() + ". The token is in /etc/sbx/token on the sbx host; without --token it is read from stdin.",
-		Example: "  ssh sbx-host sudo cat /etc/sbx/token | sbx login http://192.168.1.33:7070",
+		Example: "  ssh sbx-host sudo cat /etc/sbx/token | sbx login http://sbx-host:7070",
 		Args:    cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			if token == "" {
