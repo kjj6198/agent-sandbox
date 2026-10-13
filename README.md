@@ -18,6 +18,7 @@ Start with the [report](research/agent-sandbox-isolation.md). Its last chapter, 
 | `research/raw/` | Every measurement record, plus screenshots, iperf3 output, and boot logs |
 | `lab/` | The lab as deployed at `/opt/sbx` on the lab VM, with launch scripts, guest image, kernel config, and the measurement harness. `lab/README.md` explains it |
 | `lab/nested/` | Bare metal vs nested comparisons and the parallel restore test |
+| `sbx/` | The sandbox service built on the result: daemon, CLI for agents, default template, and the Proxmox deployment. `sbx/README.md` explains it |
 
 ## Reproduce
 

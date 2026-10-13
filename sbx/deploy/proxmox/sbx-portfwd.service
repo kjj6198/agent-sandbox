@@ -1,0 +1,18 @@
+# Publishes the sbx host's API (7070) and exposed sandbox ports (30000-30999) on the
+# Proxmox host's LAN address, because the sbx VM itself only lives on the NAT bridge vmbr1.
+[Unit]
+Description=Forward sbx API and sandbox ports to the sbx host VM
+After=network-online.target pve-firewall.service
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+Environment=LAN_IP=192.168.1.33 SBX_IP=10.10.10.40
+ExecStart=/usr/sbin/iptables -t nat -A PREROUTING -i vmbr0 -d ${LAN_IP} -p tcp --dport 7070 -j DNAT --to-destination ${SBX_IP}:7070
+ExecStart=/usr/sbin/iptables -t nat -A PREROUTING -i vmbr0 -d ${LAN_IP} -p tcp --dport 30000:30999 -j DNAT --to-destination ${SBX_IP}
+ExecStop=/usr/sbin/iptables -t nat -D PREROUTING -i vmbr0 -d ${LAN_IP} -p tcp --dport 7070 -j DNAT --to-destination ${SBX_IP}:7070
+ExecStop=/usr/sbin/iptables -t nat -D PREROUTING -i vmbr0 -d ${LAN_IP} -p tcp --dport 30000:30999 -j DNAT --to-destination ${SBX_IP}
+
+[Install]
+WantedBy=multi-user.target

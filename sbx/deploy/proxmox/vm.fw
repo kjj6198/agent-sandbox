@@ -1,0 +1,21 @@
+[OPTIONS]
+enable: 1
+policy_in: DROP
+policy_out: ACCEPT
+ipfilter: 1
+macfilter: 1
+
+[RULES]
+IN ACCEPT -source 10.10.10.1 -p tcp -dport 22
+IN ACCEPT -source 10.10.10.1 -p tcp -dport 7070
+IN ACCEPT -source 192.168.1.0/24 -p tcp -dport 7070 # sbxd API, through sbx-portfwd on the host
+IN ACCEPT -source 192.168.1.0/24 -p tcp -dport 30000:30999 # ports published with sbx expose
+OUT DROP -dest 10.0.0.0/8
+OUT DROP -dest 172.16.0.0/12
+OUT DROP -dest 192.168.0.0/16
+OUT DROP -dest 100.64.0.0/10
+OUT DROP -dest 169.254.0.0/16
+OUT DROP -dest 224.0.0.0/4
+
+[IPSET ipfilter-net0]
+@IP@
