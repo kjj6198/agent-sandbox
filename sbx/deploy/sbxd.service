@@ -1,0 +1,15 @@
+[Unit]
+Description=sbx sandbox daemon: Firecracker microVMs for AI agents
+After=network-online.target
+Wants=network-online.target
+RequiresMountsFor=/var/lib/sbx
+
+[Service]
+ExecStart=/usr/local/bin/sbxd --config /etc/sbx/sbxd.json
+# Sandboxes outlive a restart of sbxd; the next one adopts them.
+KillMode=process
+Restart=on-failure
+LimitNOFILE=1048576
+
+[Install]
+WantedBy=multi-user.target
