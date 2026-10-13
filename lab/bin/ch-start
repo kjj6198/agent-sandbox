@@ -1,0 +1,37 @@
+#!/bin/bash
+# Usage: ch-start N [vcpus=2] [mem_mib=1024]
+#   SBX_CH_VIRTIOFS=/host/dir  also share that dir over virtio-fs (tag "work")
+set -euo pipefail
+[ "$(id -u)" = 0 ] || exec sudo --preserve-env=SBX_CH_VIRTIOFS "$0" "$@"
+n=$1 vcpus=${2:-2} mem=${3:-1024}
+dir=/run/sbx/ch-$n
+
+"$(dirname "$0")/ch-stop" "$n"
+mkdir -p "$dir"
+
+mac=$(printf '06:00:ac:10:%02x:02' "$n")
+cmdline="console=ttyS0 reboot=k panic=1 quiet random.trust_cpu=on \
+ip=172.16.$n.2::172.16.$n.1:255.255.255.0::eth0:off \
+init=/sbin/sbx-init ro root=/dev/vda sbx.host=172.16.$n.1 sbx.slot=$n"
+
+memory=(--memory "size=${mem}M")
+extra=()
+if [ -n "${SBX_CH_VIRTIOFS:-}" ]; then
+  /usr/libexec/virtiofsd --socket-path="$dir/virtiofs.sock" --shared-dir="$SBX_CH_VIRTIOFS" \
+    --cache=never --sandbox=chroot </dev/null >"$dir/virtiofsd.log" 2>&1 &
+  echo $! >"$dir/virtiofsd.pid"
+  for _ in $(seq 200); do [ -S "$dir/virtiofs.sock" ] && break; sleep 0.005; done
+  # vhost-user devices need guest RAM in a shared mapping the backend can access.
+  memory=(--memory "size=${mem}M,shared=on")
+  extra=(--fs "tag=work,socket=$dir/virtiofs.sock")
+fi
+
+setsid cloud-hypervisor --api-socket "path=$dir/api.sock" \
+  --kernel /opt/sbx/kernel/vmlinux --cmdline "$cmdline" \
+  --disk path=/opt/sbx/images/rootfs.ext4,readonly=on \
+  --net "tap=sbxtap$n,mac=$mac" \
+  --cpus "boot=$vcpus" "${memory[@]}" "${extra[@]}" \
+  --rng src=/dev/urandom --serial tty --console off \
+  </dev/null >"$dir/console.log" 2>&1 &
+echo $! >"$dir/pid"
+echo "ch-start: slot $n pid $! guest 172.16.$n.2 console $dir/console.log"

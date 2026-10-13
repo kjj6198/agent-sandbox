@@ -1,0 +1,17 @@
+#!/bin/bash
+# Usage: docker-start N --runtime {runc|runsc|runsc-kvm}
+set -euo pipefail
+[ "$(id -u)" = 0 ] || exec sudo "$0" "$@"
+n=$1 runtime=runc
+[ "${2:-}" = --runtime ] && runtime=$3
+
+"$(dirname "$0")/docker-stop" "$n"
+# gVisor netstack never sees the nft DNAT behind Docker's 127.0.0.11 resolver (runsc
+# --reproduce-nat/--reproduce-nftables did not help), so every runtime gets the image's resolv.conf.
+docker run -d --name "sbx-docker-$n" --runtime "$runtime" \
+  --network sbxnet --ip "172.30.$n.2" --hostname "sbx-$n" \
+  --cpus 2 --memory 1g --memory-swap 1g --tmpfs /work:mode=1777 \
+  -v /opt/sbx/guest/resolv.conf:/etc/resolv.conf:ro \
+  -e SBX_HOST=172.30.0.1 -e SBX_SLOT="$n" \
+  sbx-guest:latest >/dev/null
+echo "docker-start: slot $n runtime $runtime guest 172.30.$n.2 logs: docker logs sbx-docker-$n"

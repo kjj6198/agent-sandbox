@@ -1,0 +1,24 @@
+[   0.000] backend=docker-runsc slot=5 guest=172.30.5.2 host=172.30.0.1
+[   0.015] $ /opt/sbx/bin/docker-start 5 --runtime runsc
+[   0.192]   docker-start: slot 5 runtime runsc guest 172.30.5.2 logs: docker logs sbx-docker-5
+[   0.217] SBX_READY received 0.198s after start from 172.30.5.2: 'SBX_READY 5 0.08'
+[   0.236] console: 'SBX_INIT 0.06 0.00'
+[   0.259] agent:
+Linux sbx-5 4.19.0-gvisor #1 SMP Sun Jan 10 15:06:54 PST 2016 x86_64 GNU/Linux
+uid=0(root) gid=0(root) groups=0(root)
+2
+               total        used        free      shared  buff/cache   available
+Mem:            1024          15        1008           0          12        1008
+Swap:              0           0           0
+__RC=0__
+[   0.362] egress: 200 0.076204
+__RC=0__
+[   1.131] sbx-browser (0.769s):
+SBX_BROWSER ready sandbox=1
+__RC=0__
+[   2.063] chrome://sandbox: Sandbox Status | Layer 1 Sandbox	Namespace | PID namespaces	Yes | Network namespaces	Yes | Seccomp-BPF sandbox	Yes | Seccomp-BPF sandbox supports TSYNC	Yes | Ptrace Protection with Yama LSM (Broker)	Yes | Ptrace Protection with Yama LSM (Non-broker)	No | You are adequately sandboxed.
+[   2.366] CDP connected to http://172.30.5.2:9223 in 0.027s (155.0.8059.39)
+[   2.908] screenshot http://172.30.0.1:8000/index.html -> /opt/sbx/smoke/docker-runsc-page.png (0.393s, title='sbx test page')
+[   3.166] screenshot https://example.com -> /opt/sbx/smoke/docker-runsc-example.png (0.256s, title='Example Domain')
+[   3.220] RESULT: PASS
+[   3.221] $ /opt/sbx/bin/docker-stop 5

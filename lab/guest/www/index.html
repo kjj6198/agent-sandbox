@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>sbx test page</title>
+<style>
+  body { margin: 0; min-height: 100vh; font-family: "DejaVu Sans", sans-serif; color: #fff;
+         background: linear-gradient(135deg, #1e3c72 0%, #2a5298 40%, #e96443 100%); }
+  main { padding: 48px; }
+  h1 { font-size: 48px; margin: 0 0 16px; }
+  p { font-size: 20px; max-width: 720px; line-height: 1.5; }
+</style>
+</head>
+<body>
+<main>
+  <h1>Sandbox screenshot check</h1>
+  <p>If you can read this over a gradient next to a red circle, a yellow square, and a green triangle,
+     text rendering, CSS gradients, and inline SVG all work in this sandbox.</p>
+  <p lang="ja">日本語の表示テスト。サンドボックス内のブラウザで漢字、ひらがな、カタカナが正しく描画されるか確認します。</p>
+  <svg width="420" height="140" viewBox="0 0 420 140" role="img" aria-label="shapes">
+    <circle cx="70" cy="70" r="60" fill="#e53935"/>
+    <rect x="160" y="10" width="120" height="120" fill="#fdd835"/>
+    <polygon points="350,10 410,130 290,130" fill="#43a047"/>
+  </svg>
+</main>
+</body>
+</html>

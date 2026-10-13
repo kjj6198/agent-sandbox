@@ -1,0 +1,18 @@
+#!/bin/bash
+# Usage: runc-start N
+set -euo pipefail
+[ "$(id -u)" = 0 ] || exec sudo "$0" "$@"
+n=$1
+id=sbx-runc-$n dir=/run/sbx/runc-$n
+
+"$(dirname "$0")/runc-stop" "$n"
+mkdir -p "$dir/ovl" "$dir/bundle"
+# runc has no rootfs overlay of its own; a tmpfs-backed overlay keeps the shared rootfs read-only.
+mount -t tmpfs tmpfs "$dir/ovl"
+mkdir -p "$dir/ovl/upper" "$dir/ovl/work" "$dir/ovl/merged"
+mount -t overlay overlay \
+  -o "lowerdir=/opt/sbx/oci/rootfs,upperdir=$dir/ovl/upper,workdir=$dir/ovl/work" "$dir/ovl/merged"
+"$(dirname "$0")/oci-config" "$n" "$dir/ovl/merged" "$id" >"$dir/bundle/config.json"
+runc --root /run/sbx/runc-root run --detach --bundle "$dir/bundle" --pid-file "$dir/pid" "$id" \
+  </dev/null >"$dir/console.log" 2>&1
+echo "runc-start: slot $n id $id guest 172.18.$n.2 console $dir/console.log"

@@ -1,0 +1,8 @@
+# Sourced by runsc-* scripts. Global flags must be identical across run/checkpoint/restore/kill.
+RUNSC_ROOT=/run/sbx/runsc-root
+runsc_() {
+  # --overlay2=root:memory keeps all rootfs writes in sandbox memory, so the shared
+  # /opt/sbx/oci/rootfs stays untouched (the default root:self would put the upper layer file there).
+  runsc --root "$RUNSC_ROOT" --platform="${SBX_RUNSC_PLATFORM:-systrap}" \
+    --network=sandbox --overlay2=root:memory "$@"
+}

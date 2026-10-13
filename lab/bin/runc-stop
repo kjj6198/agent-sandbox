@@ -1,0 +1,13 @@
+#!/bin/bash
+# Usage: runc-stop N
+set -uo pipefail
+[ "$(id -u)" = 0 ] || exec sudo "$0" "$@"
+n=$1
+id=sbx-runc-$n dir=/run/sbx/runc-$n
+
+runc --root /run/sbx/runc-root kill "$id" KILL >/dev/null 2>&1
+runc --root /run/sbx/runc-root delete --force "$id" >/dev/null 2>&1
+umount -l "$dir/ovl/merged" 2>/dev/null
+umount -l "$dir/ovl" 2>/dev/null
+rm -rf "$dir"
+true

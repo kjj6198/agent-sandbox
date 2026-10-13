@@ -1,0 +1,63 @@
+#!/bin/bash
+# PID 1 in VMs, entrypoint in containers. See /opt/sbx/README.md for the contract.
+export PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin HOME=/root
+
+vm_early_mounts() {
+  mount -t proc proc /proc
+  mount -t sysfs sysfs /sys
+  mountpoint -q /dev || mount -t devtmpfs devtmpfs /dev
+}
+
+# Root block device is shared read-only by all VMs, so writes go to a tmpfs-backed overlay.
+vm_overlay_root() {
+  mount -t tmpfs -o mode=0755 tmpfs /overlay
+  mkdir -p /overlay/upper /overlay/work /overlay/root
+  mount -t overlay overlay -o lowerdir=/,upperdir=/overlay/upper,workdir=/overlay/work /overlay/root
+  mkdir -p /overlay/root/oldroot
+  for m in /proc /sys /dev; do mount --move "$m" "/overlay/root$m"; done
+  cd /overlay/root
+  pivot_root . oldroot
+  umount -l /oldroot
+  rmdir /oldroot
+  cd /
+}
+
+vm_late_mounts() {
+  mkdir -p /dev/pts /dev/shm
+  mount -t devpts -o gid=5,mode=620,ptmxmode=666 devpts /dev/pts
+  mount -t tmpfs -o mode=1777,nosuid,nodev tmpfs /dev/shm
+  mount -t tmpfs -o mode=0755,nosuid,nodev tmpfs /run
+  mount -t tmpfs -o mode=1777,nosuid,nodev tmpfs /tmp
+  mkdir -p /work
+  mount -t tmpfs -o mode=1777 tmpfs /work
+  mount -t cgroup2 cgroup2 /sys/fs/cgroup
+  ip link set lo up
+  hostname "sbx-$SBX_SLOT"
+}
+
+cmdline_arg() { tr ' ' '\n' </proc/cmdline | sed -n "s/^$1=//p"; }
+
+if [ ! -e /proc/self ]; then
+  vm_early_mounts
+  SBX_HOST=$(cmdline_arg sbx.host)
+  SBX_SLOT=$(cmdline_arg sbx.slot)
+  vm_overlay_root
+  vm_late_mounts
+fi
+export SBX_HOST SBX_SLOT
+
+echo "SBX_INIT $(cat /proc/uptime)"
+
+socat TCP-LISTEN:7000,reuseaddr,fork EXEC:/bin/bash,stderr &
+
+(
+  for _ in $(seq 100); do
+    echo "SBX_READY $SBX_SLOT $(cut -d' ' -f1 /proc/uptime)" |
+      socat -u - "TCP:$SBX_HOST:7001,connect-timeout=1" 2>/dev/null && exit 0
+    sleep 0.1
+  done
+  echo "SBX_READY: could not reach $SBX_HOST:7001" >&2
+) &
+
+# tini keeps the PID and reaps every orphan, including the socat children started above.
+exec tini -s -- sleep infinity

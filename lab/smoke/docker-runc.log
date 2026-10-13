@@ -1,0 +1,24 @@
+[   0.000] backend=docker-runc slot=6 guest=172.30.6.2 host=172.30.0.1
+[   0.014] $ /opt/sbx/bin/docker-start 6 --runtime runc
+[   0.199]   docker-start: slot 6 runtime runc guest 172.30.6.2 logs: docker logs sbx-docker-6
+[   0.199] SBX_READY received 0.182s after start from 172.30.6.2: 'SBX_READY 6 2167.78'
+[   0.218] console: 'SBX_INIT 2167.78 15403.49'
+[   0.223] agent:
+Linux sbx-6 6.8.0-142-generic #142-Ubuntu SMP PREEMPT_DYNAMIC Wed Sep  2 14:24:27 UTC 2026 x86_64 GNU/Linux
+uid=0(root) gid=0(root) groups=0(root)
+8
+               total        used        free      shared  buff/cache   available
+Mem:            7939         825         957           1        6465        7114
+Swap:              0           0           0
+__RC=0__
+[   0.299] egress: 200 0.068302
+__RC=0__
+[   0.471] sbx-browser --no-sandbox (0.171s):
+SBX_BROWSER ready sandbox=0
+__RC=0__
+[   0.941] chrome://sandbox: Sandbox Status | Layer 1 Sandbox	None | PID namespaces	No | Network namespaces	No | Seccomp-BPF sandbox	No | Seccomp-BPF sandbox supports TSYNC	No | Ptrace Protection with Yama LSM (Broker)	No | Ptrace Protection with Yama LSM (Non-broker)	No | You are NOT adequately sandboxed.
+[   1.249] CDP connected to http://172.30.6.2:9223 in 0.022s (155.0.8059.39)
+[   1.657] screenshot http://172.30.0.1:8000/index.html -> /opt/sbx/smoke/docker-runc-page.png (0.279s, title='sbx test page')
+[   1.835] screenshot https://example.com -> /opt/sbx/smoke/docker-runc-example.png (0.177s, title='Example Domain')
+[   1.890] RESULT: PASS
+[   1.890] $ /opt/sbx/bin/docker-stop 6

@@ -1,0 +1,20 @@
+#!/bin/bash
+# Usage: ch-restore N DIR [copy|ondemand]
+#   copy (default): read the whole memory file before resuming.
+#   ondemand: map memory lazily through userfaultfd (CH >= 52). Needs root or
+#             vm.unprivileged_userfaultfd=1; incompatible with vhost-user devices such as virtio-fs.
+# The guest keeps the IP of the slot it was snapshotted in, so restore into that same slot.
+set -euo pipefail
+[ "$(id -u)" = 0 ] || exec sudo "$0" "$@"
+n=$1 src=$2 mode=${3:-copy}
+dir=/run/sbx/ch-$n
+
+"$(dirname "$0")/ch-stop" "$n"
+mkdir -p "$dir"
+opts="source_url=file://$src,resume=true"
+[ "$mode" = ondemand ] && opts+=",memory_restore_mode=ondemand"
+
+setsid cloud-hypervisor --api-socket "path=$dir/api.sock" --restore "$opts" \
+  </dev/null >"$dir/console.log" 2>&1 &
+echo $! >"$dir/pid"
+echo "ch-restore: slot $n pid $! from $src ($mode)"

@@ -1,0 +1,24 @@
+[   0.000] backend=runc slot=4 guest=172.18.4.2 host=172.18.4.1
+[   0.016] $ /opt/sbx/bin/runc-start 4
+[   0.064]   runc-start: slot 4 id sbx-runc-4 guest 172.18.4.2 console /run/sbx/runc-4/console.log
+[   0.069] SBX_READY received 0.052s after start from 172.18.4.2: 'SBX_READY 4 2161.75'
+[   0.075] console: 'SBX_INIT 2161.75 15364.75'
+[   0.079] agent:
+Linux sbx-4 6.8.0-142-generic #142-Ubuntu SMP PREEMPT_DYNAMIC Wed Sep  2 14:24:27 UTC 2026 x86_64 GNU/Linux
+uid=0(root) gid=0(root) groups=0(root)
+8
+               total        used        free      shared  buff/cache   available
+Mem:            7939         849         937           1        6461        7090
+Swap:              0           0           0
+__RC=0__
+[   0.159] egress: 200 0.072669
+__RC=0__
+[   0.293] sbx-browser --no-sandbox (0.134s):
+SBX_BROWSER ready sandbox=0
+__RC=0__
+[   0.810] chrome://sandbox: Sandbox Status | Layer 1 Sandbox	None | PID namespaces	No | Network namespaces	No | Seccomp-BPF sandbox	No | Seccomp-BPF sandbox supports TSYNC	No | Ptrace Protection with Yama LSM (Broker)	No | Ptrace Protection with Yama LSM (Non-broker)	No | You are NOT adequately sandboxed.
+[   1.104] CDP connected to http://172.18.4.2:9223 in 0.022s (155.0.8059.39)
+[   1.485] screenshot http://172.18.4.1:8000/index.html -> /opt/sbx/smoke/runc-page.png (0.293s, title='sbx test page')
+[   1.684] screenshot https://example.com -> /opt/sbx/smoke/runc-example.png (0.197s, title='Example Domain')
+[   1.740] RESULT: PASS
+[   1.740] $ /opt/sbx/bin/runc-stop 4

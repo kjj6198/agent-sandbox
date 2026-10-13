@@ -1,0 +1,13 @@
+#!/bin/bash
+# Usage: ch-snapshot N DIR   (the VM keeps running afterwards)
+set -euo pipefail
+[ "$(id -u)" = 0 ] || exec sudo "$0" "$@"
+n=$1 out=$2
+sock=/run/sbx/ch-$n/api.sock
+
+rm -rf "$out" && mkdir -p "$out"
+ch-remote --api-socket "$sock" pause
+ch-remote --api-socket "$sock" snapshot "file://$out"
+ch-remote --api-socket "$sock" resume
+echo "$n" >"$out/slot"
+ls -la "$out"

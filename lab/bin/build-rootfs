@@ -1,0 +1,45 @@
+#!/bin/bash
+# Exports sbx-guest:latest to /opt/sbx/oci/rootfs (raw runsc/runc) and /opt/sbx/images/rootfs.ext4 (VMs).
+set -euo pipefail
+[ "$(id -u)" = 0 ] || exec sudo "$0" "$@"
+IMAGE=${1:-sbx-guest:latest}
+ROOTFS=/opt/sbx/oci/rootfs
+EXT4=/opt/sbx/images/rootfs.ext4
+
+rm -rf "$ROOTFS" && mkdir -p "$ROOTFS"
+cid=$(docker create "$IMAGE")
+docker export "$cid" | tar -x -C "$ROOTFS"
+docker rm "$cid" >/dev/null
+
+# docker export leaves Docker's empty placeholders for these.
+# single-request-reopen: parallel A+AAAA from one socket loses a reply behind the double NAT (5 s stall).
+cp /opt/sbx/guest/resolv.conf "$ROOTFS/etc/resolv.conf"
+echo sbx >"$ROOTFS/etc/hostname"
+printf '127.0.0.1 localhost\n::1 localhost\n' >"$ROOTFS/etc/hosts"
+rm -f "$ROOTFS/.dockerenv"
+
+size_mib=$(($(du -sm "$ROOTFS" | cut -f1) * 115 / 100 + 64))
+rm -f "$EXT4"
+# No journal: the image is only ever mounted read-only, and a journal would only cost space.
+mkfs.ext4 -q -F -O ^has_journal -L sbxroot -d "$ROOTFS" "$EXT4" "${size_mib}M"
+chmod 0444 "$EXT4"
+chown -R kalan:kalan /opt/sbx/images
+
+# OCI template for raw runsc/runc; per-slot fields (env, netns, root path) are filled in by oci-config.
+caps='["CAP_CHOWN","CAP_DAC_OVERRIDE","CAP_FOWNER","CAP_FSETID","CAP_KILL","CAP_SETGID","CAP_SETUID","CAP_SETPCAP","CAP_NET_BIND_SERVICE","CAP_NET_RAW","CAP_SYS_CHROOT","CAP_MKNOD","CAP_AUDIT_WRITE","CAP_SETFCAP"]'
+(cd /tmp && rm -f config.json && runc spec && mv config.json /tmp/runc-spec.json)
+jq --argjson caps "$caps" '
+  .process.terminal = false
+  | .process.args = ["/sbin/sbx-init"]
+  | .process.env = ["PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin", "HOME=/root"]
+  | .process.capabilities = {bounding: $caps, effective: $caps, permitted: $caps}
+  | .process.rlimits = [{type: "RLIMIT_NOFILE", hard: 1048576, soft: 1048576}]
+  | .process.noNewPrivileges = false
+  | .root = {path: "ROOTFS", readonly: false}
+  | .linux.resources.cpu = {quota: 200000, period: 100000}
+  | .linux.resources.memory = {limit: 1073741824}
+  | .mounts += [{destination: "/work", type: "tmpfs", source: "tmpfs", options: ["mode=1777"]}]
+' /tmp/runc-spec.json >/opt/sbx/oci/config.json
+chown kalan:kalan /opt/sbx/oci/config.json
+docker image inspect "$IMAGE" --format '{{.Id}} {{.Size}}'
+ls -la "$EXT4"

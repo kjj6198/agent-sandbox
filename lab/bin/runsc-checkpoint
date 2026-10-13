@@ -1,0 +1,16 @@
+#!/bin/bash
+# Usage: runsc-checkpoint N DIR [plain|fast]
+#   fast: uncompressed image without zero pages, required for `runsc-restore ... fast`.
+# The sandbox is stopped by the checkpoint.
+set -euo pipefail
+[ "$(id -u)" = 0 ] || exec sudo --preserve-env=SBX_RUNSC_PLATFORM "$0" "$@"
+n=$1 out=$2 mode=${3:-plain}
+id=sbx-runsc-$n
+source "$(dirname "$0")/runsc-common"
+
+rm -rf "$out" && mkdir -p "$out"
+opts=()
+[ "$mode" = fast ] && opts=(--compression=none --exclude-committed-zero-pages)
+runsc_ checkpoint --image-path "$out" "${opts[@]}" "$id"
+echo "$n $mode" >"$out/slot"
+ls -la "$out"

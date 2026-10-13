@@ -1,0 +1,22 @@
+[   0.000] backend=docker-runsc-kvm slot=7 guest=172.30.7.2 host=172.30.0.1
+[   0.000] $ /opt/sbx/bin/docker-start 7 --runtime runsc-kvm
+[   0.238]   docker-start: slot 7 runtime runsc-kvm guest 172.30.7.2 logs: docker logs sbx-docker-7
+[   0.309] SBX_READY received 0.308s after start from 172.30.7.2: 'SBX_READY 7 0.13'
+[   0.329] console: 'SBX_INIT 0.09 0.00'
+[   0.360] agent:
+Linux sbx-7 4.19.0-gvisor #1 SMP Sun Jan 10 15:06:54 PST 2016 x86_64 GNU/Linux
+uid=0(root) gid=0(root) groups=0(root)
+2
+               total        used        free      shared  buff/cache   available
+Mem:            1024          15        1008           0          12        1008
+Swap:              0           0           0
+__RC=0__
+[   0.387] agent: [    0.000000] Starting gVisor...
+[    0.241463] Rewriting the kernel in Rust...
+[    0.469457] Adversarially training Redcode AI...
+__RC=0__
+[   0.387] $ sh -c pgrep -af runsc-sandbox | grep -o -- '--platform=[a-z]*' | sort | uniq -c
+[   0.395]   1 --platform=
+[   0.395]         1 --platform=kvm
+[   0.395] RESULT: PASS
+[   0.395] $ /opt/sbx/bin/docker-stop 7

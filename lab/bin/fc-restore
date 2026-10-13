@@ -1,0 +1,28 @@
+#!/bin/bash
+# Usage: fc-restore N DIR
+# The guest keeps the IP of the slot it was snapshotted in, so restore into that same slot.
+set -euo pipefail
+[ "$(id -u)" = 0 ] || exec sudo "$0" "$@"
+n=$1 src=$2
+dir=/run/sbx/fc-$n sock=/run/sbx/fc-$n/api.sock
+
+"$(dirname "$0")/fc-stop" "$n"
+mkdir -p "$dir"
+setsid firecracker --id "sbx-fc-$n" --api-sock "$sock" </dev/null >"$dir/console.log" 2>&1 &
+echo $! >"$dir/pid"
+for _ in $(seq 200); do [ -S "$sock" ] && break; sleep 0.005; done
+
+# File backend mmaps the memory file MAP_PRIVATE, so pages fault in lazily from the page cache.
+# A UFFD backend (backend_type "Uffd") would let a custom handler serve pages instead.
+# clock_realtime moves the guest wall clock forward to host time on resume. Firecracker rejects it
+# unless the snapshot was taken on a host with the tsc clocksource (this lab defaults to kvm-clock).
+clock_realtime=false
+[ "$(cat "$src/host-clocksource" 2>/dev/null)" = tsc ] && clock_realtime=true
+curl -fsS --unix-socket "$sock" -X PUT http://localhost/snapshot/load -H 'Content-Type: application/json' -d "{
+  \"snapshot_path\": \"$src/vmstate\",
+  \"mem_backend\": {\"backend_type\": \"File\", \"backend_path\": \"$src/mem\"},
+  \"network_overrides\": [{\"iface_id\": \"eth0\", \"host_dev_name\": \"sbxtap$n\"}],
+  \"clock_realtime\": $clock_realtime,
+  \"resume_vm\": true
+}"
+echo "fc-restore: slot $n pid $(cat "$dir/pid") from $src"

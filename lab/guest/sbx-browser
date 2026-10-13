@@ -1,0 +1,43 @@
+#!/bin/bash
+# Usage: sbx-browser [--no-sandbox]   (or SBX_CHROME_SANDBOX=0)
+# Starts headless Chromium as `agent`, CDP on 127.0.0.1:9222, forwarded to 0.0.0.0:9223.
+set -eu
+sandbox=${SBX_CHROME_SANDBOX:-1}
+[ "${1:-}" = --no-sandbox ] && sandbox=0
+
+pkill -x chromium 2>/dev/null || true
+pkill -f 'TCP-LISTEN:9223' 2>/dev/null || true
+
+profile=$(runuser -u agent -- mktemp -d /tmp/chromium-profile.XXXXXX)
+rm -f "$profile"/Singleton*
+
+flags=(
+  --headless=new
+  --remote-debugging-address=127.0.0.1
+  --remote-debugging-port=9222
+  # Chrome 136+ refuses remote debugging on the default profile dir.
+  --user-data-dir="$profile"
+  --remote-allow-origins=*
+  --disable-gpu
+  # /dev/shm differs per backend (64 MiB in plain Docker); /tmp avoids renderer crashes.
+  --disable-dev-shm-usage
+  --no-first-run --no-default-browser-check --disable-background-networking
+  --disable-breakpad --mute-audio --hide-scrollbars --window-size=1280,800
+)
+[ "$sandbox" = 0 ] && flags+=(--no-sandbox)
+
+runuser -u agent -- setsid chromium "${flags[@]}" about:blank \
+  >/tmp/chromium.log 2>&1 </dev/null &
+# New headless ignores --remote-debugging-address for non-loopback use, hence the forwarder.
+setsid socat TCP-LISTEN:9223,reuseaddr,fork TCP:127.0.0.1:9222 </dev/null >/dev/null 2>&1 &
+
+for _ in $(seq 100); do
+  if curl -fsS http://127.0.0.1:9222/json/version >/dev/null 2>&1; then
+    echo "SBX_BROWSER ready sandbox=$sandbox"
+    exit 0
+  fi
+  sleep 0.1
+done
+echo "SBX_BROWSER failed sandbox=$sandbox" >&2
+tail -20 /tmp/chromium.log >&2
+exit 1

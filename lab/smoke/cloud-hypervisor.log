@@ -1,0 +1,46 @@
+[   0.000] backend=cloud-hypervisor slot=2 guest=172.16.2.2 host=172.16.2.1
+[   0.014] $ /opt/sbx/bin/ch-start 2
+[   0.034]   ch-start: slot 2 pid 80680 guest 172.16.2.2 console /run/sbx/ch-2/console.log
+[   0.211] SBX_READY received 0.196s after start from 172.16.2.2: 'SBX_READY 2 0.14'
+[   0.217] console: 'SBX_INIT 0.13 0.10'
+[   0.224] agent:
+Linux sbx-2 6.18.56 #1 SMP PREEMPT_DYNAMIC Tue Oct 13 01:41:48 UTC 2026 x86_64 GNU/Linux
+uid=0(root) gid=0(root) groups=0(root)
+2
+               total        used        free      shared  buff/cache   available
+Mem:             984         108         935           0          21         876
+Swap:              0           0           0
+__RC=0__
+[   0.313] egress: 200 0.072016
+__RC=0__
+[   0.743] sbx-browser (0.430s):
+SBX_BROWSER ready sandbox=1
+__RC=0__
+[   1.364] chrome://sandbox: Sandbox Status | Layer 1 Sandbox	Namespace | PID namespaces	Yes | Network namespaces	Yes | Seccomp-BPF sandbox	Yes | Seccomp-BPF sandbox supports TSYNC	Yes | Ptrace Protection with Yama LSM (Broker)	No | Ptrace Protection with Yama LSM (Non-broker)	No | You are adequately sandboxed.
+[   1.662] CDP connected to http://172.16.2.2:9223 in 0.021s (155.0.8059.39)
+[   2.118] screenshot http://172.16.2.1:8000/index.html -> /opt/sbx/smoke/cloud-hypervisor-page.png (0.326s, title='sbx test page')
+[   2.377] screenshot https://example.com -> /opt/sbx/smoke/cloud-hypervisor-example.png (0.257s, title='Example Domain')
+[   2.430] $ sudo rm -rf /opt/sbx/snapshots/ch-2
+[   2.487] $ /opt/sbx/bin/ch-snapshot 2 /opt/sbx/snapshots/ch-2
+[   2.993]   total 1048656
+[   2.993]   drwxr-xr-x 2 root  root        4096 Oct 13 02:04 .
+[   2.993]   drwxr-xr-x 8 kalan kalan       4096 Oct 13 02:04 ..
+[   2.993]   -rw------- 1 root  root        1298 Oct 13 02:04 config.json
+[   2.993]   -rw------- 1 root  root  1073741824 Oct 13 02:04 memory-ranges
+[   2.993]   -rw-r--r-- 1 root  root           2 Oct 13 02:04 slot
+[   2.993]   -rw------- 1 root  root       58847 Oct 13 02:04 state.json
+[   2.993] snapshot took 0.506s
+[   2.993] $ sudo du -sh /opt/sbx/snapshots/ch-2
+[   2.997]   1.1G	/opt/sbx/snapshots/ch-2
+[   2.997] $ /opt/sbx/bin/ch-stop 2
+[   3.047] $ /opt/sbx/bin/ch-restore 2 /opt/sbx/snapshots/ch-2
+[   3.065]   ch-restore: slot 2 pid 80765 from /opt/sbx/snapshots/ch-2 (copy)
+[   4.108] restore -> agent responsive=True after 1.061s
+[   4.113] restored agent: 4.04 5.18
+Tue Oct 13 02:04:25 UTC 2026
+9
+__RC=0__
+[   4.349] CDP connected to http://172.16.2.2:9223 in 0.023s (155.0.8059.39)
+[   4.820] screenshot http://172.16.2.1:8000/index.html -> /opt/sbx/smoke/cloud-hypervisor-restored-page.png (0.340s, title='sbx test page')
+[   4.871] RESULT: PASS
+[   4.871] $ /opt/sbx/bin/ch-stop 2

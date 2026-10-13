@@ -1,0 +1,255 @@
+#!/opt/sbx/venv/bin/python
+"""Usage: smoke BACKEND   (firecracker|cloud-hypervisor|runsc|runc|docker-runsc|docker-runc|docker-runsc-kvm)
+
+Writes /opt/sbx/smoke/BACKEND.log and BACKEND-*.png. Expects net-setup to have run.
+The test page is served from the lab VM on the sandbox's host-side IP, port 8000.
+"""
+import http.server
+import socket
+import subprocess
+import sys
+import threading
+import time
+from dataclasses import dataclass
+from functools import partial
+from pathlib import Path
+
+from playwright.sync_api import sync_playwright
+
+BIN = "/opt/sbx/bin"
+SMOKE = Path("/opt/sbx/smoke")
+SNAP = Path("/opt/sbx/snapshots")
+
+
+@dataclass
+class Backend:
+    slot: int
+    start: list
+    stop: list
+    guest_ip: str
+    host_ip: str
+    console: list
+    no_sandbox: bool
+    snapshot: list | None = None
+    restore: list | None = None
+    full: bool = True
+
+
+def backends():
+    def vm(prefix, slot, start, snapshot=None, restore=None):
+        return Backend(slot, start, [f"{BIN}/{prefix}-stop", str(slot)], f"172.16.{slot}.2", f"172.16.{slot}.1",
+                       ["sudo", "cat", f"/run/sbx/{prefix}-{slot}/console.log"], False, snapshot, restore)
+
+    def oci(rt, slot, no_sandbox, snapshot=None, restore=None):
+        return Backend(slot, [f"{BIN}/{rt}-start", str(slot)], [f"{BIN}/{rt}-stop", str(slot)],
+                       f"172.18.{slot}.2", f"172.18.{slot}.1",
+                       ["sudo", "cat", f"/run/sbx/{rt}-{slot}/console.log"], no_sandbox, snapshot, restore)
+
+    def dock(rt, slot, no_sandbox, full=True):
+        return Backend(slot, [f"{BIN}/docker-start", str(slot), "--runtime", rt], [f"{BIN}/docker-stop", str(slot)],
+                       f"172.30.{slot}.2", "172.30.0.1", ["sudo", "docker", "logs", f"sbx-docker-{slot}"],
+                       no_sandbox, full=full)
+
+    snap = lambda name: str(SNAP / name)
+    return {
+        "firecracker": vm("fc", 1, [f"{BIN}/fc-start", "--api", "1"],
+                          [f"{BIN}/fc-snapshot", "1", snap("fc-1")], [f"{BIN}/fc-restore", "1", snap("fc-1")]),
+        "cloud-hypervisor": vm("ch", 2, [f"{BIN}/ch-start", "2"],
+                               [f"{BIN}/ch-snapshot", "2", snap("ch-2")], [f"{BIN}/ch-restore", "2", snap("ch-2")]),
+        "runsc": oci("runsc", 3, False,
+                     [f"{BIN}/runsc-checkpoint", "3", snap("runsc-3")], [f"{BIN}/runsc-restore", "3", snap("runsc-3")]),
+        "runc": oci("runc", 4, True),
+        "docker-runsc": dock("runsc", 5, False),
+        "docker-runc": dock("runc", 6, True),
+        "docker-runsc-kvm": dock("runsc-kvm", 7, False, full=False),
+    }
+
+
+class Log:
+    def __init__(self, path):
+        self.f = open(path, "w")
+        self.t0 = time.monotonic()
+
+    def __call__(self, msg):
+        line = f"[{time.monotonic() - self.t0:8.3f}] {msg}"
+        print(line, flush=True)
+        self.f.write(line + "\n")
+        self.f.flush()
+
+
+def run(log, cmd, check=True):
+    log("$ " + " ".join(cmd))
+    p = subprocess.run(cmd, capture_output=True, text=True)
+    for line in (p.stdout + p.stderr).strip().splitlines():
+        log("  " + line)
+    if check and p.returncode:
+        raise RuntimeError(f"exit {p.returncode}: {' '.join(cmd)}")
+    return p
+
+
+def agent(ip, cmd, timeout=60):
+    """Agent protocol: one bash per TCP connection; send the command plus a marker, read until the marker."""
+    with socket.create_connection((ip, 7000), timeout=timeout) as s:
+        s.sendall(f"{cmd}\necho __RC=$?__\n".encode())
+        buf = b""
+        while b"__RC=" not in buf or not buf.rstrip().endswith(b"__"):
+            chunk = s.recv(65536)
+            if not chunk:
+                break
+            buf += chunk
+    return buf.decode(errors="replace")
+
+
+def wait_agent(ip, timeout=30):
+    deadline = time.monotonic() + timeout
+    while time.monotonic() < deadline:
+        try:
+            if "__RC=0__" in agent(ip, "true", timeout=2):
+                return True
+        except OSError:
+            time.sleep(0.05)
+    return False
+
+
+class ReadyListener:
+    def __init__(self):
+        self.lines = []
+        self.srv = socket.socket()
+        self.srv.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+        self.srv.bind(("0.0.0.0", 7001))
+        self.srv.listen(64)
+        threading.Thread(target=self._loop, daemon=True).start()
+
+    def _loop(self):
+        while True:
+            conn, addr = self.srv.accept()
+            data = conn.recv(4096).decode().strip()
+            conn.close()
+            self.lines.append((time.monotonic(), addr[0], data))
+
+    def wait(self, slot, since, timeout=30):
+        deadline = time.monotonic() + timeout
+        while time.monotonic() < deadline:
+            for t, ip, line in self.lines:
+                if t >= since and line.startswith(f"SBX_READY {slot} "):
+                    return t, ip, line
+            time.sleep(0.005)
+        return None
+
+
+def serve_www(host_ip):
+    handler = partial(http.server.SimpleHTTPRequestHandler, directory="/opt/sbx/guest/www")
+    handler.log_message = lambda *a: None
+    srv = http.server.ThreadingHTTPServer((host_ip, 8000), handler)
+    threading.Thread(target=srv.serve_forever, daemon=True).start()
+    return srv
+
+
+def wait_console(b, needle, timeout=10):
+    deadline = time.monotonic() + timeout
+    while time.monotonic() < deadline:
+        out = subprocess.run(b.console, capture_output=True, text=True).stdout
+        for line in out.splitlines():
+            if line.startswith(needle):
+                return line
+        time.sleep(0.02)
+    return None
+
+
+def cdp_screenshots(log, b, name, tag, urls):
+    endpoint = f"http://{b.guest_ip}:9223"
+    with sync_playwright() as pw:
+        t = time.monotonic()
+        browser = pw.chromium.connect_over_cdp(endpoint, timeout=20000)
+        log(f"CDP connected to {endpoint} in {time.monotonic() - t:.3f}s ({browser.version})")
+        ctx = browser.contexts[0] if browser.contexts else browser.new_context()
+        page = ctx.new_page()
+        page.set_viewport_size({"width": 1280, "height": 800})
+        for label, url in urls:
+            t = time.monotonic()
+            page.goto(url, wait_until="load", timeout=30000)
+            path = SMOKE / f"{name}-{tag}{label}.png"
+            page.screenshot(path=str(path))
+            log(f"screenshot {url} -> {path} ({time.monotonic() - t:.3f}s, title={page.title()!r})")
+        page.close()
+        browser.close()
+
+
+def sandbox_status(log, b):
+    """chrome://sandbox reports the layer-1/layer-2 sandbox state of the renderer."""
+    with sync_playwright() as pw:
+        browser = pw.chromium.connect_over_cdp(f"http://{b.guest_ip}:9223", timeout=20000)
+        page = browser.contexts[0].new_page()
+        page.goto("chrome://sandbox")
+        text = page.inner_text("body")
+        log("chrome://sandbox: " + " | ".join(l.strip() for l in text.splitlines() if l.strip())[:600])
+        page.close()
+        browser.close()
+
+
+def start_browser(log, b):
+    flag = " --no-sandbox" if b.no_sandbox else ""
+    t = time.monotonic()
+    out = agent(b.guest_ip, f"sbx-browser{flag} 2>&1")
+    log(f"sbx-browser{flag} ({time.monotonic() - t:.3f}s):\n" + out.strip())
+    if "SBX_BROWSER ready" not in out:
+        raise RuntimeError("browser failed to start")
+
+
+def main():
+    name = sys.argv[1]
+    b = backends()[name]
+    SMOKE.mkdir(exist_ok=True)
+    log = Log(SMOKE / f"{name}.log")
+    log(f"backend={name} slot={b.slot} guest={b.guest_ip} host={b.host_ip}")
+    listener = ReadyListener()
+    www = serve_www(b.host_ip) if b.full else None
+    test_page = f"http://{b.host_ip}:8000/index.html"
+    try:
+        t0 = time.monotonic()
+        run(log, b.start)
+        ready = listener.wait(b.slot, t0)
+        if not ready:
+            raise RuntimeError("no SBX_READY within 30s")
+        log(f"SBX_READY received {ready[0] - t0:.3f}s after start from {ready[1]}: {ready[2]!r}")
+        log(f"console: {wait_console(b, 'SBX_INIT')!r}")
+        log("agent:\n" + agent(b.guest_ip, "uname -a; id; nproc; free -m").strip())
+        if not b.full:
+            log("agent: " + agent(b.guest_ip, "dmesg | head -3").strip())
+            run(log, ["sh", "-c", "pgrep -af runsc-sandbox | grep -o -- '--platform=[a-z]*' | sort | uniq -c"])
+            log("RESULT: PASS")
+            return
+        log("egress: " + agent(b.guest_ip, "curl -sS -o /dev/null -w '%{http_code} %{time_total}\\n' https://example.com").strip())
+        start_browser(log, b)
+        sandbox_status(log, b)
+        cdp_screenshots(log, b, name, "", [("page", test_page), ("example", "https://example.com")])
+
+        if b.snapshot:
+            run(log, ["sudo", "rm", "-rf", b.snapshot[-1]])
+            t = time.monotonic()
+            run(log, b.snapshot)
+            log(f"snapshot took {time.monotonic() - t:.3f}s")
+            run(log, ["sudo", "du", "-sh", b.snapshot[-1]])
+            run(log, b.stop)
+            t = time.monotonic()
+            run(log, b.restore)
+            ok = wait_agent(b.guest_ip)
+            log(f"restore -> agent responsive={ok} after {time.monotonic() - t:.3f}s")
+            if not ok:
+                raise RuntimeError("agent not responsive after restore")
+            log("restored agent: " + agent(b.guest_ip, "cat /proc/uptime; date -u; pgrep -c chromium").strip())
+            cdp_screenshots(log, b, name, "restored-", [("page", test_page)])
+        log("RESULT: PASS")
+    except Exception as e:
+        log(f"RESULT: FAIL {type(e).__name__}: {e}")
+        console = subprocess.run(b.console, capture_output=True, text=True)
+        log("console tail:\n" + "\n".join((console.stdout + console.stderr).splitlines()[-30:]))
+        raise
+    finally:
+        run(log, b.stop, check=False)
+        if www:
+            www.shutdown()
+
+
+if __name__ == "__main__":
+    main()

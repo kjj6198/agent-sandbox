@@ -1,0 +1,10 @@
+#!/bin/bash
+# Usage: ch-stop N
+set -uo pipefail
+[ "$(id -u)" = 0 ] || exec sudo "$0" "$@"
+n=$1 dir=/run/sbx/ch-$n
+source "$(dirname "$0")/kill-wait"
+
+kill_wait $(pgrep -f -- "^cloud-hypervisor --api-socket path=$dir/api.sock") \
+  $(cat "$dir/virtiofsd.pid" 2>/dev/null)
+rm -rf "$dir"

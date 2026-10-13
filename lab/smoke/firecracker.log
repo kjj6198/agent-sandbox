@@ -1,0 +1,46 @@
+[   0.000] backend=firecracker slot=1 guest=172.16.1.2 host=172.16.1.1
+[   0.015] $ /opt/sbx/bin/fc-start --api 1
+[   0.036]   fc-start: slot 1 pid 80543 guest 172.16.1.2 console /run/sbx/fc-1/console.log
+[   0.299] SBX_READY received 0.279s after start from 172.16.1.2: 'SBX_READY 1 0.18'
+[   0.305] console: 'SBX_INIT 0.18 0.10'
+[   0.312] agent:
+Linux sbx-1 6.18.56 #1 SMP PREEMPT_DYNAMIC Tue Oct 13 01:41:48 UTC 2026 x86_64 GNU/Linux
+uid=0(root) gid=0(root) groups=0(root)
+2
+               total        used        free      shared  buff/cache   available
+Mem:             984         102         945           0          13         882
+Swap:              0           0           0
+__RC=0__
+[   0.416] egress: 200 0.077228
+__RC=0__
+[   1.023] sbx-browser (0.607s):
+SBX_BROWSER ready sandbox=1
+__RC=0__
+[   1.637] chrome://sandbox: Sandbox Status | Layer 1 Sandbox	Namespace | PID namespaces	Yes | Network namespaces	Yes | Seccomp-BPF sandbox	Yes | Seccomp-BPF sandbox supports TSYNC	Yes | Ptrace Protection with Yama LSM (Broker)	No | Ptrace Protection with Yama LSM (Non-broker)	No | You are adequately sandboxed.
+[   1.929] CDP connected to http://172.16.1.2:9223 in 0.025s (155.0.8059.39)
+[   2.401] screenshot http://172.16.1.1:8000/index.html -> /opt/sbx/smoke/firecracker-page.png (0.339s, title='sbx test page')
+[   2.608] screenshot https://example.com -> /opt/sbx/smoke/firecracker-example.png (0.205s, title='Example Domain')
+[   2.660] $ sudo rm -rf /opt/sbx/snapshots/fc-1
+[   2.690] $ /opt/sbx/bin/fc-snapshot 1 /opt/sbx/snapshots/fc-1
+[   3.437]   total 1048624
+[   3.437]   drwxr-xr-x 2 root  root        4096 Oct 13 02:04 .
+[   3.437]   drwxr-xr-x 8 kalan kalan       4096 Oct 13 02:04 ..
+[   3.437]   -rw-r--r-- 1 root  root          10 Oct 13 02:04 host-clocksource
+[   3.437]   -rw-r--r-- 1 root  root  1073741824 Oct 13 02:04 mem
+[   3.437]   -rw-r--r-- 1 root  root           2 Oct 13 02:04 slot
+[   3.437]   -rw-r--r-- 1 root  root       24998 Oct 13 02:04 vmstate
+[   3.437] snapshot took 0.746s
+[   3.437] $ sudo du -sh /opt/sbx/snapshots/fc-1
+[   3.442]   1.1G	/opt/sbx/snapshots/fc-1
+[   3.442] $ /opt/sbx/bin/fc-stop 1
+[   3.519] $ /opt/sbx/bin/fc-restore 1 /opt/sbx/snapshots/fc-1
+[   3.552]   fc-restore: slot 1 pid 80619 from /opt/sbx/snapshots/fc-1
+[   3.594] restore -> agent responsive=True after 0.074s
+[   3.653] restored agent: 2.67 2.08
+Tue Oct 13 02:04:18 UTC 2026
+9
+__RC=0__
+[   3.984] CDP connected to http://172.16.1.2:9223 in 0.108s (155.0.8059.39)
+[   4.709] screenshot http://172.16.1.1:8000/index.html -> /opt/sbx/smoke/firecracker-restored-page.png (0.427s, title='sbx test page')
+[   4.762] RESULT: PASS
+[   4.762] $ /opt/sbx/bin/fc-stop 1

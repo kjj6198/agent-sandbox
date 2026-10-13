@@ -1,0 +1,46 @@
+[   0.000] backend=runsc slot=3 guest=172.18.3.2 host=172.18.3.1
+[   0.015] $ /opt/sbx/bin/runsc-start 3
+[   0.086]   runsc-start: slot 3 id sbx-runsc-3 guest 172.18.3.2 console /run/sbx/runsc-3/console.log
+[   0.117] SBX_READY received 0.099s after start from 172.18.3.2: 'SBX_READY 3 0.04'
+[   0.122] console: 'SBX_INIT 0.02 0.00'
+[   0.144] agent:
+Linux sbx-3 4.19.0-gvisor #1 SMP Sun Jan 10 15:06:54 PST 2016 x86_64 GNU/Linux
+uid=0(root) gid=0(root) groups=0(root)
+2
+               total        used        free      shared  buff/cache   available
+Mem:            1024          15        1008           0          12        1008
+Swap:              0           0           0
+__RC=0__
+[   0.242] egress: 200 0.072684
+__RC=0__
+[   1.052] sbx-browser (0.810s):
+SBX_BROWSER ready sandbox=1
+__RC=0__
+[   1.946] chrome://sandbox: Sandbox Status | Layer 1 Sandbox	Namespace | PID namespaces	Yes | Network namespaces	Yes | Seccomp-BPF sandbox	Yes | Seccomp-BPF sandbox supports TSYNC	Yes | Ptrace Protection with Yama LSM (Broker)	Yes | Ptrace Protection with Yama LSM (Non-broker)	No | You are adequately sandboxed.
+[   2.253] CDP connected to http://172.18.3.2:9223 in 0.029s (155.0.8059.39)
+[   2.873] screenshot http://172.18.3.1:8000/index.html -> /opt/sbx/smoke/runsc-page.png (0.514s, title='sbx test page')
+[   3.127] screenshot https://example.com -> /opt/sbx/smoke/runsc-example.png (0.252s, title='Example Domain')
+[   3.182] $ sudo rm -rf /opt/sbx/snapshots/runsc-3
+[   3.189] $ /opt/sbx/bin/runsc-checkpoint 3 /opt/sbx/snapshots/runsc-3
+[   3.563]   total 157832
+[   3.563]   drwxr-xr-x 2 root  root       4096 Oct 13 02:04 .
+[   3.563]   drwxr-xr-x 8 kalan kalan      4096 Oct 13 02:04 ..
+[   3.563]   -rw-r--r-- 1 root  root    3360810 Oct 13 02:04 checkpoint.img
+[   3.563]   -rw-r--r-- 1 root  root  158154752 Oct 13 02:04 pages.img
+[   3.563]   -rw-r--r-- 1 root  root      87392 Oct 13 02:04 pages_meta.img
+[   3.563]   -rw-r--r-- 1 root  root          8 Oct 13 02:04 slot
+[   3.563] snapshot took 0.374s
+[   3.563] $ sudo du -sh /opt/sbx/snapshots/runsc-3
+[   3.568]   155M	/opt/sbx/snapshots/runsc-3
+[   3.568] $ /opt/sbx/bin/runsc-stop 3
+[   3.600] $ /opt/sbx/bin/runsc-restore 3 /opt/sbx/snapshots/runsc-3
+[   3.850]   runsc-restore: slot 3 id sbx-runsc-3 from /opt/sbx/snapshots/runsc-3 (plain)
+[   3.866] restore -> agent responsive=True after 0.266s
+[   3.899] restored agent: 3.81 0.00
+Tue Oct 13 02:04:30 UTC 2026
+9
+__RC=0__
+[   4.190] CDP connected to http://172.18.3.2:9223 in 0.074s (155.0.8059.39)
+[   4.745] screenshot http://172.18.3.1:8000/index.html -> /opt/sbx/smoke/runsc-restored-page.png (0.374s, title='sbx test page')
+[   4.797] RESULT: PASS
+[   4.797] $ /opt/sbx/bin/runsc-stop 3

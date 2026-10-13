@@ -1,0 +1,33 @@
+# Collected 2026-10-13T02:02:09Z on sandbox-lab, host kernel 6.8.0-142-generic, Ubuntu 24.04.5 LTS
+firecracker      Firecracker v1.17.0
+jailer           Jailer v1.17.0
+cloud-hypervisor cloud-hypervisor v53.0 (static release binary)
+ch-remote        ch-remote v53.0
+virtiofsd        virtiofsd 1.10.0 (Ubuntu apt 1.10.0-1ubuntu0.1)
+runsc            runsc version release-20261005.0 (apt 20261005.0)
+containerd-shim-runsc-v1 from the same runsc package
+docker           Docker version 29.9.0, build f415da8 (docker-ce 5:29.9.0-1~ubuntu.24.04~noble)
+containerd       containerd containerd v2.4.1 f2551031d7276a770f65f98c9b52e57e7dad07e8
+runc             runc version 1.5.2
+guest kernel     linux 6.18.56 (kernel.org longterm), base config firecracker-microvm/firecracker@7614ab4d258ad66eee72a34f2fbf3712c3664c65 resources/guest_configs/microvm-kernel-ci-x86_64-6.18.config
+guest kernel gcc gcc (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0
+vmlinux          27698152 bytes, sha256 9596c92743ced534db3d2875796162cde49972c02c1b596f176841ff4dc5671a
+guest chromium   Chromium 155.0.8059.39 built on Debian GNU/Linux 13 (trixie)
+guest node       v20.19.2, npm 9.2.0
+guest python     Python 3.13.5
+guest gcc        gcc (Debian 14.2.0-19) 14.2.0
+guest sqlite src sqlite-amalgamation-3540000 (3.54.0)
+guest redis.git  38087a9f7f900eeb490297096c6a24b85f8e7d97 (depth 500, 507 commits)
+guest many-files 23405 files
+guest os         Debian GNU/Linux 13 (trixie)
+image sbx-guest:latest id sha256:c30514a439063078072cd3d8779ae4a57f9a38aa2e32691fb086815543108c82 size 2425982814 bytes
+base             docker.io/library/debian:trixie-slim@sha256:a29215f6a35e51e22adffa17f89e9d2ef06214e64a2bad10d765c46aea49f11f (resolved at build time)
+rootfs.ext4      2169503744 bytes
+host playwright  1.63.0 (python 3.12.3)
+# Step 0 rebuild (measurement phase), 2026-10-13T02:14:23Z
+image sbx-guest:latest id sha256:6207c7944deeba346bbe72cc78058681fec690deeb4629cf797169a1b2d5f4e1 size 2595528133 bytes (was c30514a4..., 2425982814)
+rootfs.ext4      2276458496 bytes (was 2169503744)
+added            fonts-noto-cjk	1:20240730+repack1-1; mkdir /work in image; /work tmpfs in sbx-init (VMs), OCI mount (raw runsc/runc), docker --tmpfs
+guest redis.git  38087a9f7f900eeb490297096c6a24b85f8e7d97 (unchanged, 507 commits); many-files.tar 208957440 bytes, 23405 files (typescript 7.0.2)
+firecracker      config now includes "entropy": {} (virtio-rng, matching CH --rng)
+host sysctl      kernel.apparmor_restrict_unprivileged_userns=0 (lab-only, for Chromium sandbox under raw runc)

@@ -1,0 +1,11 @@
+#!/bin/bash
+# Usage: oci-config SLOT ROOTFS_PATH CONTAINER_ID > config.json
+set -euo pipefail
+n=$1 rootfs=$2 id=$3
+jq --arg n "$n" --arg rootfs "$rootfs" --arg id "$id" '
+  .root.path = $rootfs
+  | .hostname = "sbx-\($n)"
+  | .process.env += ["SBX_HOST=172.18.\($n).1", "SBX_SLOT=\($n)"]
+  | (.linux.namespaces[] | select(.type == "network")) += {path: "/run/netns/sbxns\($n)"}
+  | .linux.cgroupsPath = "/sbx/\($id)"
+' /opt/sbx/oci/config.json

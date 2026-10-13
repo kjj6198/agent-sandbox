@@ -1,0 +1,316 @@
++ : '== Firecracker --no-api cold boot'
++ listen 5
++ timeout 5 socat -u TCP-LISTEN:7001,reuseaddr,fork STDOUT
++ sleep 0.2
++ /opt/sbx/bin/fc-start 10
+fc-start: slot 10 pid 78111 guest 172.16.10.2 console /run/sbx/fc-10/console.log
++ sleep 2
+SBX_READY 10 0.19
++ python3 /tmp/agent.py 172.16.10.2 'uname -r; cat /proc/uptime'
+6.18.56
+1.95 3.62
+__RC=0__
++ /opt/sbx/bin/fc-stop 10
++ sleep 3
+2026/10/13 01:59:59 socat[78097] W exiting on signal 15
++ : '== runsc fast checkpoint/restore (--compression=none --exclude-committed-zero-pages / --background)'
++ listen 5
++ sleep 0.2
++ timeout 5 socat -u TCP-LISTEN:7001,reuseaddr,fork STDOUT
++ /opt/sbx/bin/runsc-start 11
+runsc-start: slot 11 id sbx-runsc-11 guest 172.18.11.2 console /run/sbx/runsc-11/console.log
++ sleep 1
+SBX_READY 11 0.03
++ python3 /tmp/agent.py 172.18.11.2 sbx-browser
+SBX_BROWSER ready sandbox=1
+__RC=0__
++ /opt/sbx/bin/runsc-checkpoint 11 /opt/sbx/snapshots/runsc-11-fast fast
+total 109352
+drwxr-xr-x 2 root  root       4096 Oct 13 02:00 .
+drwxr-xr-x 6 kalan kalan      4096 Oct 13 02:00 ..
+-rw-r--r-- 1 root  root    2720707 Oct 13 02:00 checkpoint.img
+-rw-r--r-- 1 root  root  109174784 Oct 13 02:00 pages.img
+-rw-r--r-- 1 root  root      64986 Oct 13 02:00 pages_meta.img
+-rw-r--r-- 1 root  root          8 Oct 13 02:00 slot
++ sudo du -sh /opt/sbx/snapshots/runsc-11-fast
+107M	/opt/sbx/snapshots/runsc-11-fast
++ /opt/sbx/bin/runsc-stop 11
+++ date +%s.%N
++ t=1791856802.332423984
++ /opt/sbx/bin/runsc-restore 11 /opt/sbx/snapshots/runsc-11-fast fast
+runsc-restore: slot 11 id sbx-runsc-11 from /opt/sbx/snapshots/runsc-11-fast (fast)
++ python3 /tmp/agent.py 172.18.11.2 true
++++ date +%s.%N
+++ bc
+++ echo '1791856802.592661606 - 1791856802.332423984'
++ echo 'agent after .260237622s'
+agent after .260237622s
++ python3 /tmp/agent.py 172.18.11.2 'pgrep -c chromium; curl -s 127.0.0.1:9222/json/version | grep Browser'
+9
+   "Browser": "Chrome/155.0.8059.39",
+__RC=0__
++ curl -s http://172.18.11.2:9223/json/version
++ grep Browser
+   "Browser": "Chrome/155.0.8059.39",
++ /opt/sbx/bin/runsc-stop 11
++ sleep 3
+2026/10/13 02:00:05 socat[78137] W exiting on signal 15
++ : '== runsc plain checkpoint for size comparison'
++ listen 5
++ sleep 0.2
++ timeout 5 socat -u TCP-LISTEN:7001,reuseaddr,fork STDOUT
++ /opt/sbx/bin/runsc-start 11
+runsc-start: slot 11 id sbx-runsc-11 guest 172.18.11.2 console /run/sbx/runsc-11/console.log
++ sleep 1
+SBX_READY 11 0.05
++ python3 /tmp/agent.py 172.18.11.2 sbx-browser
+SBX_BROWSER ready sandbox=1
+__RC=0__
++ /opt/sbx/bin/runsc-checkpoint 11 /opt/sbx/snapshots/runsc-11-plain plain
++ tail -3
+-rw-r--r-- 1 root  root  111464448 Oct 13 02:00 pages.img
+-rw-r--r-- 1 root  root      66212 Oct 13 02:00 pages_meta.img
+-rw-r--r-- 1 root  root          9 Oct 13 02:00 slot
++ /opt/sbx/bin/runsc-stop 11
++ sleep 3
+2026/10/13 02:00:11 socat[78462] W exiting on signal 15
++ : '== Cloud Hypervisor ondemand restore'
++ listen 5
++ timeout 5 socat -u TCP-LISTEN:7001,reuseaddr,fork STDOUT
++ sleep 0.2
++ /opt/sbx/bin/ch-start 12
+ch-start: slot 12 pid 78640 guest 172.16.12.2 console /run/sbx/ch-12/console.log
++ sleep 1
+SBX_READY 12 0.15
++ python3 /tmp/agent.py 172.16.12.2 sbx-browser
+SBX_BROWSER ready sandbox=1
+__RC=0__
++ /opt/sbx/bin/ch-snapshot 12 /opt/sbx/snapshots/ch-12
++ /opt/sbx/bin/ch-stop 12
+++ date +%s.%N
++ t=1791856813.506148457
++ /opt/sbx/bin/ch-restore 12 /opt/sbx/snapshots/ch-12 ondemand
+ch-restore: slot 12 pid 78698 from /opt/sbx/snapshots/ch-12 (ondemand)
++ python3 /tmp/agent.py 172.16.12.2 true
+++ bc
++++ date +%s.%N
+++ echo '1791856813.588291130 - 1791856813.506148457'
++ echo 'agent after .082142673s'
+agent after .082142673s
++ curl -s http://172.16.12.2:9223/json/version
++ grep Browser
+   "Browser": "Chrome/155.0.8059.39",
++ sudo tail -3 /run/sbx/ch-12/console.log
+cloud-hypervisor:   0.003370s: <vmm> WARN:net_util/src/open_tap.rs:84 -- Tap sbxtap12 already exists. IP configuration will not be overwritten.
++ /opt/sbx/bin/ch-stop 12
+++ date +%s.%N
++ t=1791856813.823790261
++ /opt/sbx/bin/ch-restore 12 /opt/sbx/snapshots/ch-12 copy
+ch-restore: slot 12 pid 78753 from /opt/sbx/snapshots/ch-12 (copy)
++ python3 /tmp/agent.py 172.16.12.2 true
+++ bc
++++ date +%s.%N
+++ echo '1791856814.875534846 - 1791856813.823790261'
++ echo 'copy-mode agent after 1.051744585s'
+copy-mode agent after 1.051744585s
++ /opt/sbx/bin/ch-stop 12
++ sleep 3
+2026/10/13 02:00:16 socat[78625] W exiting on signal 15
++ : '== Cloud Hypervisor virtio-fs'
++ mkdir -p /tmp/vfs
++ echo hello-from-host
++ listen 5
++ sleep 0.2
++ timeout 5 socat -u TCP-LISTEN:7001,reuseaddr,fork STDOUT
++ SBX_CH_VIRTIOFS=/tmp/vfs
++ /opt/sbx/bin/ch-start 13
+ch-start: slot 13 pid 78805 guest 172.16.13.2 console /run/sbx/ch-13/console.log
++ sleep 1.5
+SBX_READY 13 0.14
++ python3 /tmp/agent.py 172.16.13.2 'mkdir -p /mnt/work && mount -t virtiofs work /mnt/work && cat /mnt/work/hello.txt && echo from-guest > /mnt/work/guest.txt'
+mount: /mnt/work: wrong fs type, bad option, bad superblock on work, missing codepage or helper program, or other error.
+       dmesg(1) may have more information after failed mount system call.
+__RC=32__
++ cat /tmp/vfs/guest.txt
+cat: /tmp/vfs/guest.txt: No such file or directory
++ /opt/sbx/bin/ch-stop 13
++ pgrep -c virtiofsd
+0
++ : '== shared rootfs untouched'
++ sudo find /opt/sbx/oci/rootfs -newer /opt/sbx/oci/config.json -not -type d
++ head
++ sha256sum /opt/sbx/images/rootfs.ext4
++ cut -c1-16
+36cdbcc7b732bad4
+2026/10/13 02:00:22 socat[78790] W exiting on signal 15
++ : '== Cloud Hypervisor virtio-fs (retry after sudo env fix)'
++ timeout 5 socat -u TCP-LISTEN:7001,reuseaddr,fork STDOUT
++ sleep 0.2
++ SBX_CH_VIRTIOFS=/tmp/vfs
++ /opt/sbx/bin/ch-start 13
+ch-start: slot 13 pid 78921 guest 172.16.13.2 console /run/sbx/ch-13/console.log
++ sleep 1.5
+SBX_READY 13 0.22
++ python3 /tmp/agent.py 172.16.13.2 'mkdir -p /mnt/work && mount -t virtiofs work /mnt/work && cat /mnt/work/hello.txt && echo from-guest > /mnt/work/guest.txt'
+hello-from-host
+__RC=0__
++ cat /tmp/vfs/guest.txt
+from-guest
++ /opt/sbx/bin/ch-stop 13
++ pgrep -c virtiofsd
+0
++ : '== raw runsc with SBX_RUNSC_PLATFORM=kvm'
++ timeout 5 socat -u TCP-LISTEN:7001,reuseaddr,fork STDOUT
++ sleep 0.2
+2026/10/13 02:00:50 socat[78963] E bind(5, {AF=10 [0000:0000:0000:0000:0000:0000:0000:0000]:7001}, 28): Address already in use
++ SBX_RUNSC_PLATFORM=kvm
++ /opt/sbx/bin/runsc-start 14
+runsc-start: slot 14 id sbx-runsc-14 guest 172.18.14.2 console /run/sbx/runsc-14/console.log
++ sleep 1
+SBX_READY 14 0.09
++ python3 /tmp/agent.py 172.18.14.2 'uname -r'
+4.19.0-gvisor
+__RC=0__
++ pgrep -af runsc-sandbox
++ grep -o -- --platform=kvm
++ head -1
+--platform=kvm
++ SBX_RUNSC_PLATFORM=kvm
++ /opt/sbx/bin/runsc-stop 14
+2026/10/13 02:00:53 socat[78902] W exiting on signal 15
++ : '== Docker inside a Firecracker guest (nice to have)'
++ timeout 5 socat -u TCP-LISTEN:7001,reuseaddr,fork STDOUT
++ sleep 0.2
++ /opt/sbx/bin/fc-start 15 2 2048
+fc-start: slot 15 pid 79084 guest 172.16.15.2 console /run/sbx/fc-15/console.log
++ sleep 1.5
++ python3 /tmp/agent.py 172.16.15.2 'export DEBIAN_FRONTEND=noninteractive; apt-get update -qq >/dev/null && apt-get install -y -qq --no-install-recommends docker.io iptables >/dev/null 2>&1; echo install=$?; (dockerd >/tmp/dockerd.log 2>&1 &); for i in $(seq 50); do docker info >/dev/null 2>&1 && break; sleep 0.2; done; docker info --format "{{.ServerVersion}} {{.Driver}} {{.CgroupVersion}}"; docker run --rm hello-world 2>&1 | grep -m1 Hello; docker run --rm busybox wget -qO- http://example.com 2>&1 | grep -m1 -o "<title>.*</title>"; tail -3 /tmp/dockerd.log'
+2026/10/13 02:01:14 socat[79070] W exiting on signal 15
+install=0
+/bin/bash: line 1: docker: command not found
+time="2026-10-13T02:01:17.823477470Z" level=info msg="Docker daemon" commit=411e817 containerd-snapshotter=false storage-driver=vfs version=26.1.5+dfsg1
+time="2026-10-13T02:01:17.823519244Z" level=info msg="Daemon has completed initialization"
+time="2026-10-13T02:01:17.827612801Z" level=info msg="API listen on /var/run/docker.sock"
+__RC=0__
++ /opt/sbx/bin/fc-stop 15
++ : '== Docker inside a Firecracker guest, retry with docker-cli and tmpfs /var/lib/docker'
++ timeout 5 socat -u TCP-LISTEN:7001,reuseaddr,fork STDOUT
++ sleep 0.2
++ /opt/sbx/bin/fc-start 15 2 2048
+fc-start: slot 15 pid 79129 guest 172.16.15.2 console /run/sbx/fc-15/console.log
++ sleep 1.5
++ python3 /tmp/agent.py 172.16.15.2 'export DEBIAN_FRONTEND=noninteractive; apt-get update -qq >/dev/null && apt-get install -y -qq --no-install-recommends docker.io docker-cli iptables >/dev/null 2>&1; echo install=$?; mkdir -p /var/lib/docker && mount -t tmpfs tmpfs /var/lib/docker; (dockerd >/tmp/dockerd.log 2>&1 &); for i in $(seq 50); do docker info >/dev/null 2>&1 && break; sleep 0.2; done; docker info --format "{{.ServerVersion}} {{.Driver}} cgroup{{.CgroupVersion}}"; docker run --rm hello-world 2>&1 | grep -m1 Hello; docker run --rm busybox wget -qO- http://example.com 2>&1 | grep -m1 -o "<title>.*</title>"; grep -i -m3 "level=error\|level=warn" /tmp/dockerd.log'
+2026/10/13 02:01:41 socat[79115] W exiting on signal 15
+install=0
+26.1.5+dfsg1 overlay2 cgroup2
+Hello from Docker!
+<title>Example Domain</title>
+time="2026-10-13T02:01:44.973568756Z" level=warning msg="WARNING: No swap limit support"
+time="2026-10-13T02:01:48.830725918Z" level=warning msg="Failed to delete conntrack state for 172.17.0.2: invalid argument"
+time="2026-10-13T02:01:48.948674062Z" level=warning msg="cleaning up after shim disconnected" id=99e98017d7618792a87673b114dbaab8ed4f16b3bd89e9863fa3e1e42cd8f59b namespace=moby
+__RC=0__
++ /opt/sbx/bin/fc-stop 15
++ : '== idempotency: start twice, then hard-kill and start again'
++ for i in 1 2
++ /opt/sbx/bin/fc-start 20
+fc-start: slot 20 pid 79434 guest 172.16.20.2 console /run/sbx/fc-20/console.log
++ : '== idempotency: start twice, then hard-kill everything and start again'
++ for i in 1 2
++ /opt/sbx/bin/fc-start 20
+fc-start: slot 20 pid 79473 guest 172.16.20.2 console /run/sbx/fc-20/console.log
++ /opt/sbx/bin/ch-start 21
+ch-start: slot 21 pid 79492 guest 172.16.21.2 console /run/sbx/ch-21/console.log
++ /opt/sbx/bin/runsc-start 22
+runsc-start: slot 22 id sbx-runsc-22 guest 172.18.22.2 console /run/sbx/runsc-22/console.log
++ /opt/sbx/bin/runc-start 23
+runc-start: slot 23 id sbx-runc-23 guest 172.18.23.2 console /run/sbx/runc-23/console.log
++ /opt/sbx/bin/docker-start 24 --runtime runsc
+docker-start: slot 24 runtime runsc guest 172.30.24.2 logs: docker logs sbx-docker-24
++ for i in 1 2
++ /opt/sbx/bin/fc-start 20
+fc-start: slot 20 pid 79814 guest 172.16.20.2 console /run/sbx/fc-20/console.log
++ /opt/sbx/bin/ch-start 21
+ch-start: slot 21 pid 79836 guest 172.16.21.2 console /run/sbx/ch-21/console.log
++ /opt/sbx/bin/runsc-start 22
+runsc-start: slot 22 id sbx-runsc-22 guest 172.18.22.2 console /run/sbx/runsc-22/console.log
++ /opt/sbx/bin/runc-start 23
+runc-start: slot 23 id sbx-runc-23 guest 172.18.23.2 console /run/sbx/runc-23/console.log
++ /opt/sbx/bin/docker-start 24 --runtime runsc
+docker-start: slot 24 runtime runsc guest 172.30.24.2 logs: docker logs sbx-docker-24
++ sleep 2
++ for ip in 172.16.20.2 172.16.21.2 172.18.22.2 172.18.23.2 172.30.24.2
++ python3 /tmp/agent.py 172.16.20.2 hostname
++ head -1
+sbx-20
++ for ip in 172.16.20.2 172.16.21.2 172.18.22.2 172.18.23.2 172.30.24.2
++ python3 /tmp/agent.py 172.16.21.2 hostname
++ head -1
+sbx-21
++ for ip in 172.16.20.2 172.16.21.2 172.18.22.2 172.18.23.2 172.30.24.2
++ python3 /tmp/agent.py 172.18.22.2 hostname
++ head -1
+sbx-22
++ for ip in 172.16.20.2 172.16.21.2 172.18.22.2 172.18.23.2 172.30.24.2
++ python3 /tmp/agent.py 172.18.23.2 hostname
++ head -1
+sbx-23
++ for ip in 172.16.20.2 172.16.21.2 172.18.22.2 172.18.23.2 172.30.24.2
++ python3 /tmp/agent.py 172.30.24.2 hostname
++ head -1
+sbx-24
++ pgrep -c '^firecracker'
+1
++ pgrep -fc '^cloud-hypervisor'
+1
++ pgrep -fa '^runsc-sandbox'
++ grep -c sbx-runsc-22
+1
++ sudo pkill -KILL -f '^firecracker --id sbx-fc-20 '
++ sudo pkill -KILL -f '^cloud-hypervisor --api-socket path=/run/sbx/ch-21/'
++ sudo pkill -KILL -f '^runsc-sandbox.*sbx-runsc-22'
+++ sudo cat /run/sbx/runc-23/pid
++ sudo kill -KILL 79982
++ sleep 0.5
++ /opt/sbx/bin/fc-start 20
+fc-start: slot 20 pid 80199 guest 172.16.20.2 console /run/sbx/fc-20/console.log
++ /opt/sbx/bin/ch-start 21
+ch-start: slot 21 pid 80218 guest 172.16.21.2 console /run/sbx/ch-21/console.log
++ /opt/sbx/bin/runsc-start 22
+runsc-start: slot 22 id sbx-runsc-22 guest 172.18.22.2 console /run/sbx/runsc-22/console.log
++ /opt/sbx/bin/runc-start 23
+runc-start: slot 23 id sbx-runc-23 guest 172.18.23.2 console /run/sbx/runc-23/console.log
++ sleep 2
++ for ip in 172.16.20.2 172.16.21.2 172.18.22.2 172.18.23.2
++ python3 /tmp/agent.py 172.16.20.2 hostname
++ head -1
+sbx-20
++ for ip in 172.16.20.2 172.16.21.2 172.18.22.2 172.18.23.2
++ python3 /tmp/agent.py 172.16.21.2 hostname
++ head -1
+sbx-21
++ for ip in 172.16.20.2 172.16.21.2 172.18.22.2 172.18.23.2
++ python3 /tmp/agent.py 172.18.22.2 hostname
++ head -1
+sbx-22
++ for ip in 172.16.20.2 172.16.21.2 172.18.22.2 172.18.23.2
++ python3 /tmp/agent.py 172.18.23.2 hostname
++ head -1
+sbx-23
++ /opt/sbx/bin/fc-stop 20
++ /opt/sbx/bin/ch-stop 21
++ /opt/sbx/bin/runsc-stop 22
++ /opt/sbx/bin/runc-stop 23
++ /opt/sbx/bin/docker-stop 24
++ ls /run/sbx/
+runc-root
+runsc-root
++ sudo runsc --root /run/sbx/runsc-root list
+ID          PID         STATUS      BUNDLE      CREATED     OWNER
++ sudo runc --root /run/sbx/runc-root list
+ID          PID         STATUS      BUNDLE      CREATED     OWNER
++ mount
++ grep -c /run/sbx/
+1
++ pgrep -c 'firecracker|cloud-hyperv|runsc'
+0
+2026/10/13 02:04:05 socat[79454] W exiting on signal 15

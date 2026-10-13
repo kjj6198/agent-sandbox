@@ -1,0 +1,16 @@
+#!/bin/bash
+set -uo pipefail
+[ "$(id -u)" = 0 ] || exec sudo "$0" "$@"
+UPLINK=$(ip -o route get 1.1.1.1 | sed -n 's/.* dev \([^ ]*\).*/\1/p')
+
+for l in $(ip -o link show | grep -oE 'sbx(tap|v)[0-9]+' | sort -u); do ip link del "$l"; done
+for ns in $(ip netns list | grep -oE '^sbxns[0-9]+'); do ip netns del "$ns"; done
+for net in 172.16.0.0/16 172.18.0.0/16; do
+  while iptables -t nat -D POSTROUTING -s "$net" -o "$UPLINK" -j MASQUERADE 2>/dev/null; do :; done
+done
+for ifc in sbxtap+ sbxv+; do
+  while iptables -D FORWARD -i "$ifc" -j ACCEPT 2>/dev/null; do :; done
+  while iptables -D FORWARD -o "$ifc" -j ACCEPT 2>/dev/null; do :; done
+done
+docker network rm sbxnet >/dev/null 2>&1 || true
+echo "net-teardown: done"

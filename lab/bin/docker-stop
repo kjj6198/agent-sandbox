@@ -1,0 +1,5 @@
+#!/bin/bash
+# Usage: docker-stop N
+[ "$(id -u)" = 0 ] || exec sudo "$0" "$@"
+docker rm -f "sbx-docker-$1" >/dev/null 2>&1
+true

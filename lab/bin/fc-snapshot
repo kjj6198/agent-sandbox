@@ -1,0 +1,18 @@
+#!/bin/bash
+# Usage: fc-snapshot N DIR   (VM must have been started with fc-start --api; it keeps running afterwards)
+set -euo pipefail
+[ "$(id -u)" = 0 ] || exec sudo "$0" "$@"
+n=$1 out=$2
+sock=/run/sbx/fc-$n/api.sock
+[ -S "$sock" ] || { echo "fc-snapshot: $sock missing (start with fc-start --api)" >&2; exit 1; }
+api() { curl -fsS --unix-socket "$sock" -X "$1" "http://localhost$2" -H 'Content-Type: application/json' -d "$3"; }
+
+mkdir -p "$out"
+rm -f "$out/vmstate" "$out/mem"
+api PATCH /vm '{"state":"Paused"}'
+api PUT /snapshot/create "{\"snapshot_type\":\"Full\",\"snapshot_path\":\"$out/vmstate\",\"mem_file_path\":\"$out/mem\"}"
+api PATCH /vm '{"state":"Resumed"}'
+echo "$n" >"$out/slot"
+# KVM only saves realtime with kvmclock when the host clocksource is tsc; fc-restore checks this.
+cat /sys/devices/system/clocksource/clocksource0/current_clocksource >"$out/host-clocksource"
+ls -la "$out"

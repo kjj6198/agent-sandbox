@@ -1,0 +1,9 @@
+# Sourced. kill_wait PID...: SIGKILL and wait until each /proc/PID is gone.
+# pgrep -f alone is not enough: an exiting VMM loses its cmdline before it closes the tap fd.
+kill_wait() {
+  [ $# -gt 0 ] || return 0
+  kill -KILL "$@" 2>/dev/null
+  for pid in "$@"; do
+    for _ in $(seq 500); do [ -e "/proc/$pid" ] || break; sleep 0.01; done
+  done
+}

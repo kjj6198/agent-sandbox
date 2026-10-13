@@ -1,0 +1,13 @@
+#!/bin/bash
+# Usage: runsc-stop N
+set -uo pipefail
+[ "$(id -u)" = 0 ] || exec sudo --preserve-env=SBX_RUNSC_PLATFORM "$0" "$@"
+n=$1
+id=sbx-runsc-$n dir=/run/sbx/runsc-$n
+source "$(dirname "$0")/runsc-common"
+
+runsc_ kill "$id" KILL >/dev/null 2>&1
+runsc_ delete -force "$id" >/dev/null 2>&1
+pkill -KILL -f -- "^runsc-sandbox .*--root $RUNSC_ROOT .* $id\$" 2>/dev/null
+rm -rf "$dir" "$RUNSC_ROOT/$id" "$RUNSC_ROOT/$id"_sandbox*
+true

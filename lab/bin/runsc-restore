@@ -1,0 +1,19 @@
+#!/bin/bash
+# Usage: runsc-restore N DIR [plain|fast]
+#   fast: --background starts the app before all memory is loaded (needs a fast checkpoint).
+set -euo pipefail
+[ "$(id -u)" = 0 ] || exec sudo --preserve-env=SBX_RUNSC_PLATFORM "$0" "$@"
+n=$1 src=$2 mode=${3:-plain}
+id=sbx-runsc-$n dir=/run/sbx/runsc-$n
+source "$(dirname "$0")/runsc-common"
+
+"$(dirname "$0")/runsc-stop" "$n"
+# runsc's netstack strips eth0's address and routes from the netns and never restores them.
+"$(dirname "$0")/net-setup" "$n"
+mkdir -p "$dir/bundle"
+"$(dirname "$0")/oci-config" "$n" /opt/sbx/oci/rootfs "$id" >"$dir/bundle/config.json"
+opts=()
+[ "$mode" = fast ] && opts=(--background)
+runsc_ restore --detach --image-path "$src" "${opts[@]}" --bundle "$dir/bundle" \
+  --pid-file "$dir/pid" "$id" </dev/null >"$dir/console.log" 2>&1
+echo "runsc-restore: slot $n id $id from $src ($mode)"

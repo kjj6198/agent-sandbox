@@ -1,0 +1,16 @@
+#!/bin/bash
+# Usage: runsc-start N     (SBX_RUNSC_PLATFORM=systrap|kvm, default systrap)
+set -euo pipefail
+[ "$(id -u)" = 0 ] || exec sudo --preserve-env=SBX_RUNSC_PLATFORM "$0" "$@"
+n=$1
+id=sbx-runsc-$n dir=/run/sbx/runsc-$n
+source "$(dirname "$0")/runsc-common"
+
+"$(dirname "$0")/runsc-stop" "$n"
+# runsc's netstack strips eth0's address and routes from the netns and never restores them.
+"$(dirname "$0")/net-setup" "$n"
+mkdir -p "$dir/bundle"
+"$(dirname "$0")/oci-config" "$n" /opt/sbx/oci/rootfs "$id" >"$dir/bundle/config.json"
+runsc_ run --detach --bundle "$dir/bundle" --pid-file "$dir/pid" "$id" \
+  </dev/null >"$dir/console.log" 2>&1
+echo "runsc-start: slot $n id $id guest 172.18.$n.2 console $dir/console.log"
