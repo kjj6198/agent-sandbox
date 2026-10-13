@@ -49,7 +49,8 @@ func (d *Daemon) auth(next http.Handler) http.Handler {
 }
 
 // withSandbox looks up {id} and marks the sandbox active for the whole request, so a long
-// exec or an open port forward never lets it expire.
+// exec or an open port forward never lets it expire. Requests with passive=1 do not count,
+// so a screen viewer left open cannot keep an abandoned sandbox alive.
 func (d *Daemon) withSandbox(h func(http.ResponseWriter, *http.Request, *sandbox)) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		sb, err := d.get(r.PathValue("id"))
@@ -57,8 +58,10 @@ func (d *Daemon) withSandbox(h func(http.ResponseWriter, *http.Request, *sandbox
 			writeError(w, http.StatusNotFound, err)
 			return
 		}
-		sb.begin()
-		defer sb.end()
+		if r.URL.Query().Get("passive") != "1" {
+			sb.begin()
+			defer sb.end()
+		}
 		h(w, r, sb)
 	}
 }

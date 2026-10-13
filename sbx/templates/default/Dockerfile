@@ -16,6 +16,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
       jq ripgrep fd-find tree unzip zip xz-utils zstd file rsync sqlite3 \
       ffmpeg imagemagick \
       chromium fonts-noto-cjk fonts-noto-color-emoji fonts-liberation fonts-dejavu-core \
+      tigervnc-standalone-server openbox x11-xserver-utils \
       locales tzdata \
     && ln -s /usr/bin/fdfind /usr/local/bin/fd \
     && sed -i -E 's/^# (en_US|ja_JP|zh_TW)\.UTF-8/\1.UTF-8/' /etc/locale.gen && locale-gen \
@@ -42,4 +43,4 @@ RUN useradd -m -u 1000 -s /bin/bash user \
     && echo 'user ALL=(ALL) NOPASSWD:ALL' >/etc/sudoers.d/user && chmod 0440 /etc/sudoers.d/user
 
 COPY profile.sh /etc/profile.d/sbx.sh
-COPY sbx-browser /usr/local/bin/sbx-browser
+COPY sbx-desktop sbx-browser /usr/local/bin/

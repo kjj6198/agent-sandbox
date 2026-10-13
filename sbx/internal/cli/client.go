@@ -69,7 +69,20 @@ func (c *client) request(ctx context.Context, method, path string, body io.Reade
 	return req, nil
 }
 
-// send performs req and turns an error status into an error carrying the daemon's message.
+// apiError is an error answer from sbxd.
+type apiError struct {
+	status int
+	msg    string
+}
+
+func (e *apiError) Error() string { return e.msg }
+
+func isNotFound(err error) bool {
+	var ae *apiError
+	return errors.As(err, &ae) && ae.status == http.StatusNotFound
+}
+
+// send performs req and turns an error status into an *apiError carrying the daemon's message.
 func (c *client) send(req *http.Request) (*http.Response, error) {
 	resp, err := c.hc.Do(req)
 	if err != nil {
@@ -82,7 +95,7 @@ func (c *client) send(req *http.Request) (*http.Response, error) {
 		if json.Unmarshal(b, &e) != nil || e.Error == "" {
 			e.Error = strings.TrimSpace(resp.Status + " " + string(b))
 		}
-		return nil, errors.New(e.Error)
+		return nil, &apiError{status: resp.StatusCode, msg: e.Error}
 	}
 	return resp, nil
 }
