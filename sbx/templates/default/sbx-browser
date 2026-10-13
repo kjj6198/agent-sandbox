@@ -1,20 +1,22 @@
 #!/bin/bash
-# Starts headless Chromium with the DevTools protocol on 127.0.0.1:9222 and waits until it
-# answers. The browser template runs this before its snapshot, so its sandboxes start with
-# the browser already up. Reach it from outside with `sbx forward ID 9222`.
+# Opens Chromium on the sandbox's desktop with the DevTools protocol on 127.0.0.1:9222 and
+# waits until it answers. The browser template runs this before its snapshot, so its
+# sandboxes start with the browser already up. Drive it from outside through
+# `sbx forward ID 9222`, and watch it with `sbx view ID`.
 set -eu
+export DISPLAY=:0
 port=${SBX_BROWSER_PORT:-9222}
 if curl -fsS "http://127.0.0.1:$port/json/version" >/dev/null 2>&1; then
   echo "chromium already listening on $port"
   exit 0
 fi
 profile=$(mktemp -d /tmp/chromium-profile.XXXXXX)
-setsid chromium --headless=new \
+sbx-desktop >/dev/null
+setsid chromium --start-maximized --password-store=basic \
   --remote-debugging-address=127.0.0.1 --remote-debugging-port="$port" \
   --remote-allow-origins='*' --user-data-dir="$profile" \
   --disable-gpu --disable-dev-shm-usage --no-first-run --no-default-browser-check \
-  --disable-background-networking --disable-breakpad --mute-audio --hide-scrollbars \
-  --window-size=1280,800 about:blank >/tmp/chromium.log 2>&1 </dev/null &
+  --disable-background-networking --disable-breakpad --mute-audio about:blank >/tmp/chromium.log 2>&1 </dev/null &
 for _ in $(seq 150); do
   if curl -fsS "http://127.0.0.1:$port/json/version" >/dev/null 2>&1; then
     echo "chromium listening on $port"

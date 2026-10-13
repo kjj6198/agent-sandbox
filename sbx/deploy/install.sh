@@ -120,12 +120,13 @@ step_sbx() {
 }
 
 # Builds the default template, then the browser template: the same image with Chromium
-# already running when the snapshot is taken. Set SBX_REBUILD=1 to rebuild existing ones.
+# already open when the snapshot is taken. Both start the desktop first, so every sandbox
+# has a screen. Set SBX_REBUILD=1 to rebuild existing ones.
 step_templates() {
   local have
   have=$(sbx template ls --json | jq -r '.[].name')
   if [ -n "${SBX_REBUILD:-}" ] || ! grep -qx default <<<"$have"; then
-    sbx template build default /usr/local/share/sbx/templates/default
+    sbx template build default /usr/local/share/sbx/templates/default --warmup sbx-desktop
   fi
   if [ -n "${SBX_REBUILD:-}" ] || ! grep -qx browser <<<"$have"; then
     sbx template build browser /usr/local/share/sbx/templates/default --warmup sbx-browser
