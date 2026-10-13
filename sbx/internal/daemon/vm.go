@@ -225,7 +225,11 @@ func cloneFile(src, dst string) error {
 		return nil
 	}
 	os.Remove(dst)
-	return run("cp", "--sparse=always", src, dst)
+	if err := run("cp", "--sparse=always", src, dst); err != nil {
+		return err
+	}
+	// cp copies the mode of src, and template files are read-only.
+	return os.Chmod(dst, 0o600)
 }
 
 func tail(path string, n int64) string {

@@ -38,9 +38,12 @@ Typical use:
 
   sbx run -- python3 -c 'print(1+1)'     # create, run one command, remove
 
-Browser: "sbx create browser" starts with Chromium already running, its DevTools
+Screen: every sandbox has a desktop. "sbx view $id", or "sbx create --view", opens a small
+window at the top right of your screen showing it live; GUI programs appear there.
+
+Browser: "sbx create browser" starts with Chromium already open on that desktop, its DevTools
 protocol on port 9222. Use "sbx forward $id 9222" and connect Playwright or Puppeteer to
-http://127.0.0.1:9222 with connectOverCDP.
+http://127.0.0.1:9222 with connectOverCDP. With "sbx view" you watch it browse.
 
 Sandboxes are destroyed after an idle period (default 1h, see "sbx ttl"); running commands and
 open connections count as activity. Errors from sbx itself exit with 125.`
@@ -61,7 +64,7 @@ func Main() int {
 		SilenceErrors: true,
 	}
 	root.AddCommand(createCmd(), execCmd(), runCmd(), cpCmd(), lsCmd(), inspectCmd(), rmCmd(),
-		ttlCmd(), exposeCmd(), unexposeCmd(), forwardCmd(), snapshotCmd(), forkCmd(),
+		ttlCmd(), exposeCmd(), unexposeCmd(), forwardCmd(), viewCmd(), snapshotCmd(), forkCmd(),
 		templateCmd(), statusCmd(), loginCmd())
 	err := root.Execute()
 	var ee exitError
@@ -129,13 +132,13 @@ func create(ctx context.Context, c *client, template, ttl string, env []string) 
 func createCmd() *cobra.Command {
 	var ttl string
 	var env []string
-	var asJSON bool
+	var asJSON, view bool
 	cmd := &cobra.Command{
 		Use:   "create [TEMPLATE]",
 		Short: "Create a sandbox and print its ID",
 		Long: "Create a sandbox from TEMPLATE (default \"default\") and print its ID.\n\n" +
 			"--env sets variables for every command in the sandbox.",
-		Example: "  id=$(sbx create)\n  id=$(sbx create browser --ttl 2h -e OPENAI_API_KEY)",
+		Example: "  id=$(sbx create)\n  id=$(sbx create browser --view)\n  id=$(sbx create --ttl 2h -e OPENAI_API_KEY)",
 		Args:    cobra.MaximumNArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			c, err := newClient()
@@ -146,6 +149,14 @@ func createCmd() *cobra.Command {
 			if err != nil {
 				return err
 			}
+			if view {
+				url, err := startViewer(sb.ID, true)
+				if err != nil {
+					fmt.Fprintln(os.Stderr, "sbx: viewer:", err)
+				} else {
+					fmt.Fprintln(os.Stderr, "sbx: viewer at", url)
+				}
+			}
 			if asJSON {
 				return printJSON(sb)
 			}
@@ -153,6 +164,7 @@ func createCmd() *cobra.Command {
 			return nil
 		},
 	}
+	cmd.Flags().BoolVar(&view, "view", false, "open a small window showing the sandbox's screen (see sbx view)")
 	cmd.Flags().StringVar(&ttl, "ttl", "", "idle timeout such as 30m or 2d; 0 never expires (default: daemon setting)")
 	cmd.Flags().StringArrayVarP(&env, "env", "e", nil, "NAME=VALUE, or NAME to copy it from your environment")
 	cmd.Flags().BoolVar(&asJSON, "json", false, "print the sandbox as JSON")
@@ -437,7 +449,7 @@ func loginCmd() *cobra.Command {
 		Use:     "login URL",
 		Short:   "Save the sbxd address and API token",
 		Long:    "Save the address and token to " + configPath() + ". The token is in /etc/sbx/token on the sbx host; without --token it is read from stdin.",
-		Example: "  ssh sbx-host sudo cat /etc/sbx/token | sbx login http://192.168.1.33:7070",
+		Example: "  ssh sbx-host sudo cat /etc/sbx/token | sbx login http://sbx-host:7070",
 		Args:    cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			if token == "" {

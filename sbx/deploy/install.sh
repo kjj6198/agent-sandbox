@@ -1,12 +1,15 @@
 #!/usr/bin/env bash
-# Installs sbx on a Debian or Ubuntu host that has /dev/kvm (bare metal, or a VM with nested
-# virtualization). Run as root from the directory `make dist` produces:
+# Installs sbx on an x86_64 Linux host with /dev/kvm: bare metal, or a VM with nested
+# virtualization. Debian and Ubuntu get their packages installed; on other distributions,
+# install the commands listed in step_packages first. Run as root from the directory
+# `make dist` produces, or use `make install`:
 #
 #   sudo ./install.sh [step...]
 #
 # Steps run in order and are idempotent: packages firecracker disk sysctl kernel sbx templates.
 # Settings come from the environment:
-#   SBX_DATA_DISK    block device to format as XFS for /var/lib/sbx (empty: use the root fs)
+#   SBX_DATA_DISK    block device to format as XFS for /var/lib/sbx (empty: use the root fs).
+#                    XFS or Btrfs lets sandbox disks be reflinked; any filesystem works.
 #   SBX_PUBLIC_HOST  host name put in URLs of exposed ports (default: the one clients use
 #                    to reach the API, which is right behind a port forward)
 set -euo pipefail
@@ -19,12 +22,23 @@ ARCH=$(uname -m)
 log() { echo "install: $*"; }
 
 step_packages() {
-  export DEBIAN_FRONTEND=noninteractive
-  apt-get update -q
-  # podman builds template images; the rest is networking, filesystems, and the kernel toolchain.
-  apt-get install -y -q --no-install-recommends \
-    podman xfsprogs e2fsprogs nftables iproute2 jq curl ca-certificates xz-utils \
-    build-essential flex bison bc libelf-dev libssl-dev
+  if command -v apt-get >/dev/null; then
+    export DEBIAN_FRONTEND=noninteractive
+    apt-get update -q
+    # podman builds template images; the rest is networking, filesystems, and the kernel toolchain.
+    apt-get install -y -q --no-install-recommends \
+      podman xfsprogs e2fsprogs nftables iproute2 jq curl ca-certificates xz-utils \
+      build-essential flex bison bc libelf-dev libssl-dev
+  fi
+  local missing=()
+  for c in podman mkfs.ext4 nft ip jq curl sha256sum xz make gcc flex bison bc; do
+    command -v "$c" >/dev/null || missing+=("$c")
+  done
+  if [ ${#missing[@]} -gt 0 ]; then
+    echo "install: missing commands: ${missing[*]}" >&2
+    echo "install: the kernel build also needs the libelf and OpenSSL headers" >&2
+    exit 1
+  fi
 }
 
 step_firecracker() {
@@ -47,6 +61,12 @@ step_firecracker() {
 step_disk() {
   mkdir -p "$DATA"
   if mountpoint -q "$DATA" || [ -z "${SBX_DATA_DISK:-}" ]; then
+    local fs
+    fs=$(findmnt -no FSTYPE --target "$DATA")
+    case $fs in
+      xfs | btrfs) log "$DATA is on $fs: sandbox disks are reflinked" ;;
+      *) log "$DATA is on $fs: sandbox disks are sparse copies, slower for big snapshot templates" ;;
+    esac
     return
   fi
   # XFS gives reflinks, so each sandbox's writable disk is an instant copy of its template's.
@@ -94,15 +114,19 @@ step_sbx() {
   systemctl restart sbxd.service
   for _ in $(seq 50); do sbx status >/dev/null 2>&1 && break; sleep 0.2; done
   log "sbxd $(sbxd --version) running. API token: /etc/sbx/token"
+  if command -v ufw >/dev/null && ufw status | grep -q 'Status: active'; then
+    log "ufw is active: allow 7070/tcp (API) and 30000:30999/tcp (sbx expose) for your clients"
+  fi
 }
 
 # Builds the default template, then the browser template: the same image with Chromium
-# already running when the snapshot is taken. Set SBX_REBUILD=1 to rebuild existing ones.
+# already open when the snapshot is taken. Both start the desktop first, so every sandbox
+# has a screen. Set SBX_REBUILD=1 to rebuild existing ones.
 step_templates() {
   local have
   have=$(sbx template ls --json | jq -r '.[].name')
   if [ -n "${SBX_REBUILD:-}" ] || ! grep -qx default <<<"$have"; then
-    sbx template build default /usr/local/share/sbx/templates/default
+    sbx template build default /usr/local/share/sbx/templates/default --warmup sbx-desktop
   fi
   if [ -n "${SBX_REBUILD:-}" ] || ! grep -qx browser <<<"$have"; then
     sbx template build browser /usr/local/share/sbx/templates/default --warmup sbx-browser
@@ -111,6 +135,7 @@ step_templates() {
 }
 
 [ "$(id -u)" = 0 ] || { echo "install: run as root" >&2; exit 1; }
+[ "$ARCH" = x86_64 ] || { echo "install: sbx supports x86_64 only, this is $ARCH" >&2; exit 1; }
 [ -e /dev/kvm ] || { echo "install: /dev/kvm missing; enable (nested) virtualization" >&2; exit 1; }
 
 steps=("$@")

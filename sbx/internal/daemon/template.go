@@ -241,6 +241,11 @@ func (d *Daemon) bootAndSnapshot(ctx context.Context, opt BuildOptions, tmp stri
 			return fmt.Errorf("warmup exited with %d %s", res.ExitCode, res.Error)
 		}
 	}
+	t1 := time.Now()
+	if _, err := agent.exec(ctx, proto.ExecRequest{Script: settleScript, User: "root"}, io.Discard); err != nil {
+		return err
+	}
+	fmt.Fprintf(logw, "==> guest settled after %.1f s\n", time.Since(t1).Seconds())
 	if err := errors.Join(agent.sync(ctx), v.pause(ctx), v.snapshot(ctx, "/vmstate", "/mem")); err != nil {
 		return err
 	}
@@ -251,6 +256,20 @@ func (d *Daemon) bootAndSnapshot(ctx context.Context, opt BuildOptions, tmp stri
 		os.Rename(filepath.Join(root, "upper.ext4"), filepath.Join(tmp, "upper.ext4")),
 	)
 }
+
+// settleScript waits, up to 30 s, until the guest's free memory has not moved by 1 MiB for
+// 2 s. Programs a warmup leaves running keep loading after it returns, and every page they
+// touch after the snapshot is copied into each clone: the desktop alone cost every sandbox
+// 70 MiB when it was snapshotted mid-startup.
+const settleScript = `prev=0 stable=0
+for _ in $(seq 120); do
+  cur=$(awk '/^MemFree:/ {print $2}' /proc/meminfo)
+  delta=$((cur - prev)); delta=${delta#-}
+  if [ "$delta" -lt 1024 ]; then stable=$((stable + 1)); else stable=0; fi
+  [ "$stable" -ge 8 ] && exit 0
+  prev=$cur
+  sleep 0.25
+done`
 
 // sealTemplate makes the template's files root-owned and read-only and writes its metadata.
 func sealTemplate(dir string, tpl *proto.Template) error {

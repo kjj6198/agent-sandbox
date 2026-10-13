@@ -79,7 +79,32 @@ func setupHostNetwork() error {
 	if err := os.WriteFile("/proc/sys/net/ipv4/ip_forward", []byte("1"), 0o644); err != nil {
 		return err
 	}
-	return runIn(hostRules, "nft", "-f", "-")
+	if err := runIn(hostRules, "nft", "-f", "-"); err != nil {
+		return err
+	}
+	return allowIptablesForward()
+}
+
+// allowIptablesForward lets sandbox traffic through the iptables FORWARD chain. Docker and ufw
+// set its policy to DROP, and a packet must pass every chain on the hook, so hostRules alone
+// cannot let it through. The rules go in even when the policy is ACCEPT, because Docker may
+// start later. hostRules still drops traffic to private ranges.
+func allowIptablesForward() error {
+	if _, err := exec.LookPath("iptables"); err != nil {
+		return nil
+	}
+	for _, rule := range [][]string{
+		{"-i", "sbxv+", "-j", "ACCEPT"},
+		{"-o", "sbxv+", "-m", "conntrack", "--ctstate", "ESTABLISHED,RELATED", "-j", "ACCEPT"},
+	} {
+		if run("iptables", append([]string{"-C", "FORWARD"}, rule...)...) == nil {
+			continue
+		}
+		if err := run("iptables", append([]string{"-I", "FORWARD"}, rule...)...); err != nil {
+			return err
+		}
+	}
+	return nil
 }
 
 func setupSlot(slot, uid int) error {
