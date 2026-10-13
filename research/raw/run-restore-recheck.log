@@ -1,0 +1,39 @@
+{"time": "2026-10-13T04:01:53Z", "host": "sandbox-lab", "kernel": "6.8.0-142-generic", "loadavg": [0.06884765625, 0.58349609375, 0.8916015625], "clocksource": "kvm-clock", "mem_available_kib": "MemAvailable:    7385760 kB", "userns_sysctl": "0", "scenario": "restore", "args": {"scenario": "restore", "backends": ["cloud-hypervisor", "firecracker"], "trials": 10, "warmup": 2, "rounds": 3, "k": null, "mem_mib": null, "workloads": null, "gap": 0.5, "pilot": false, "tag": "recheck", "max_load": 1.0}, "load_at_start": 0.06884765625}
+snapshot firecracker/file browser=False: 947.995874 ms, mem=1073741824 ok=True
+snapshot cloud-hypervisor/copy browser=False: 1171.446725 ms, mem=1073741824 ok=True
+restore firecracker/file trial -2: exec=30.768 ok=True 
+restore cloud-hypervisor/copy trial -2: exec=530.928 ok=True 
+restore cloud-hypervisor/ondemand trial -2: exec=53.548 ok=True 
+restore firecracker/file trial -1: exec=34.69 ok=True 
+restore cloud-hypervisor/copy trial -1: exec=345.55 ok=True 
+restore cloud-hypervisor/ondemand trial -1: exec=48.452 ok=True 
+restore firecracker/file trial 0: exec=33.667 ok=True 
+restore cloud-hypervisor/copy trial 0: exec=303.592 ok=True 
+restore cloud-hypervisor/ondemand trial 0: exec=53.356 ok=True 
+restore firecracker/file trial 1: exec=38.805 ok=True 
+restore cloud-hypervisor/copy trial 1: exec=316.042 ok=True 
+restore cloud-hypervisor/ondemand trial 1: exec=52.706 ok=True 
+restore firecracker/file trial 2: exec=40.273 ok=True 
+restore cloud-hypervisor/copy trial 2: exec=322.142 ok=True 
+restore cloud-hypervisor/ondemand trial 2: exec=55.068 ok=True 
+restore firecracker/file trial 3: exec=35.676 ok=True 
+restore cloud-hypervisor/copy trial 3: exec=308.712 ok=True 
+restore cloud-hypervisor/ondemand trial 3: exec=61.134 ok=True 
+restore firecracker/file trial 4: exec=38.855 ok=True 
+restore cloud-hypervisor/copy trial 4: exec=396.013 ok=True 
+restore cloud-hypervisor/ondemand trial 4: exec=60.012 ok=True 
+restore firecracker/file trial 5: exec=37.241 ok=True 
+restore cloud-hypervisor/copy trial 5: exec=311.195 ok=True 
+restore cloud-hypervisor/ondemand trial 5: exec=67.425 ok=True 
+restore firecracker/file trial 6: exec=40.891 ok=True 
+restore cloud-hypervisor/copy trial 6: exec=331.597 ok=True 
+restore cloud-hypervisor/ondemand trial 6: exec=56.792 ok=True 
+restore firecracker/file trial 7: exec=39.645 ok=True 
+restore cloud-hypervisor/copy trial 7: exec=320.426 ok=True 
+restore cloud-hypervisor/ondemand trial 7: exec=61.198 ok=True 
+restore firecracker/file trial 8: exec=37.797 ok=True 
+restore cloud-hypervisor/copy trial 8: exec=284.197 ok=True 
+restore cloud-hypervisor/ondemand trial 8: exec=51.764 ok=True 
+restore firecracker/file trial 9: exec=38.865 ok=True 
+restore cloud-hypervisor/copy trial 9: exec=313.327 ok=True 
+restore cloud-hypervisor/ondemand trial 9: exec=52.733 ok=True 

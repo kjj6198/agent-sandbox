@@ -1,0 +1,104 @@
+hugepages free: HugePages_Free:      600
+{"time": "2026-10-13T04:39:57Z", "host": "sandbox-lab", "kernel": "6.8.0-142-generic", "loadavg": [0.41162109375, 0.61474609375, 0.56201171875], "clocksource": "kvm-clock", "mem_available_kib": "MemAvailable:    6345500 kB", "userns_sysctl": "0", "scenario": "cold", "args": {"scenario": "cold", "backends": ["firecracker", "firecracker-hp", "cloud-hypervisor"], "trials": 20, "warmup": 2, "rounds": 3, "k": null, "mem_mib": null, "workloads": null, "gap": 0.5, "pilot": false, "tag": "s3", "max_load": 2.5}, "load_at_start": 0.41162109375}
+cold firecracker trial -2: exec=326.67 ok=True 
+cold firecracker-hp trial -2: exec=160.254 ok=True 
+cold cloud-hypervisor trial -2: exec=222.593 ok=True 
+cold firecracker trial -1: exec=259.947 ok=True 
+cold firecracker-hp trial -1: exec=151.078 ok=True 
+cold cloud-hypervisor trial -1: exec=178.287 ok=True 
+cold firecracker trial 0: exec=267.556 ok=True 
+cold firecracker-hp trial 0: exec=160.968 ok=True 
+cold cloud-hypervisor trial 0: exec=170.121 ok=True 
+cold firecracker trial 1: exec=257.199 ok=True 
+cold firecracker-hp trial 1: exec=156.415 ok=True 
+cold cloud-hypervisor trial 1: exec=177.95 ok=True 
+cold firecracker trial 2: exec=256.889 ok=True 
+cold firecracker-hp trial 2: exec=160.521 ok=True 
+cold cloud-hypervisor trial 2: exec=170.897 ok=True 
+cold firecracker trial 3: exec=249.789 ok=True 
+cold firecracker-hp trial 3: exec=157.012 ok=True 
+cold cloud-hypervisor trial 3: exec=180.299 ok=True 
+cold firecracker trial 4: exec=251.411 ok=True 
+cold firecracker-hp trial 4: exec=156.534 ok=True 
+cold cloud-hypervisor trial 4: exec=169.17 ok=True 
+cold firecracker trial 5: exec=253.061 ok=True 
+cold firecracker-hp trial 5: exec=160.905 ok=True 
+cold cloud-hypervisor trial 5: exec=178.939 ok=True 
+cold firecracker trial 6: exec=268.143 ok=True 
+cold firecracker-hp trial 6: exec=152.947 ok=True 
+cold cloud-hypervisor trial 6: exec=179.248 ok=True 
+cold firecracker trial 7: exec=264.719 ok=True 
+cold firecracker-hp trial 7: exec=155.568 ok=True 
+cold cloud-hypervisor trial 7: exec=170.667 ok=True 
+cold firecracker trial 8: exec=259.696 ok=True 
+cold firecracker-hp trial 8: exec=164.379 ok=True 
+cold cloud-hypervisor trial 8: exec=169.476 ok=True 
+cold firecracker trial 9: exec=252.373 ok=True 
+cold firecracker-hp trial 9: exec=161.274 ok=True 
+cold cloud-hypervisor trial 9: exec=179.458 ok=True 
+cold firecracker trial 10: exec=273.437 ok=True 
+cold firecracker-hp trial 10: exec=168.886 ok=True 
+cold cloud-hypervisor trial 10: exec=170.407 ok=True 
+cold firecracker trial 11: exec=273.24 ok=True 
+cold firecracker-hp trial 11: exec=147.745 ok=True 
+cold cloud-hypervisor trial 11: exec=177.78 ok=True 
+cold firecracker trial 12: exec=267.597 ok=True 
+cold firecracker-hp trial 12: exec=164.827 ok=True 
+cold cloud-hypervisor trial 12: exec=181.487 ok=True 
+cold firecracker trial 13: exec=252.101 ok=True 
+cold firecracker-hp trial 13: exec=160.284 ok=True 
+cold cloud-hypervisor trial 13: exec=178.478 ok=True 
+cold firecracker trial 14: exec=246.34 ok=True 
+cold firecracker-hp trial 14: exec=155.977 ok=True 
+cold cloud-hypervisor trial 14: exec=177.509 ok=True 
+cold firecracker trial 15: exec=261.756 ok=True 
+cold firecracker-hp trial 15: exec=160.534 ok=True 
+cold cloud-hypervisor trial 15: exec=171.207 ok=True 
+cold firecracker trial 16: exec=263.116 ok=True 
+cold firecracker-hp trial 16: exec=165.133 ok=True 
+cold cloud-hypervisor trial 16: exec=184.732 ok=True 
+cold firecracker trial 17: exec=254.243 ok=True 
+cold firecracker-hp trial 17: exec=159.238 ok=True 
+cold cloud-hypervisor trial 17: exec=173.136 ok=True 
+cold firecracker trial 18: exec=276.661 ok=True 
+cold firecracker-hp trial 18: exec=157.627 ok=True 
+cold cloud-hypervisor trial 18: exec=175.214 ok=True 
+cold firecracker trial 19: exec=263.768 ok=True 
+cold firecracker-hp trial 19: exec=160.398 ok=True 
+cold cloud-hypervisor trial 19: exec=173.755 ok=True 
+{"time": "2026-10-13T04:42:58Z", "host": "sandbox-lab", "kernel": "6.8.0-142-generic", "loadavg": [0.2255859375, 0.43359375, 0.49951171875], "clocksource": "kvm-clock", "mem_available_kib": "MemAvailable:    6299236 kB", "userns_sysctl": "0", "scenario": "browser-cold", "args": {"scenario": "browser-cold", "backends": ["firecracker", "firecracker-hp", "cloud-hypervisor"], "trials": 10, "warmup": 1, "rounds": 3, "k": null, "mem_mib": null, "workloads": null, "gap": 0.5, "pilot": false, "tag": "s3", "max_load": 2.5}, "load_at_start": 0.2255859375}
+browser-cold firecracker trial -1: cdp=1572.697 shot=2489.779 public=2634.225 ok=True 
+browser-cold firecracker-hp trial -1: cdp=722.474 shot=1431.475 public=1534.924 ok=True 
+browser-cold cloud-hypervisor trial -1: cdp=921.596 shot=1572.967 public=1696.143 ok=True 
+browser-cold firecracker trial 0: cdp=1076.456 shot=2007.459 public=2161.415 ok=True 
+browser-cold firecracker-hp trial 0: cdp=689.252 shot=1406.98 public=1527.495 ok=True 
+browser-cold cloud-hypervisor trial 0: cdp=725.415 shot=1322.111 public=1448.525 ok=True 
+browser-cold firecracker trial 1: cdp=1098.384 shot=1897.323 public=2009.138 ok=True 
+browser-cold firecracker-hp trial 1: cdp=622.602 shot=1286.849 public=1419.047 ok=True 
+browser-cold cloud-hypervisor trial 1: cdp=630.385 shot=1285.924 public=1405.428 ok=True 
+browser-cold firecracker trial 2: cdp=1010.816 shot=1791.106 public=1926.458 ok=True 
+browser-cold firecracker-hp trial 2: cdp=599.084 shot=1228.338 public=1315.666 ok=True 
+browser-cold cloud-hypervisor trial 2: cdp=593.338 shot=1197.82 public=1307.59 ok=True 
+browser-cold firecracker trial 3: cdp=1061.485 shot=1842.176 public=1945.339 ok=True 
+browser-cold firecracker-hp trial 3: cdp=632.659 shot=1281.439 public=1414.533 ok=True 
+browser-cold cloud-hypervisor trial 3: cdp=569.711 shot=1181.683 public=1278.618 ok=True 
+browser-cold firecracker trial 4: cdp=1035.937 shot=1887.983 public=2009.838 ok=True 
+browser-cold firecracker-hp trial 4: cdp=608.4 shot=1272.158 public=1378.549 ok=True 
+browser-cold cloud-hypervisor trial 4: cdp=566.855 shot=1175.623 public=1296.834 ok=True 
+browser-cold firecracker trial 5: cdp=1000.082 shot=1764.525 public=1877.137 ok=True 
+browser-cold firecracker-hp trial 5: cdp=580.417 shot=1212.68 public=1311.42 ok=True 
+browser-cold cloud-hypervisor trial 5: cdp=537.288 shot=1111.418 public=1242.0 ok=True 
+browser-cold firecracker trial 6: cdp=990.307 shot=1736.278 public=1881.388 ok=True 
+browser-cold firecracker-hp trial 6: cdp=624.17 shot=1256.783 public=1390.129 ok=True 
+browser-cold cloud-hypervisor trial 6: cdp=567.206 shot=1192.907 public=1309.863 ok=True 
+browser-cold firecracker trial 7: cdp=1002.22 shot=1785.318 public=1911.459 ok=True 
+browser-cold firecracker-hp trial 7: cdp=617.425 shot=1259.059 public=1379.063 ok=True 
+browser-cold cloud-hypervisor trial 7: cdp=545.813 shot=1155.576 public=1278.915 ok=True 
+browser-cold firecracker trial 8: cdp=986.392 shot=1727.857 public=1813.729 ok=True 
+browser-cold firecracker-hp trial 8: cdp=608.776 shot=1246.643 public=1366.99 ok=True 
+browser-cold cloud-hypervisor trial 8: cdp=550.863 shot=1182.875 public=1299.256 ok=True 
+browser-cold firecracker trial 9: cdp=1012.179 shot=1790.36 public=1876.828 ok=True 
+browser-cold firecracker-hp trial 9: cdp=607.757 shot=1236.493 public=1330.889 ok=True 
+browser-cold cloud-hypervisor trial 9: cdp=573.878 shot=1206.848 public=1311.159 ok=True 
+nr_hugepages back to 0
+SESSION3_DONE

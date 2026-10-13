@@ -1,0 +1,144 @@
+{"level": "L1-r1", "case": "firecracker/snapshot-create", "trial": 0, "ok": true, "error": null, "t_create_ms": 886.084448, "bytes": 1073766949}
+{"level": "L1-r1", "case": "cloud-hypervisor/snapshot-create", "trial": 0, "ok": true, "error": null, "t_create_ms": 381.09593, "bytes": 1073802025}
+{"level": "L1-r1", "case": "firecracker/cold-console", "trial": 0, "ok": true, "error": null, "t_ready_ms": 328.286564, "t_exec_ms": 330.53887, "hello": "SBX_READY 0 0.24"}
+{"level": "L1-r1", "case": "cloud-hypervisor/cold-console", "trial": 0, "ok": true, "error": null, "t_ready_ms": 209.450363, "t_exec_ms": 211.424527, "hello": "SBX_READY 0 0.16"}
+{"level": "L1-r1", "case": "firecracker/cold-noconsole", "trial": 0, "ok": true, "error": null, "t_ready_ms": 305.024182, "t_exec_ms": 307.301695, "hello": "SBX_READY 0 0.22"}
+{"level": "L1-r1", "case": "cloud-hypervisor/cold-noconsole", "trial": 0, "ok": true, "error": null, "t_ready_ms": 222.071205, "t_exec_ms": 223.853894, "hello": "SBX_READY 0 0.18"}
+{"level": "L1-r1", "case": "firecracker/restore-file", "trial": 0, "ok": true, "error": null, "t_loaded_ms": 5.10886, "t_exec_ms": 38.573825}
+{"level": "L1-r1", "case": "cloud-hypervisor/restore-copy", "trial": 0, "ok": true, "error": null, "t_loaded_ms": 0.515353, "t_exec_ms": 315.834471}
+{"level": "L1-r1", "case": "cloud-hypervisor/restore-ondemand", "trial": 0, "ok": true, "error": null, "t_loaded_ms": 0.543188, "t_exec_ms": 70.005723}
+{"level": "L1-r1", "case": "firecracker/cold-console", "trial": 1, "ok": true, "error": null, "t_ready_ms": 338.496603, "t_exec_ms": 340.973225, "hello": "SBX_READY 0 0.25"}
+{"level": "L1-r1", "case": "cloud-hypervisor/cold-console", "trial": 1, "ok": true, "error": null, "t_ready_ms": 216.049897, "t_exec_ms": 217.955263, "hello": "SBX_READY 0 0.17"}
+{"level": "L1-r1", "case": "firecracker/cold-noconsole", "trial": 1, "ok": true, "error": null, "t_ready_ms": 327.777566, "t_exec_ms": 330.414021, "hello": "SBX_READY 0 0.24"}
+{"level": "L1-r1", "case": "cloud-hypervisor/cold-noconsole", "trial": 1, "ok": true, "error": null, "t_ready_ms": 207.123532, "t_exec_ms": 209.043452, "hello": "SBX_READY 0 0.16"}
+{"level": "L1-r1", "case": "firecracker/restore-file", "trial": 1, "ok": true, "error": null, "t_loaded_ms": 4.752659, "t_exec_ms": 37.731751}
+{"level": "L1-r1", "case": "cloud-hypervisor/restore-copy", "trial": 1, "ok": true, "error": null, "t_loaded_ms": 0.488991, "t_exec_ms": 366.207382}
+{"level": "L1-r1", "case": "cloud-hypervisor/restore-ondemand", "trial": 1, "ok": true, "error": null, "t_loaded_ms": 0.493237, "t_exec_ms": 69.405941}
+{"level": "L1-r1", "case": "firecracker/cold-console", "trial": 2, "ok": true, "error": null, "t_ready_ms": 338.039615, "t_exec_ms": 341.154685, "hello": "SBX_READY 0 0.24"}
+{"level": "L1-r1", "case": "cloud-hypervisor/cold-console", "trial": 2, "ok": true, "error": null, "t_ready_ms": 247.241799, "t_exec_ms": 249.048352, "hello": "SBX_READY 0 0.20"}
+{"level": "L1-r1", "case": "firecracker/cold-noconsole", "trial": 2, "ok": true, "error": null, "t_ready_ms": 312.521197, "t_exec_ms": 314.795317, "hello": "SBX_READY 0 0.22"}
+{"level": "L1-r1", "case": "cloud-hypervisor/cold-noconsole", "trial": 2, "ok": true, "error": null, "t_ready_ms": 206.541838, "t_exec_ms": 208.438978, "hello": "SBX_READY 0 0.16"}
+{"level": "L1-r1", "case": "firecracker/restore-file", "trial": 2, "ok": true, "error": null, "t_loaded_ms": 5.007373, "t_exec_ms": 38.431059}
+{"level": "L1-r1", "case": "cloud-hypervisor/restore-copy", "trial": 2, "ok": true, "error": null, "t_loaded_ms": 0.506275, "t_exec_ms": 366.771964}
+{"level": "L1-r1", "case": "cloud-hypervisor/restore-ondemand", "trial": 2, "ok": true, "error": null, "t_loaded_ms": 0.496304, "t_exec_ms": 70.399606}
+{"level": "L1-r1", "case": "firecracker/cold-console", "trial": 3, "ok": true, "error": null, "t_ready_ms": 322.396238, "t_exec_ms": 324.666566, "hello": "SBX_READY 0 0.24"}
+{"level": "L1-r1", "case": "cloud-hypervisor/cold-console", "trial": 3, "ok": true, "error": null, "t_ready_ms": 204.376742, "t_exec_ms": 206.330565, "hello": "SBX_READY 0 0.16"}
+{"level": "L1-r1", "case": "firecracker/cold-noconsole", "trial": 3, "ok": true, "error": null, "t_ready_ms": 313.110258, "t_exec_ms": 315.094125, "hello": "SBX_READY 0 0.23"}
+{"level": "L1-r1", "case": "cloud-hypervisor/cold-noconsole", "trial": 3, "ok": true, "error": null, "t_ready_ms": 206.810438, "t_exec_ms": 208.628063, "hello": "SBX_READY 0 0.16"}
+{"level": "L1-r1", "case": "firecracker/restore-file", "trial": 3, "ok": true, "error": null, "t_loaded_ms": 4.458483, "t_exec_ms": 36.201075}
+{"level": "L1-r1", "case": "cloud-hypervisor/restore-copy", "trial": 3, "ok": true, "error": null, "t_loaded_ms": 0.483581, "t_exec_ms": 314.115376}
+{"level": "L1-r1", "case": "cloud-hypervisor/restore-ondemand", "trial": 3, "ok": true, "error": null, "t_loaded_ms": 0.465621, "t_exec_ms": 70.526231}
+{"level": "L1-r1", "case": "firecracker/cold-console", "trial": 4, "ok": true, "error": null, "t_ready_ms": 306.371163, "t_exec_ms": 308.250158, "hello": "SBX_READY 0 0.22"}
+{"level": "L1-r1", "case": "cloud-hypervisor/cold-console", "trial": 4, "ok": true, "error": null, "t_ready_ms": 213.910873, "t_exec_ms": 215.627436, "hello": "SBX_READY 0 0.17"}
+{"level": "L1-r1", "case": "firecracker/cold-noconsole", "trial": 4, "ok": true, "error": null, "t_ready_ms": 294.818765, "t_exec_ms": 296.629731, "hello": "SBX_READY 0 0.21"}
+{"level": "L1-r1", "case": "cloud-hypervisor/cold-noconsole", "trial": 4, "ok": true, "error": null, "t_ready_ms": 211.75096, "t_exec_ms": 213.656273, "hello": "SBX_READY 0 0.16"}
+{"level": "L1-r1", "case": "firecracker/restore-file", "trial": 4, "ok": true, "error": null, "t_loaded_ms": 4.885325, "t_exec_ms": 36.34592}
+{"level": "L1-r1", "case": "cloud-hypervisor/restore-copy", "trial": 4, "ok": true, "error": null, "t_loaded_ms": 0.507066, "t_exec_ms": 366.359813}
+{"level": "L1-r1", "case": "cloud-hypervisor/restore-ondemand", "trial": 4, "ok": true, "error": null, "t_loaded_ms": 0.451515, "t_exec_ms": 69.317017}
+{"level": "L1-r1", "case": "firecracker/cold-console", "trial": 5, "ok": true, "error": null, "t_ready_ms": 293.919843, "t_exec_ms": 296.079355, "hello": "SBX_READY 0 0.21"}
+{"level": "L1-r1", "case": "cloud-hypervisor/cold-console", "trial": 5, "ok": true, "error": null, "t_ready_ms": 184.407096, "t_exec_ms": 186.264452, "hello": "SBX_READY 0 0.14"}
+{"level": "L1-r1", "case": "firecracker/cold-noconsole", "trial": 5, "ok": true, "error": null, "t_ready_ms": 311.336758, "t_exec_ms": 313.418498, "hello": "SBX_READY 0 0.22"}
+{"level": "L1-r1", "case": "cloud-hypervisor/cold-noconsole", "trial": 5, "ok": true, "error": null, "t_ready_ms": 191.676611, "t_exec_ms": 193.249459, "hello": "SBX_READY 0 0.15"}
+{"level": "L1-r1", "case": "firecracker/restore-file", "trial": 5, "ok": true, "error": null, "t_loaded_ms": 4.518604, "t_exec_ms": 35.544284}
+{"level": "L1-r1", "case": "cloud-hypervisor/restore-copy", "trial": 5, "ok": true, "error": null, "t_loaded_ms": 0.483192, "t_exec_ms": 314.131469}
+{"level": "L1-r1", "case": "cloud-hypervisor/restore-ondemand", "trial": 5, "ok": true, "error": null, "t_loaded_ms": 0.451761, "t_exec_ms": 68.564154}
+{"level": "L1-r1", "case": "firecracker/cold-console", "trial": 6, "ok": true, "error": null, "t_ready_ms": 285.390048, "t_exec_ms": 287.148396, "hello": "SBX_READY 0 0.20"}
+{"level": "L1-r1", "case": "cloud-hypervisor/cold-console", "trial": 6, "ok": true, "error": null, "t_ready_ms": 207.097827, "t_exec_ms": 208.75567, "hello": "SBX_READY 0 0.16"}
+{"level": "L1-r1", "case": "firecracker/cold-noconsole", "trial": 6, "ok": true, "error": null, "t_ready_ms": 292.118803, "t_exec_ms": 294.102592, "hello": "SBX_READY 0 0.20"}
+{"level": "L1-r1", "case": "cloud-hypervisor/cold-noconsole", "trial": 6, "ok": true, "error": null, "t_ready_ms": 221.39224, "t_exec_ms": 223.5451, "hello": "SBX_READY 0 0.18"}
+{"level": "L1-r1", "case": "firecracker/restore-file", "trial": 6, "ok": true, "error": null, "t_loaded_ms": 4.810438, "t_exec_ms": 34.979857}
+{"level": "L1-r1", "case": "cloud-hypervisor/restore-copy", "trial": 6, "ok": true, "error": null, "t_loaded_ms": 0.494208, "t_exec_ms": 366.868816}
+{"level": "L1-r1", "case": "cloud-hypervisor/restore-ondemand", "trial": 6, "ok": true, "error": null, "t_loaded_ms": 0.478091, "t_exec_ms": 69.47946}
+{"level": "L1-r1", "case": "firecracker/cold-console", "trial": 7, "ok": true, "error": null, "t_ready_ms": 292.2852, "t_exec_ms": 294.238649, "hello": "SBX_READY 0 0.21"}
+{"level": "L1-r1", "case": "cloud-hypervisor/cold-console", "trial": 7, "ok": true, "error": null, "t_ready_ms": 195.822557, "t_exec_ms": 197.570674, "hello": "SBX_READY 0 0.15"}
+{"level": "L1-r1", "case": "firecracker/cold-noconsole", "trial": 7, "ok": true, "error": null, "t_ready_ms": 267.5392, "t_exec_ms": 269.659413, "hello": "SBX_READY 0 0.19"}
+{"level": "L1-r1", "case": "cloud-hypervisor/cold-noconsole", "trial": 7, "ok": true, "error": null, "t_ready_ms": 210.063171, "t_exec_ms": 212.467306, "hello": "SBX_READY 0 0.17"}
+{"level": "L1-r1", "case": "firecracker/restore-file", "trial": 7, "ok": true, "error": null, "t_loaded_ms": 4.574991, "t_exec_ms": 37.833577}
+{"level": "L1-r1", "case": "cloud-hypervisor/restore-copy", "trial": 7, "ok": true, "error": null, "t_loaded_ms": 0.480117, "t_exec_ms": 366.279285}
+{"level": "L1-r1", "case": "cloud-hypervisor/restore-ondemand", "trial": 7, "ok": true, "error": null, "t_loaded_ms": 0.488375, "t_exec_ms": 69.47652}
+{"level": "L1-r1", "case": "firecracker/cold-console", "trial": 8, "ok": true, "error": null, "t_ready_ms": 322.369305, "t_exec_ms": 324.465128, "hello": "SBX_READY 0 0.23"}
+{"level": "L1-r1", "case": "cloud-hypervisor/cold-console", "trial": 8, "ok": true, "error": null, "t_ready_ms": 205.5277, "t_exec_ms": 207.376191, "hello": "SBX_READY 0 0.16"}
+{"level": "L1-r1", "case": "firecracker/cold-noconsole", "trial": 8, "ok": true, "error": null, "t_ready_ms": 294.284871, "t_exec_ms": 296.253633, "hello": "SBX_READY 0 0.20"}
+{"level": "L1-r1", "case": "cloud-hypervisor/cold-noconsole", "trial": 8, "ok": true, "error": null, "t_ready_ms": 202.155144, "t_exec_ms": 203.769463, "hello": "SBX_READY 0 0.16"}
+{"level": "L1-r1", "case": "firecracker/restore-file", "trial": 8, "ok": true, "error": null, "t_loaded_ms": 4.480951, "t_exec_ms": 34.832818}
+{"level": "L1-r1", "case": "cloud-hypervisor/restore-copy", "trial": 8, "ok": true, "error": null, "t_loaded_ms": 0.447394, "t_exec_ms": 315.556061}
+{"level": "L1-r1", "case": "cloud-hypervisor/restore-ondemand", "trial": 8, "ok": true, "error": null, "t_loaded_ms": 0.478679, "t_exec_ms": 68.753763}
+{"level": "L1-r1", "case": "firecracker/cold-console", "trial": 9, "ok": true, "error": null, "t_ready_ms": 310.545937, "t_exec_ms": 312.47387, "hello": "SBX_READY 0 0.22"}
+{"level": "L1-r1", "case": "cloud-hypervisor/cold-console", "trial": 9, "ok": true, "error": null, "t_ready_ms": 224.13596, "t_exec_ms": 226.095392, "hello": "SBX_READY 0 0.18"}
+{"level": "L1-r1", "case": "firecracker/cold-noconsole", "trial": 9, "ok": true, "error": null, "t_ready_ms": 300.544863, "t_exec_ms": 302.686081, "hello": "SBX_READY 0 0.21"}
+{"level": "L1-r1", "case": "cloud-hypervisor/cold-noconsole", "trial": 9, "ok": true, "error": null, "t_ready_ms": 209.379317, "t_exec_ms": 211.204727, "hello": "SBX_READY 0 0.17"}
+{"level": "L1-r1", "case": "firecracker/restore-file", "trial": 9, "ok": true, "error": null, "t_loaded_ms": 4.698834, "t_exec_ms": 36.097546}
+{"level": "L1-r1", "case": "cloud-hypervisor/restore-copy", "trial": 9, "ok": true, "error": null, "t_loaded_ms": 0.483554, "t_exec_ms": 366.206408}
+{"level": "L1-r1", "case": "cloud-hypervisor/restore-ondemand", "trial": 9, "ok": true, "error": null, "t_loaded_ms": 0.458278, "t_exec_ms": 69.969469}
+{"level": "L1-r2", "case": "firecracker/snapshot-create", "trial": 0, "ok": true, "error": null, "t_create_ms": 761.141403, "bytes": 1073766949}
+{"level": "L1-r2", "case": "cloud-hypervisor/snapshot-create", "trial": 0, "ok": true, "error": null, "t_create_ms": 505.377883, "bytes": 1073802111}
+{"level": "L1-r2", "case": "firecracker/cold-console", "trial": 0, "ok": true, "error": null, "t_ready_ms": 340.674992, "t_exec_ms": 342.518639, "hello": "SBX_READY 0 0.26"}
+{"level": "L1-r2", "case": "cloud-hypervisor/cold-console", "trial": 0, "ok": true, "error": null, "t_ready_ms": 216.66669, "t_exec_ms": 218.366067, "hello": "SBX_READY 0 0.17"}
+{"level": "L1-r2", "case": "firecracker/cold-noconsole", "trial": 0, "ok": true, "error": null, "t_ready_ms": 300.922121, "t_exec_ms": 303.428319, "hello": "SBX_READY 0 0.21"}
+{"level": "L1-r2", "case": "cloud-hypervisor/cold-noconsole", "trial": 0, "ok": true, "error": null, "t_ready_ms": 197.817503, "t_exec_ms": 199.770788, "hello": "SBX_READY 0 0.16"}
+{"level": "L1-r2", "case": "firecracker/restore-file", "trial": 0, "ok": true, "error": null, "t_loaded_ms": 4.608958, "t_exec_ms": 36.923551}
+{"level": "L1-r2", "case": "cloud-hypervisor/restore-copy", "trial": 0, "ok": true, "error": null, "t_loaded_ms": 0.481581, "t_exec_ms": 365.591819}
+{"level": "L1-r2", "case": "cloud-hypervisor/restore-ondemand", "trial": 0, "ok": true, "error": null, "t_loaded_ms": 0.512604, "t_exec_ms": 69.354386}
+{"level": "L1-r2", "case": "firecracker/cold-console", "trial": 1, "ok": true, "error": null, "t_ready_ms": 328.110673, "t_exec_ms": 330.174148, "hello": "SBX_READY 0 0.24"}
+{"level": "L1-r2", "case": "cloud-hypervisor/cold-console", "trial": 1, "ok": true, "error": null, "t_ready_ms": 212.666409, "t_exec_ms": 214.506872, "hello": "SBX_READY 0 0.17"}
+{"level": "L1-r2", "case": "firecracker/cold-noconsole", "trial": 1, "ok": true, "error": null, "t_ready_ms": 287.021469, "t_exec_ms": 289.002175, "hello": "SBX_READY 0 0.20"}
+{"level": "L1-r2", "case": "cloud-hypervisor/cold-noconsole", "trial": 1, "ok": true, "error": null, "t_ready_ms": 196.547907, "t_exec_ms": 199.483972, "hello": "SBX_READY 0 0.16"}
+{"level": "L1-r2", "case": "firecracker/restore-file", "trial": 1, "ok": true, "error": null, "t_loaded_ms": 4.520889, "t_exec_ms": 40.003324}
+{"level": "L1-r2", "case": "cloud-hypervisor/restore-copy", "trial": 1, "ok": true, "error": null, "t_loaded_ms": 0.482439, "t_exec_ms": 313.6419}
+{"level": "L1-r2", "case": "cloud-hypervisor/restore-ondemand", "trial": 1, "ok": true, "error": null, "t_loaded_ms": 0.517012, "t_exec_ms": 69.903045}
+{"level": "L1-r2", "case": "firecracker/cold-console", "trial": 2, "ok": true, "error": null, "t_ready_ms": 305.612536, "t_exec_ms": 307.570155, "hello": "SBX_READY 0 0.22"}
+{"level": "L1-r2", "case": "cloud-hypervisor/cold-console", "trial": 2, "ok": true, "error": null, "t_ready_ms": 216.873303, "t_exec_ms": 218.606222, "hello": "SBX_READY 0 0.17"}
+{"level": "L1-r2", "case": "firecracker/cold-noconsole", "trial": 2, "ok": true, "error": null, "t_ready_ms": 310.844338, "t_exec_ms": 312.966554, "hello": "SBX_READY 0 0.22"}
+{"level": "L1-r2", "case": "cloud-hypervisor/cold-noconsole", "trial": 2, "ok": true, "error": null, "t_ready_ms": 214.389552, "t_exec_ms": 216.138757, "hello": "SBX_READY 0 0.17"}
+{"level": "L1-r2", "case": "firecracker/restore-file", "trial": 2, "ok": true, "error": null, "t_loaded_ms": 4.798542, "t_exec_ms": 36.954974}
+{"level": "L1-r2", "case": "cloud-hypervisor/restore-copy", "trial": 2, "ok": true, "error": null, "t_loaded_ms": 0.480364, "t_exec_ms": 314.123579}
+{"level": "L1-r2", "case": "cloud-hypervisor/restore-ondemand", "trial": 2, "ok": true, "error": null, "t_loaded_ms": 0.533725, "t_exec_ms": 69.459036}
+{"level": "L1-r2", "case": "firecracker/cold-console", "trial": 3, "ok": true, "error": null, "t_ready_ms": 333.733125, "t_exec_ms": 335.87235, "hello": "SBX_READY 0 0.24"}
+{"level": "L1-r2", "case": "cloud-hypervisor/cold-console", "trial": 3, "ok": true, "error": null, "t_ready_ms": 212.493983, "t_exec_ms": 214.212613, "hello": "SBX_READY 0 0.17"}
+{"level": "L1-r2", "case": "firecracker/cold-noconsole", "trial": 3, "ok": true, "error": null, "t_ready_ms": 319.694401, "t_exec_ms": 322.295892, "hello": "SBX_READY 0 0.23"}
+{"level": "L1-r2", "case": "cloud-hypervisor/cold-noconsole", "trial": 3, "ok": true, "error": null, "t_ready_ms": 209.897321, "t_exec_ms": 211.825217, "hello": "SBX_READY 0 0.16"}
+{"level": "L1-r2", "case": "firecracker/restore-file", "trial": 3, "ok": true, "error": null, "t_loaded_ms": 4.910317, "t_exec_ms": 37.173426}
+{"level": "L1-r2", "case": "cloud-hypervisor/restore-copy", "trial": 3, "ok": true, "error": null, "t_loaded_ms": 0.522584, "t_exec_ms": 313.775198}
+{"level": "L1-r2", "case": "cloud-hypervisor/restore-ondemand", "trial": 3, "ok": true, "error": null, "t_loaded_ms": 0.49319, "t_exec_ms": 70.104852}
+{"level": "L1-r2", "case": "firecracker/cold-console", "trial": 4, "ok": true, "error": null, "t_ready_ms": 338.955641, "t_exec_ms": 341.567258, "hello": "SBX_READY 0 0.24"}
+{"level": "L1-r2", "case": "cloud-hypervisor/cold-console", "trial": 4, "ok": true, "error": null, "t_ready_ms": 217.76743, "t_exec_ms": 220.112714, "hello": "SBX_READY 0 0.17"}
+{"level": "L1-r2", "case": "firecracker/cold-noconsole", "trial": 4, "ok": true, "error": null, "t_ready_ms": 305.996093, "t_exec_ms": 308.127859, "hello": "SBX_READY 0 0.22"}
+{"level": "L1-r2", "case": "cloud-hypervisor/cold-noconsole", "trial": 4, "ok": true, "error": null, "t_ready_ms": 207.749196, "t_exec_ms": 209.93819, "hello": "SBX_READY 0 0.16"}
+{"level": "L1-r2", "case": "firecracker/restore-file", "trial": 4, "ok": true, "error": null, "t_loaded_ms": 4.967842, "t_exec_ms": 39.889804}
+{"level": "L1-r2", "case": "cloud-hypervisor/restore-copy", "trial": 4, "ok": true, "error": null, "t_loaded_ms": 0.5578, "t_exec_ms": 314.750623}
+{"level": "L1-r2", "case": "cloud-hypervisor/restore-ondemand", "trial": 4, "ok": true, "error": null, "t_loaded_ms": 0.495711, "t_exec_ms": 70.25342}
+{"level": "L1-r2", "case": "firecracker/cold-console", "trial": 5, "ok": true, "error": null, "t_ready_ms": 326.634778, "t_exec_ms": 328.585405, "hello": "SBX_READY 0 0.23"}
+{"level": "L1-r2", "case": "cloud-hypervisor/cold-console", "trial": 5, "ok": true, "error": null, "t_ready_ms": 203.433241, "t_exec_ms": 205.245003, "hello": "SBX_READY 0 0.16"}
+{"level": "L1-r2", "case": "firecracker/cold-noconsole", "trial": 5, "ok": true, "error": null, "t_ready_ms": 294.372281, "t_exec_ms": 296.330568, "hello": "SBX_READY 0 0.21"}
+{"level": "L1-r2", "case": "cloud-hypervisor/cold-noconsole", "trial": 5, "ok": true, "error": null, "t_ready_ms": 208.622212, "t_exec_ms": 210.412138, "hello": "SBX_READY 0 0.17"}
+{"level": "L1-r2", "case": "firecracker/restore-file", "trial": 5, "ok": true, "error": null, "t_loaded_ms": 4.412887, "t_exec_ms": 38.00545}
+{"level": "L1-r2", "case": "cloud-hypervisor/restore-copy", "trial": 5, "ok": true, "error": null, "t_loaded_ms": 0.496708, "t_exec_ms": 313.662192}
+{"level": "L1-r2", "case": "cloud-hypervisor/restore-ondemand", "trial": 5, "ok": true, "error": null, "t_loaded_ms": 0.46901, "t_exec_ms": 70.962793}
+{"level": "L1-r2", "case": "firecracker/cold-console", "trial": 6, "ok": true, "error": null, "t_ready_ms": 310.863324, "t_exec_ms": 313.197592, "hello": "SBX_READY 0 0.22"}
+{"level": "L1-r2", "case": "cloud-hypervisor/cold-console", "trial": 6, "ok": true, "error": null, "t_ready_ms": 196.991855, "t_exec_ms": 198.656935, "hello": "SBX_READY 0 0.15"}
+{"level": "L1-r2", "case": "firecracker/cold-noconsole", "trial": 6, "ok": true, "error": null, "t_ready_ms": 276.800029, "t_exec_ms": 278.824945, "hello": "SBX_READY 0 0.19"}
+{"level": "L1-r2", "case": "cloud-hypervisor/cold-noconsole", "trial": 6, "ok": true, "error": null, "t_ready_ms": 207.655375, "t_exec_ms": 209.358358, "hello": "SBX_READY 0 0.17"}
+{"level": "L1-r2", "case": "firecracker/restore-file", "trial": 6, "ok": true, "error": null, "t_loaded_ms": 4.472318, "t_exec_ms": 35.500136}
+{"level": "L1-r2", "case": "cloud-hypervisor/restore-copy", "trial": 6, "ok": true, "error": null, "t_loaded_ms": 0.479179, "t_exec_ms": 313.57124}
+{"level": "L1-r2", "case": "cloud-hypervisor/restore-ondemand", "trial": 6, "ok": true, "error": null, "t_loaded_ms": 1.217037, "t_exec_ms": 73.409076}
+{"level": "L1-r2", "case": "firecracker/cold-console", "trial": 7, "ok": true, "error": null, "t_ready_ms": 322.104514, "t_exec_ms": 324.298262, "hello": "SBX_READY 0 0.23"}
+{"level": "L1-r2", "case": "cloud-hypervisor/cold-console", "trial": 7, "ok": true, "error": null, "t_ready_ms": 210.320146, "t_exec_ms": 212.08561, "hello": "SBX_READY 0 0.17"}
+{"level": "L1-r2", "case": "firecracker/cold-noconsole", "trial": 7, "ok": true, "error": null, "t_ready_ms": 309.99009, "t_exec_ms": 312.05727, "hello": "SBX_READY 0 0.21"}
+{"level": "L1-r2", "case": "cloud-hypervisor/cold-noconsole", "trial": 7, "ok": true, "error": null, "t_ready_ms": 208.736223, "t_exec_ms": 210.904784, "hello": "SBX_READY 0 0.17"}
+{"level": "L1-r2", "case": "firecracker/restore-file", "trial": 7, "ok": true, "error": null, "t_loaded_ms": 5.231987, "t_exec_ms": 37.074084}
+{"level": "L1-r2", "case": "cloud-hypervisor/restore-copy", "trial": 7, "ok": true, "error": null, "t_loaded_ms": 0.478307, "t_exec_ms": 365.925717}
+{"level": "L1-r2", "case": "cloud-hypervisor/restore-ondemand", "trial": 7, "ok": true, "error": null, "t_loaded_ms": 0.461442, "t_exec_ms": 72.131724}
+{"level": "L1-r2", "case": "firecracker/cold-console", "trial": 8, "ok": true, "error": null, "t_ready_ms": 321.304715, "t_exec_ms": 323.582366, "hello": "SBX_READY 0 0.23"}
+{"level": "L1-r2", "case": "cloud-hypervisor/cold-console", "trial": 8, "ok": true, "error": null, "t_ready_ms": 214.678267, "t_exec_ms": 216.45813, "hello": "SBX_READY 0 0.17"}
+{"level": "L1-r2", "case": "firecracker/cold-noconsole", "trial": 8, "ok": true, "error": null, "t_ready_ms": 308.95798, "t_exec_ms": 311.142634, "hello": "SBX_READY 0 0.22"}
+{"level": "L1-r2", "case": "cloud-hypervisor/cold-noconsole", "trial": 8, "ok": true, "error": null, "t_ready_ms": 210.978269, "t_exec_ms": 212.968981, "hello": "SBX_READY 0 0.16"}
+{"level": "L1-r2", "case": "firecracker/restore-file", "trial": 8, "ok": true, "error": null, "t_loaded_ms": 4.833538, "t_exec_ms": 37.063137}
+{"level": "L1-r2", "case": "cloud-hypervisor/restore-copy", "trial": 8, "ok": true, "error": null, "t_loaded_ms": 0.543569, "t_exec_ms": 314.46204}
+{"level": "L1-r2", "case": "cloud-hypervisor/restore-ondemand", "trial": 8, "ok": true, "error": null, "t_loaded_ms": 0.480846, "t_exec_ms": 69.872876}
+{"level": "L1-r2", "case": "firecracker/cold-console", "trial": 9, "ok": true, "error": null, "t_ready_ms": 325.303581, "t_exec_ms": 327.318392, "hello": "SBX_READY 0 0.24"}
+{"level": "L1-r2", "case": "cloud-hypervisor/cold-console", "trial": 9, "ok": true, "error": null, "t_ready_ms": 209.430718, "t_exec_ms": 211.22833, "hello": "SBX_READY 0 0.17"}
+{"level": "L1-r2", "case": "firecracker/cold-noconsole", "trial": 9, "ok": true, "error": null, "t_ready_ms": 276.016703, "t_exec_ms": 277.662088, "hello": "SBX_READY 0 0.19"}
+{"level": "L1-r2", "case": "cloud-hypervisor/cold-noconsole", "trial": 9, "ok": true, "error": null, "t_ready_ms": 202.961585, "t_exec_ms": 204.998551, "hello": "SBX_READY 0 0.16"}
+{"level": "L1-r2", "case": "firecracker/restore-file", "trial": 9, "ok": true, "error": null, "t_loaded_ms": 4.838362, "t_exec_ms": 31.914337}
+{"level": "L1-r2", "case": "cloud-hypervisor/restore-copy", "trial": 9, "ok": true, "error": null, "t_loaded_ms": 0.528002, "t_exec_ms": 313.212525}
+{"level": "L1-r2", "case": "cloud-hypervisor/restore-ondemand", "trial": 9, "ok": true, "error": null, "t_loaded_ms": 0.488995, "t_exec_ms": 69.394168}

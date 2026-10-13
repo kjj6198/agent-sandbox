@@ -1,0 +1,1241 @@
+=== cold 2026-10-13T02:58:32Z
+{"time": "2026-10-13T02:58:32Z", "host": "sandbox-lab", "kernel": "6.8.0-142-generic", "loadavg": [0.1298828125, 0.6318359375, 0.57763671875], "clocksource": "kvm-clock", "mem_available_kib": "MemAvailable:    7314040 kB", "userns_sysctl": "0", "scenario": "cold", "args": {"scenario": "cold", "backends": ["firecracker", "cloud-hypervisor", "runsc", "runc", "docker-runsc", "docker-runc", "docker-runsc-kvm"], "trials": 30, "warmup": 2, "rounds": 3, "k": null, "mem_mib": null, "workloads": null, "gap": 0.5, "pilot": false, "max_load": 1.0}, "load_at_start": 0.1298828125}
+cold firecracker trial -2: exec=250.16 ok=True 
+cold cloud-hypervisor trial -2: exec=179.532 ok=True 
+cold runsc trial -2: exec=61.777 ok=True 
+cold runc trial -2: exec=21.13 ok=True 
+cold docker-runsc trial -2: exec=189.045 ok=True 
+cold docker-runc trial -2: exec=145.88 ok=True 
+cold docker-runsc-kvm trial -2: exec=274.678 ok=True 
+cold firecracker trial -1: exec=251.96 ok=True 
+cold cloud-hypervisor trial -1: exec=186.571 ok=True 
+cold runsc trial -1: exec=65.546 ok=True 
+cold runc trial -1: exec=33.29 ok=True 
+cold docker-runsc trial -1: exec=193.935 ok=True 
+cold docker-runc trial -1: exec=147.904 ok=True 
+cold docker-runsc-kvm trial -1: exec=250.723 ok=True 
+cold firecracker trial 0: exec=252.747 ok=True 
+cold cloud-hypervisor trial 0: exec=174.49 ok=True 
+cold runsc trial 0: exec=62.248 ok=True 
+cold runc trial 0: exec=33.013 ok=True 
+cold docker-runsc trial 0: exec=188.434 ok=True 
+cold docker-runc trial 0: exec=152.551 ok=True 
+cold docker-runsc-kvm trial 0: exec=244.098 ok=True 
+cold firecracker trial 1: exec=250.33 ok=True 
+cold cloud-hypervisor trial 1: exec=174.239 ok=True 
+cold runsc trial 1: exec=69.539 ok=True 
+cold runc trial 1: exec=20.547 ok=True 
+cold docker-runsc trial 1: exec=188.594 ok=True 
+cold docker-runc trial 1: exec=147.644 ok=True 
+cold docker-runsc-kvm trial 1: exec=246.064 ok=True 
+cold firecracker trial 2: exec=245.778 ok=True 
+cold cloud-hypervisor trial 2: exec=183.28 ok=True 
+cold runsc trial 2: exec=61.492 ok=True 
+cold runc trial 2: exec=33.108 ok=True 
+cold docker-runsc trial 2: exec=197.728 ok=True 
+cold docker-runc trial 2: exec=145.947 ok=True 
+cold docker-runsc-kvm trial 2: exec=246.319 ok=True 
+cold firecracker trial 3: exec=250.26 ok=True 
+cold cloud-hypervisor trial 3: exec=169.849 ok=True 
+cold runsc trial 3: exec=63.181 ok=True 
+cold runc trial 3: exec=33.105 ok=True 
+cold docker-runsc trial 3: exec=186.541 ok=True 
+cold docker-runc trial 3: exec=155.53 ok=True 
+cold docker-runsc-kvm trial 3: exec=233.927 ok=True 
+cold firecracker trial 4: exec=252.206 ok=True 
+cold cloud-hypervisor trial 4: exec=181.992 ok=True 
+cold runsc trial 4: exec=62.014 ok=True 
+cold runc trial 4: exec=33.044 ok=True 
+cold docker-runsc trial 4: exec=186.502 ok=True 
+cold docker-runc trial 4: exec=139.082 ok=True 
+cold docker-runsc-kvm trial 4: exec=232.403 ok=True 
+cold firecracker trial 5: exec=248.105 ok=True 
+cold cloud-hypervisor trial 5: exec=175.963 ok=True 
+cold runsc trial 5: exec=73.386 ok=True 
+cold runc trial 5: exec=33.174 ok=True 
+cold docker-runsc trial 5: exec=188.8 ok=True 
+cold docker-runc trial 5: exec=154.724 ok=True 
+cold docker-runsc-kvm trial 5: exec=234.952 ok=True 
+cold firecracker trial 6: exec=252.605 ok=True 
+cold cloud-hypervisor trial 6: exec=176.963 ok=True 
+cold runsc trial 6: exec=71.648 ok=True 
+cold runc trial 6: exec=33.137 ok=True 
+cold docker-runsc trial 6: exec=177.879 ok=True 
+cold docker-runc trial 6: exec=145.872 ok=True 
+cold docker-runsc-kvm trial 6: exec=249.89 ok=True 
+cold firecracker trial 7: exec=265.505 ok=True 
+cold cloud-hypervisor trial 7: exec=183.53 ok=True 
+cold runsc trial 7: exec=70.539 ok=True 
+cold runc trial 7: exec=33.011 ok=True 
+cold docker-runsc trial 7: exec=195.619 ok=True 
+cold docker-runc trial 7: exec=156.585 ok=True 
+cold docker-runsc-kvm trial 7: exec=273.131 ok=True 
+cold firecracker trial 8: exec=260.195 ok=True 
+cold cloud-hypervisor trial 8: exec=172.165 ok=True 
+cold runsc trial 8: exec=69.834 ok=True 
+cold runc trial 8: exec=32.98 ok=True 
+cold docker-runsc trial 8: exec=193.291 ok=True 
+cold docker-runc trial 8: exec=162.041 ok=True 
+cold docker-runsc-kvm trial 8: exec=236.885 ok=True 
+cold firecracker trial 9: exec=255.304 ok=True 
+cold cloud-hypervisor trial 9: exec=169.422 ok=True 
+cold runsc trial 9: exec=63.03 ok=True 
+cold runc trial 9: exec=33.157 ok=True 
+cold docker-runsc trial 9: exec=195.923 ok=True 
+cold docker-runc trial 9: exec=145.538 ok=True 
+cold docker-runsc-kvm trial 9: exec=250.67 ok=True 
+cold firecracker trial 10: exec=268.887 ok=True 
+cold cloud-hypervisor trial 10: exec=174.233 ok=True 
+cold runsc trial 10: exec=60.905 ok=True 
+cold runc trial 10: exec=33.134 ok=True 
+cold docker-runsc trial 10: exec=179.027 ok=True 
+cold docker-runc trial 10: exec=145.22 ok=True 
+cold docker-runsc-kvm trial 10: exec=237.137 ok=True 
+cold firecracker trial 11: exec=252.808 ok=True 
+cold cloud-hypervisor trial 11: exec=172.99 ok=True 
+cold runsc trial 11: exec=63.804 ok=True 
+cold runc trial 11: exec=36.954 ok=True 
+cold docker-runsc trial 11: exec=195.643 ok=True 
+cold docker-runc trial 11: exec=148.462 ok=True 
+cold docker-runsc-kvm trial 11: exec=244.354 ok=True 
+cold firecracker trial 12: exec=254.971 ok=True 
+cold cloud-hypervisor trial 12: exec=175.007 ok=True 
+cold runsc trial 12: exec=60.5 ok=True 
+cold runc trial 12: exec=33.241 ok=True 
+cold docker-runsc trial 12: exec=185.343 ok=True 
+cold docker-runc trial 12: exec=143.181 ok=True 
+cold docker-runsc-kvm trial 12: exec=258.625 ok=True 
+cold firecracker trial 13: exec=255.389 ok=True 
+cold cloud-hypervisor trial 13: exec=169.248 ok=True 
+cold runsc trial 13: exec=59.734 ok=True 
+cold runc trial 13: exec=33.183 ok=True 
+cold docker-runsc trial 13: exec=178.139 ok=True 
+cold docker-runc trial 13: exec=153.364 ok=True 
+cold docker-runsc-kvm trial 13: exec=239.645 ok=True 
+cold firecracker trial 14: exec=250.93 ok=True 
+cold cloud-hypervisor trial 14: exec=173.642 ok=True 
+cold runsc trial 14: exec=72.538 ok=True 
+cold runc trial 14: exec=33.045 ok=True 
+cold docker-runsc trial 14: exec=185.063 ok=True 
+cold docker-runc trial 14: exec=154.388 ok=True 
+cold docker-runsc-kvm trial 14: exec=252.526 ok=True 
+cold firecracker trial 15: exec=250.915 ok=True 
+cold cloud-hypervisor trial 15: exec=170.955 ok=True 
+cold runsc trial 15: exec=59.83 ok=True 
+cold runc trial 15: exec=33.116 ok=True 
+cold docker-runsc trial 15: exec=199.085 ok=True 
+cold docker-runc trial 15: exec=143.696 ok=True 
+cold docker-runsc-kvm trial 15: exec=237.53 ok=True 
+cold firecracker trial 16: exec=251.022 ok=True 
+cold cloud-hypervisor trial 16: exec=184.246 ok=True 
+cold runsc trial 16: exec=60.019 ok=True 
+cold runc trial 16: exec=32.95 ok=True 
+cold docker-runsc trial 16: exec=178.195 ok=True 
+cold docker-runc trial 16: exec=156.294 ok=True 
+cold docker-runsc-kvm trial 16: exec=233.582 ok=True 
+cold firecracker trial 17: exec=256.628 ok=True 
+cold cloud-hypervisor trial 17: exec=183.294 ok=True 
+cold runsc trial 17: exec=73.229 ok=True 
+cold runc trial 17: exec=33.064 ok=True 
+cold docker-runsc trial 17: exec=185.576 ok=True 
+cold docker-runc trial 17: exec=151.908 ok=True 
+cold docker-runsc-kvm trial 17: exec=241.142 ok=True 
+cold firecracker trial 18: exec=251.118 ok=True 
+cold cloud-hypervisor trial 18: exec=176.878 ok=True 
+cold runsc trial 18: exec=74.108 ok=True 
+cold runc trial 18: exec=33.16 ok=True 
+cold docker-runsc trial 18: exec=180.97 ok=True 
+cold docker-runc trial 18: exec=150.374 ok=True 
+cold docker-runsc-kvm trial 18: exec=243.308 ok=True 
+cold firecracker trial 19: exec=268.125 ok=True 
+cold cloud-hypervisor trial 19: exec=168.527 ok=True 
+cold runsc trial 19: exec=60.407 ok=True 
+cold runc trial 19: exec=33.591 ok=True 
+cold docker-runsc trial 19: exec=175.798 ok=True 
+cold docker-runc trial 19: exec=157.133 ok=True 
+cold docker-runsc-kvm trial 19: exec=248.279 ok=True 
+cold firecracker trial 20: exec=252.576 ok=True 
+cold cloud-hypervisor trial 20: exec=178.478 ok=True 
+cold runsc trial 20: exec=59.874 ok=True 
+cold runc trial 20: exec=33.125 ok=True 
+cold docker-runsc trial 20: exec=180.121 ok=True 
+cold docker-runc trial 20: exec=147.869 ok=True 
+cold docker-runsc-kvm trial 20: exec=248.385 ok=True 
+cold firecracker trial 21: exec=259.191 ok=True 
+cold cloud-hypervisor trial 21: exec=173.778 ok=True 
+cold runsc trial 21: exec=62.06 ok=True 
+cold runc trial 21: exec=33.095 ok=True 
+cold docker-runsc trial 21: exec=184.581 ok=True 
+cold docker-runc trial 21: exec=144.665 ok=True 
+cold docker-runsc-kvm trial 21: exec=245.682 ok=True 
+cold firecracker trial 22: exec=265.869 ok=True 
+cold cloud-hypervisor trial 22: exec=172.257 ok=True 
+cold runsc trial 22: exec=72.014 ok=True 
+cold runc trial 22: exec=33.092 ok=True 
+cold docker-runsc trial 22: exec=192.365 ok=True 
+cold docker-runc trial 22: exec=155.631 ok=True 
+cold docker-runsc-kvm trial 22: exec=257.351 ok=True 
+cold firecracker trial 23: exec=251.919 ok=True 
+cold cloud-hypervisor trial 23: exec=168.35 ok=True 
+cold runsc trial 23: exec=61.871 ok=True 
+cold runc trial 23: exec=20.42 ok=True 
+cold docker-runsc trial 23: exec=181.309 ok=True 
+cold docker-runc trial 23: exec=151.037 ok=True 
+cold docker-runsc-kvm trial 23: exec=265.499 ok=True 
+cold firecracker trial 24: exec=252.811 ok=True 
+cold cloud-hypervisor trial 24: exec=173.818 ok=True 
+cold runsc trial 24: exec=61.254 ok=True 
+cold runc trial 24: exec=33.133 ok=True 
+cold docker-runsc trial 24: exec=182.811 ok=True 
+cold docker-runc trial 24: exec=149.011 ok=True 
+cold docker-runsc-kvm trial 24: exec=239.356 ok=True 
+cold firecracker trial 25: exec=247.973 ok=True 
+cold cloud-hypervisor trial 25: exec=169.471 ok=True 
+cold runsc trial 25: exec=76.681 ok=True 
+cold runc trial 25: exec=33.047 ok=True 
+cold docker-runsc trial 25: exec=185.494 ok=True 
+cold docker-runc trial 25: exec=143.775 ok=True 
+cold docker-runsc-kvm trial 25: exec=251.223 ok=True 
+cold firecracker trial 26: exec=260.17 ok=True 
+cold cloud-hypervisor trial 26: exec=178.631 ok=True 
+cold runsc trial 26: exec=62.432 ok=True 
+cold runc trial 26: exec=33.044 ok=True 
+cold docker-runsc trial 26: exec=196.193 ok=True 
+cold docker-runc trial 26: exec=145.791 ok=True 
+cold docker-runsc-kvm trial 26: exec=246.427 ok=True 
+cold firecracker trial 27: exec=259.361 ok=True 
+cold cloud-hypervisor trial 27: exec=181.672 ok=True 
+cold runsc trial 27: exec=77.397 ok=True 
+cold runc trial 27: exec=33.096 ok=True 
+cold docker-runsc trial 27: exec=186.365 ok=True 
+cold docker-runc trial 27: exec=155.006 ok=True 
+cold docker-runsc-kvm trial 27: exec=245.738 ok=True 
+cold firecracker trial 28: exec=274.842 ok=True 
+cold cloud-hypervisor trial 28: exec=182.045 ok=True 
+cold runsc trial 28: exec=65.552 ok=True 
+cold runc trial 28: exec=32.982 ok=True 
+cold docker-runsc trial 28: exec=184.69 ok=True 
+cold docker-runc trial 28: exec=147.065 ok=True 
+cold docker-runsc-kvm trial 28: exec=258.547 ok=True 
+cold firecracker trial 29: exec=256.368 ok=True 
+cold cloud-hypervisor trial 29: exec=172.265 ok=True 
+cold runsc trial 29: exec=61.744 ok=True 
+cold runc trial 29: exec=33.19 ok=True 
+cold docker-runsc trial 29: exec=179.221 ok=True 
+cold docker-runc trial 29: exec=151.224 ok=True 
+cold docker-runsc-kvm trial 29: exec=229.017 ok=True 
+=== cold exit 0 2026-10-13T03:08:53Z
+=== restore 2026-10-13T03:08:53Z
+{"time": "2026-10-13T03:08:53Z", "host": "sandbox-lab", "kernel": "6.8.0-142-generic", "loadavg": [0.1611328125, 0.2314453125, 0.37841796875], "clocksource": "kvm-clock", "mem_available_kib": "MemAvailable:    7275724 kB", "userns_sysctl": "0", "scenario": "restore", "args": {"scenario": "restore", "backends": ["firecracker", "cloud-hypervisor", "runsc"], "trials": 30, "warmup": 2, "rounds": 3, "k": null, "mem_mib": null, "workloads": null, "gap": 0.5, "pilot": false, "max_load": 1.0}, "load_at_start": 0.1611328125}
+snapshot firecracker/file browser=False: 898.146652 ms, mem=1073741824 ok=True
+snapshot cloud-hypervisor/copy browser=False: 938.119419 ms, mem=1073741824 ok=True
+snapshot runsc/plain browser=False: 24.465479 ms, mem=1167360 ok=True
+snapshot runsc/background browser=False: 23.236744 ms, mem=1167360 ok=True
+restore firecracker/file trial -2: exec=29.246 ok=True 
+restore cloud-hypervisor/copy trial -2: exec=860.831 ok=True 
+restore cloud-hypervisor/ondemand trial -2: exec=51.769 ok=True 
+restore runsc/plain trial -2: exec=73.927 ok=True 
+restore runsc/background trial -2: exec=73.464 ok=True 
+restore firecracker/file trial -1: exec=28.803 ok=True 
+restore cloud-hypervisor/copy trial -1: exec=662.438 ok=True 
+restore cloud-hypervisor/ondemand trial -1: exec=42.184 ok=True 
+restore runsc/plain trial -1: exec=74.436 ok=True 
+restore runsc/background trial -1: exec=73.348 ok=True 
+restore firecracker/file trial 0: exec=29.99 ok=True 
+restore cloud-hypervisor/copy trial 0: exec=290.416 ok=True 
+restore cloud-hypervisor/ondemand trial 0: exec=43.659 ok=True 
+restore runsc/plain trial 0: exec=73.653 ok=True 
+restore runsc/background trial 0: exec=73.646 ok=True 
+restore firecracker/file trial 1: exec=31.468 ok=True 
+restore cloud-hypervisor/copy trial 1: exec=286.103 ok=True 
+restore cloud-hypervisor/ondemand trial 1: exec=48.076 ok=True 
+restore runsc/plain trial 1: exec=73.633 ok=True 
+restore runsc/background trial 1: exec=73.847 ok=True 
+restore firecracker/file trial 2: exec=30.068 ok=True 
+restore cloud-hypervisor/copy trial 2: exec=293.307 ok=True 
+restore cloud-hypervisor/ondemand trial 2: exec=52.273 ok=True 
+restore runsc/plain trial 2: exec=73.936 ok=True 
+restore runsc/background trial 2: exec=73.506 ok=True 
+restore firecracker/file trial 3: exec=29.163 ok=True 
+restore cloud-hypervisor/copy trial 3: exec=261.338 ok=True 
+restore cloud-hypervisor/ondemand trial 3: exec=41.871 ok=True 
+restore runsc/plain trial 3: exec=73.467 ok=True 
+restore runsc/background trial 3: exec=73.882 ok=True 
+restore firecracker/file trial 4: exec=28.943 ok=True 
+restore cloud-hypervisor/copy trial 4: exec=253.942 ok=True 
+restore cloud-hypervisor/ondemand trial 4: exec=47.9 ok=True 
+restore runsc/plain trial 4: exec=74.103 ok=True 
+restore runsc/background trial 4: exec=73.654 ok=True 
+restore firecracker/file trial 5: exec=29.288 ok=True 
+restore cloud-hypervisor/copy trial 5: exec=342.324 ok=True 
+restore cloud-hypervisor/ondemand trial 5: exec=42.645 ok=True 
+restore runsc/plain trial 5: exec=73.967 ok=True 
+restore runsc/background trial 5: exec=73.591 ok=True 
+restore firecracker/file trial 6: exec=32.807 ok=True 
+restore cloud-hypervisor/copy trial 6: exec=332.167 ok=True 
+restore cloud-hypervisor/ondemand trial 6: exec=51.058 ok=True 
+restore runsc/plain trial 6: exec=73.565 ok=True 
+restore runsc/background trial 6: exec=74.624 ok=True 
+restore firecracker/file trial 7: exec=29.256 ok=True 
+restore cloud-hypervisor/copy trial 7: exec=268.959 ok=True 
+restore cloud-hypervisor/ondemand trial 7: exec=44.358 ok=True 
+restore runsc/plain trial 7: exec=73.593 ok=True 
+restore runsc/background trial 7: exec=73.776 ok=True 
+restore firecracker/file trial 8: exec=30.647 ok=True 
+restore cloud-hypervisor/copy trial 8: exec=247.061 ok=True 
+restore cloud-hypervisor/ondemand trial 8: exec=46.407 ok=True 
+restore runsc/plain trial 8: exec=73.439 ok=True 
+restore runsc/background trial 8: exec=73.596 ok=True 
+restore firecracker/file trial 9: exec=28.348 ok=True 
+restore cloud-hypervisor/copy trial 9: exec=271.33 ok=True 
+restore cloud-hypervisor/ondemand trial 9: exec=45.056 ok=True 
+restore runsc/plain trial 9: exec=73.145 ok=True 
+restore runsc/background trial 9: exec=73.618 ok=True 
+restore firecracker/file trial 10: exec=29.196 ok=True 
+restore cloud-hypervisor/copy trial 10: exec=256.388 ok=True 
+restore cloud-hypervisor/ondemand trial 10: exec=44.686 ok=True 
+restore runsc/plain trial 10: exec=73.487 ok=True 
+restore runsc/background trial 10: exec=73.862 ok=True 
+restore firecracker/file trial 11: exec=32.372 ok=True 
+restore cloud-hypervisor/copy trial 11: exec=244.996 ok=True 
+restore cloud-hypervisor/ondemand trial 11: exec=43.07 ok=True 
+restore runsc/plain trial 11: exec=73.692 ok=True 
+restore runsc/background trial 11: exec=73.847 ok=True 
+restore firecracker/file trial 12: exec=29.165 ok=True 
+restore cloud-hypervisor/copy trial 12: exec=262.321 ok=True 
+restore cloud-hypervisor/ondemand trial 12: exec=43.506 ok=True 
+restore runsc/plain trial 12: exec=73.661 ok=True 
+restore runsc/background trial 12: exec=74.173 ok=True 
+restore firecracker/file trial 13: exec=28.83 ok=True 
+restore cloud-hypervisor/copy trial 13: exec=267.057 ok=True 
+restore cloud-hypervisor/ondemand trial 13: exec=43.186 ok=True 
+restore runsc/plain trial 13: exec=73.6 ok=True 
+restore runsc/background trial 13: exec=73.718 ok=True 
+restore firecracker/file trial 14: exec=33.193 ok=True 
+restore cloud-hypervisor/copy trial 14: exec=245.254 ok=True 
+restore cloud-hypervisor/ondemand trial 14: exec=47.54 ok=True 
+restore runsc/plain trial 14: exec=73.642 ok=True 
+restore runsc/background trial 14: exec=73.281 ok=True 
+restore firecracker/file trial 15: exec=28.494 ok=True 
+restore cloud-hypervisor/copy trial 15: exec=256.598 ok=True 
+restore cloud-hypervisor/ondemand trial 15: exec=46.761 ok=True 
+restore runsc/plain trial 15: exec=75.187 ok=True 
+restore runsc/background trial 15: exec=73.327 ok=True 
+restore firecracker/file trial 16: exec=29.394 ok=True 
+restore cloud-hypervisor/copy trial 16: exec=252.061 ok=True 
+restore cloud-hypervisor/ondemand trial 16: exec=47.447 ok=True 
+restore runsc/plain trial 16: exec=73.928 ok=True 
+restore runsc/background trial 16: exec=73.499 ok=True 
+restore firecracker/file trial 17: exec=30.556 ok=True 
+restore cloud-hypervisor/copy trial 17: exec=243.474 ok=True 
+restore cloud-hypervisor/ondemand trial 17: exec=42.586 ok=True 
+restore runsc/plain trial 17: exec=73.348 ok=True 
+restore runsc/background trial 17: exec=73.467 ok=True 
+restore firecracker/file trial 18: exec=31.142 ok=True 
+restore cloud-hypervisor/copy trial 18: exec=258.084 ok=True 
+restore cloud-hypervisor/ondemand trial 18: exec=44.101 ok=True 
+restore runsc/plain trial 18: exec=73.814 ok=True 
+restore runsc/background trial 18: exec=73.436 ok=True 
+restore firecracker/file trial 19: exec=30.031 ok=True 
+restore cloud-hypervisor/copy trial 19: exec=260.271 ok=True 
+restore cloud-hypervisor/ondemand trial 19: exec=44.669 ok=True 
+restore runsc/plain trial 19: exec=73.924 ok=True 
+restore runsc/background trial 19: exec=73.724 ok=True 
+restore firecracker/file trial 20: exec=29.084 ok=True 
+restore cloud-hypervisor/copy trial 20: exec=248.309 ok=True 
+restore cloud-hypervisor/ondemand trial 20: exec=44.953 ok=True 
+restore runsc/plain trial 20: exec=73.567 ok=True 
+restore runsc/background trial 20: exec=73.36 ok=True 
+restore firecracker/file trial 21: exec=28.513 ok=True 
+restore cloud-hypervisor/copy trial 21: exec=241.904 ok=True 
+restore cloud-hypervisor/ondemand trial 21: exec=41.892 ok=True 
+restore runsc/plain trial 21: exec=73.411 ok=True 
+restore runsc/background trial 21: exec=74.021 ok=True 
+restore firecracker/file trial 22: exec=29.326 ok=True 
+restore cloud-hypervisor/copy trial 22: exec=253.047 ok=True 
+restore cloud-hypervisor/ondemand trial 22: exec=48.14 ok=True 
+restore runsc/plain trial 22: exec=126.192 ok=True 
+restore runsc/background trial 22: exec=73.316 ok=True 
+restore firecracker/file trial 23: exec=28.721 ok=True 
+restore cloud-hypervisor/copy trial 23: exec=251.359 ok=True 
+restore cloud-hypervisor/ondemand trial 23: exec=46.733 ok=True 
+restore runsc/plain trial 23: exec=73.804 ok=True 
+restore runsc/background trial 23: exec=73.162 ok=True 
+restore firecracker/file trial 24: exec=28.984 ok=True 
+restore cloud-hypervisor/copy trial 24: exec=245.565 ok=True 
+restore cloud-hypervisor/ondemand trial 24: exec=44.673 ok=True 
+restore runsc/plain trial 24: exec=74.139 ok=True 
+restore runsc/background trial 24: exec=73.814 ok=True 
+restore firecracker/file trial 25: exec=29.83 ok=True 
+restore cloud-hypervisor/copy trial 25: exec=275.233 ok=True 
+restore cloud-hypervisor/ondemand trial 25: exec=43.293 ok=True 
+restore runsc/plain trial 25: exec=74.603 ok=True 
+restore runsc/background trial 25: exec=73.401 ok=True 
+restore firecracker/file trial 26: exec=28.818 ok=True 
+restore cloud-hypervisor/copy trial 26: exec=302.044 ok=True 
+restore cloud-hypervisor/ondemand trial 26: exec=45.332 ok=True 
+restore runsc/plain trial 26: exec=73.702 ok=True 
+restore runsc/background trial 26: exec=73.8 ok=True 
+restore firecracker/file trial 27: exec=29.406 ok=True 
+restore cloud-hypervisor/copy trial 27: exec=288.941 ok=True 
+restore cloud-hypervisor/ondemand trial 27: exec=43.864 ok=True 
+restore runsc/plain trial 27: exec=73.43 ok=True 
+restore runsc/background trial 27: exec=73.528 ok=True 
+restore firecracker/file trial 28: exec=29.681 ok=True 
+restore cloud-hypervisor/copy trial 28: exec=240.229 ok=True 
+restore cloud-hypervisor/ondemand trial 28: exec=40.884 ok=True 
+restore runsc/plain trial 28: exec=74.208 ok=True 
+restore runsc/background trial 28: exec=74.219 ok=True 
+restore firecracker/file trial 29: exec=29.379 ok=True 
+restore cloud-hypervisor/copy trial 29: exec=219.127 ok=True 
+restore cloud-hypervisor/ondemand trial 29: exec=44.45 ok=True 
+restore runsc/plain trial 29: exec=74.262 ok=True 
+restore runsc/background trial 29: exec=73.802 ok=True 
+=== restore exit 0 2026-10-13T03:16:12Z
+=== browser-cold 2026-10-13T03:16:12Z
+{"time": "2026-10-13T03:16:12Z", "host": "sandbox-lab", "kernel": "6.8.0-142-generic", "loadavg": [0.193359375, 0.20068359375, 0.298828125], "clocksource": "kvm-clock", "mem_available_kib": "MemAvailable:    7398776 kB", "userns_sysctl": "0", "scenario": "browser-cold", "args": {"scenario": "browser-cold", "backends": ["firecracker", "cloud-hypervisor", "runsc", "runc", "docker-runsc", "docker-runc"], "trials": 10, "warmup": 1, "rounds": 3, "k": null, "mem_mib": null, "workloads": null, "gap": 0.5, "pilot": false, "max_load": 1.0}, "load_at_start": 0.193359375}
+browser-cold firecracker trial -1: cdp=1000.985 shot=1731.574 public=1858.7 ok=True 
+browser-cold cloud-hypervisor trial -1: cdp=556.869 shot=1135.02 public=1246.55 ok=True 
+browser-cold runsc trial -1: cdp=1019.885 shot=2029.703 public=2166.824 ok=True 
+browser-cold runc trial -1: cdp=215.755 shot=819.643 public=927.446 ok=True 
+browser-cold docker-runsc trial -1: cdp=1117.212 shot=2138.605 public=2265.183 ok=True 
+browser-cold docker-runc trial -1: cdp=366.701 shot=1042.755 public=1150.111 ok=True 
+browser-cold firecracker trial 0: cdp=991.156 shot=1746.831 public=1857.962 ok=True 
+browser-cold cloud-hypervisor trial 0: cdp=556.977 shot=1137.964 public=1261.461 ok=True 
+browser-cold runsc trial 0: cdp=937.695 shot=1971.879 public=2131.82 ok=True 
+browser-cold runc trial 0: cdp=243.402 shot=867.704 public=972.422 ok=True 
+browser-cold docker-runsc trial 0: cdp=1101.038 shot=2122.02 public=2254.461 ok=True 
+browser-cold docker-runc trial 0: cdp=329.011 shot=985.639 public=1097.967 ok=True 
+browser-cold firecracker trial 1: cdp=970.741 shot=1721.266 public=1829.786 ok=True 
+browser-cold cloud-hypervisor trial 1: cdp=530.047 shot=1149.176 public=1267.392 ok=True 
+browser-cold runsc trial 1: cdp=957.877 shot=1965.867 public=2079.225 ok=True 
+browser-cold runc trial 1: cdp=231.34 shot=866.946 public=966.239 ok=True 
+browser-cold docker-runsc trial 1: cdp=1064.933 shot=2133.435 public=2302.211 ok=True 
+browser-cold docker-runc trial 1: cdp=330.207 shot=1071.008 public=1187.209 ok=True 
+browser-cold firecracker trial 2: cdp=978.208 shot=1755.006 public=1876.329 ok=True 
+browser-cold cloud-hypervisor trial 2: cdp=557.653 shot=1130.685 public=1264.241 ok=True 
+browser-cold runsc trial 2: cdp=916.694 shot=1982.435 public=2085.439 ok=True 
+browser-cold runc trial 2: cdp=237.27 shot=871.226 public=979.14 ok=True 
+browser-cold docker-runsc trial 2: cdp=1072.147 shot=2082.143 public=2231.411 ok=True 
+browser-cold docker-runc trial 2: cdp=348.422 shot=930.264 public=1044.697 ok=True 
+browser-cold firecracker trial 3: cdp=992.808 shot=1767.614 public=1906.644 ok=True 
+browser-cold cloud-hypervisor trial 3: cdp=543.252 shot=1132.663 public=1244.373 ok=True 
+browser-cold runsc trial 3: cdp=898.614 shot=1958.096 public=2084.592 ok=True 
+browser-cold runc trial 3: cdp=217.118 shot=850.166 public=958.775 ok=True 
+browser-cold docker-runsc trial 3: cdp=1087.668 shot=2170.008 public=2331.132 ok=True 
+browser-cold docker-runc trial 3: cdp=329.014 shot=935.025 public=1046.816 ok=True 
+browser-cold firecracker trial 4: cdp=965.535 shot=1742.924 public=1877.677 ok=True 
+browser-cold cloud-hypervisor trial 4: cdp=559.517 shot=1165.603 public=1280.851 ok=True 
+browser-cold runsc trial 4: cdp=932.921 shot=1959.038 public=2106.69 ok=True 
+browser-cold runc trial 4: cdp=233.587 shot=862.937 public=973.465 ok=True 
+browser-cold docker-runsc trial 4: cdp=1076.51 shot=2073.757 public=2192.503 ok=True 
+browser-cold docker-runc trial 4: cdp=351.977 shot=1029.184 public=1128.187 ok=True 
+browser-cold firecracker trial 5: cdp=975.599 shot=1714.737 public=1846.305 ok=True 
+browser-cold cloud-hypervisor trial 5: cdp=543.896 shot=1117.915 public=1225.948 ok=True 
+browser-cold runsc trial 5: cdp=919.639 shot=1990.487 public=2136.42 ok=True 
+browser-cold runc trial 5: cdp=216.017 shot=846.398 public=933.574 ok=True 
+browser-cold docker-runsc trial 5: cdp=1101.092 shot=2125.821 public=2250.414 ok=True 
+browser-cold docker-runc trial 5: cdp=357.836 shot=1027.168 public=1130.101 ok=True 
+browser-cold firecracker trial 6: cdp=981.51 shot=1752.967 public=1886.103 ok=True 
+browser-cold cloud-hypervisor trial 6: cdp=540.945 shot=1136.518 public=1215.906 ok=True 
+browser-cold runsc trial 6: cdp=969.558 shot=2030.339 public=2182.214 ok=True 
+browser-cold runc trial 6: cdp=231.472 shot=930.488 public=1037.377 ok=True 
+browser-cold docker-runsc trial 6: cdp=1087.033 shot=2079.585 public=2181.958 ok=True 
+browser-cold docker-runc trial 6: cdp=318.256 shot=925.751 public=1032.194 ok=True 
+browser-cold firecracker trial 7: cdp=985.765 shot=1750.128 public=1850.96 ok=True 
+browser-cold cloud-hypervisor trial 7: cdp=662.656 shot=1289.393 public=1381.586 ok=True 
+browser-cold runsc trial 7: cdp=938.36 shot=1948.6 public=2107.533 ok=True 
+browser-cold runc trial 7: cdp=220.868 shot=849.207 public=958.969 ok=True 
+browser-cold docker-runsc trial 7: cdp=1049.963 shot=2107.066 public=2240.766 ok=True 
+browser-cold docker-runc trial 7: cdp=323.686 shot=924.312 public=1024.546 ok=True 
+browser-cold firecracker trial 8: cdp=977.68 shot=1756.099 public=1887.136 ok=True 
+browser-cold cloud-hypervisor trial 8: cdp=553.218 shot=1141.364 public=1263.708 ok=True 
+browser-cold runsc trial 8: cdp=974.597 shot=1996.424 public=2140.913 ok=True 
+browser-cold runc trial 8: cdp=230.98 shot=852.996 public=959.306 ok=True 
+browser-cold docker-runsc trial 8: cdp=1081.979 shot=2169.811 public=2318.187 ok=True 
+browser-cold docker-runc trial 8: cdp=332.759 shot=956.155 public=1062.34 ok=True 
+browser-cold firecracker trial 9: cdp=979.677 shot=1732.831 public=1860.985 ok=True 
+browser-cold cloud-hypervisor trial 9: cdp=567.756 shot=1181.497 public=1314.266 ok=True 
+browser-cold runsc trial 9: cdp=927.418 shot=2001.975 public=2149.201 ok=True 
+browser-cold runc trial 9: cdp=219.807 shot=884.872 public=981.563 ok=True 
+browser-cold docker-runsc trial 9: cdp=1054.334 shot=2147.013 public=2294.236 ok=True 
+browser-cold docker-runc trial 9: cdp=356.141 shot=981.023 public=1072.024 ok=True 
+=== browser-cold exit 0 2026-10-13T03:21:07Z
+=== browser-restore 2026-10-13T03:21:07Z
+{"time": "2026-10-13T03:21:07Z", "host": "sandbox-lab", "kernel": "6.8.0-142-generic", "loadavg": [0.8466796875, 0.6806640625, 0.48779296875], "clocksource": "kvm-clock", "mem_available_kib": "MemAvailable:    7307756 kB", "userns_sysctl": "0", "scenario": "browser-restore", "args": {"scenario": "browser-restore", "backends": ["firecracker", "cloud-hypervisor", "runsc"], "trials": 10, "warmup": 1, "rounds": 3, "k": null, "mem_mib": null, "workloads": null, "gap": 0.5, "pilot": false, "max_load": 1.0}, "load_at_start": 0.8466796875}
+snapshot firecracker/file browser=True: 894.425195 ms, mem=1073741824 ok=True
+snapshot cloud-hypervisor/copy browser=True: 784.623252 ms, mem=1073741824 ok=True
+snapshot runsc/plain browser=True: 353.948802 ms, mem=154923008 ok=True
+snapshot runsc/background browser=True: 304.456022 ms, mem=155836416 ok=True
+browser-restore firecracker/file trial -1: cdp=40.717 shot=910.098 public=1117.38 ok=True 
+browser-restore cloud-hypervisor/copy trial -1: cdp=729.209 shot=1232.491 public=1377.956 ok=True 
+----------------------------------------
+Exception occurred during processing of request from ('172.16.2.2', 50142)
+Traceback (most recent call last):
+  File "/usr/lib/python3.12/socketserver.py", line 692, in process_request_thread
+    self.finish_request(request, client_address)
+  File "/usr/lib/python3.12/socketserver.py", line 362, in finish_request
+    self.RequestHandlerClass(request, client_address, self)
+  File "/usr/lib/python3.12/http/server.py", line 672, in __init__
+    super().__init__(*args, **kwargs)
+  File "/usr/lib/python3.12/socketserver.py", line 761, in __init__
+    self.handle()
+  File "/usr/lib/python3.12/http/server.py", line 436, in handle
+    self.handle_one_request()
+  File "/usr/lib/python3.12/http/server.py", line 404, in handle_one_request
+    self.raw_requestline = self.rfile.readline(65537)
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/socket.py", line 707, in readinto
+    return self._sock.recv_into(b)
+           ^^^^^^^^^^^^^^^^^^^^^^^
+ConnectionResetError: [Errno 104] Connection reset by peer
+----------------------------------------
+browser-restore cloud-hypervisor/ondemand trial -1: cdp=147.381 shot=904.195 public=1019.263 ok=True 
+browser-restore runsc/plain trial -1: cdp=292.927 shot=979.747 public=1165.186 ok=True 
+browser-restore runsc/background trial -1: cdp=236.225 shot=850.887 public=1088.182 ok=True 
+browser-restore firecracker/file trial 0: cdp=49.934 shot=911.632 public=1071.261 ok=True 
+browser-restore cloud-hypervisor/copy trial 0: cdp=708.386 shot=1178.177 public=1300.344 ok=True 
+----------------------------------------
+Exception occurred during processing of request from ('172.16.2.2', 47326)
+Traceback (most recent call last):
+  File "/usr/lib/python3.12/socketserver.py", line 692, in process_request_thread
+    self.finish_request(request, client_address)
+  File "/usr/lib/python3.12/socketserver.py", line 362, in finish_request
+    self.RequestHandlerClass(request, client_address, self)
+  File "/usr/lib/python3.12/http/server.py", line 672, in __init__
+    super().__init__(*args, **kwargs)
+  File "/usr/lib/python3.12/socketserver.py", line 761, in __init__
+    self.handle()
+  File "/usr/lib/python3.12/http/server.py", line 436, in handle
+    self.handle_one_request()
+  File "/usr/lib/python3.12/http/server.py", line 404, in handle_one_request
+    self.raw_requestline = self.rfile.readline(65537)
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/socket.py", line 707, in readinto
+    return self._sock.recv_into(b)
+           ^^^^^^^^^^^^^^^^^^^^^^^
+ConnectionResetError: [Errno 104] Connection reset by peer
+----------------------------------------
+browser-restore cloud-hypervisor/ondemand trial 0: cdp=162.767 shot=916.516 public=1052.832 ok=True 
+browser-restore runsc/plain trial 0: cdp=302.367 shot=1066.791 public=1229.917 ok=True 
+browser-restore runsc/background trial 0: cdp=317.95 shot=1039.173 public=1214.082 ok=True 
+browser-restore firecracker/file trial 1: cdp=36.836 shot=983.755 public=1193.713 ok=True 
+browser-restore cloud-hypervisor/copy trial 1: cdp=519.007 shot=982.436 public=1121.902 ok=True 
+----------------------------------------
+Exception occurred during processing of request from ('172.16.2.2', 36430)
+Traceback (most recent call last):
+  File "/usr/lib/python3.12/socketserver.py", line 692, in process_request_thread
+    self.finish_request(request, client_address)
+  File "/usr/lib/python3.12/socketserver.py", line 362, in finish_request
+    self.RequestHandlerClass(request, client_address, self)
+  File "/usr/lib/python3.12/http/server.py", line 672, in __init__
+    super().__init__(*args, **kwargs)
+  File "/usr/lib/python3.12/socketserver.py", line 761, in __init__
+    self.handle()
+  File "/usr/lib/python3.12/http/server.py", line 436, in handle
+    self.handle_one_request()
+  File "/usr/lib/python3.12/http/server.py", line 404, in handle_one_request
+    self.raw_requestline = self.rfile.readline(65537)
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/socket.py", line 707, in readinto
+    return self._sock.recv_into(b)
+           ^^^^^^^^^^^^^^^^^^^^^^^
+ConnectionResetError: [Errno 104] Connection reset by peer
+----------------------------------------
+browser-restore cloud-hypervisor/ondemand trial 1: cdp=165.555 shot=973.918 public=1115.292 ok=True 
+browser-restore runsc/plain trial 1: cdp=543.913 shot=1329.338 public=1507.386 ok=True 
+browser-restore runsc/background trial 1: cdp=540.076 shot=1301.84 public=1475.03 ok=True 
+browser-restore firecracker/file trial 2: cdp=39.952 shot=882.204 public=1064.321 ok=True 
+browser-restore cloud-hypervisor/copy trial 2: cdp=466.445 shot=1027.169 public=1163.068 ok=True 
+----------------------------------------
+Exception occurred during processing of request from ('172.16.2.2', 36812)
+Traceback (most recent call last):
+  File "/usr/lib/python3.12/socketserver.py", line 692, in process_request_thread
+    self.finish_request(request, client_address)
+  File "/usr/lib/python3.12/socketserver.py", line 362, in finish_request
+    self.RequestHandlerClass(request, client_address, self)
+  File "/usr/lib/python3.12/http/server.py", line 672, in __init__
+    super().__init__(*args, **kwargs)
+  File "/usr/lib/python3.12/socketserver.py", line 761, in __init__
+    self.handle()
+  File "/usr/lib/python3.12/http/server.py", line 436, in handle
+    self.handle_one_request()
+  File "/usr/lib/python3.12/http/server.py", line 404, in handle_one_request
+    self.raw_requestline = self.rfile.readline(65537)
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/socket.py", line 707, in readinto
+    return self._sock.recv_into(b)
+           ^^^^^^^^^^^^^^^^^^^^^^^
+ConnectionResetError: [Errno 104] Connection reset by peer
+----------------------------------------
+browser-restore cloud-hypervisor/ondemand trial 2: cdp=179.552 shot=863.675 public=964.288 ok=True 
+browser-restore runsc/plain trial 2: cdp=363.413 shot=1314.738 public=1460.17 ok=True 
+browser-restore runsc/background trial 2: cdp=260.994 shot=1274.458 public=1402.419 ok=True 
+browser-restore firecracker/file trial 3: cdp=39.302 shot=953.133 public=1119.516 ok=True 
+browser-restore cloud-hypervisor/copy trial 3: cdp=490.386 shot=991.643 public=1115.127 ok=True 
+----------------------------------------
+Exception occurred during processing of request from ('172.16.2.2', 53208)
+Traceback (most recent call last):
+  File "/usr/lib/python3.12/socketserver.py", line 692, in process_request_thread
+    self.finish_request(request, client_address)
+  File "/usr/lib/python3.12/socketserver.py", line 362, in finish_request
+    self.RequestHandlerClass(request, client_address, self)
+  File "/usr/lib/python3.12/http/server.py", line 672, in __init__
+    super().__init__(*args, **kwargs)
+  File "/usr/lib/python3.12/socketserver.py", line 761, in __init__
+    self.handle()
+  File "/usr/lib/python3.12/http/server.py", line 436, in handle
+    self.handle_one_request()
+  File "/usr/lib/python3.12/http/server.py", line 404, in handle_one_request
+    self.raw_requestline = self.rfile.readline(65537)
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/socket.py", line 707, in readinto
+    return self._sock.recv_into(b)
+           ^^^^^^^^^^^^^^^^^^^^^^^
+ConnectionResetError: [Errno 104] Connection reset by peer
+----------------------------------------
+browser-restore cloud-hypervisor/ondemand trial 3: cdp=176.733 shot=895.749 public=1024.578 ok=True 
+browser-restore runsc/plain trial 3: cdp=500.403 shot=1267.344 public=1420.261 ok=True 
+browser-restore runsc/background trial 3: cdp=272.104 shot=1302.258 public=1436.079 ok=True 
+browser-restore firecracker/file trial 4: cdp=36.691 shot=887.517 public=1058.597 ok=True 
+browser-restore cloud-hypervisor/copy trial 4: cdp=412.545 shot=924.74 public=1037.656 ok=True 
+----------------------------------------
+Exception occurred during processing of request from ('172.16.2.2', 60658)
+Traceback (most recent call last):
+  File "/usr/lib/python3.12/socketserver.py", line 692, in process_request_thread
+    self.finish_request(request, client_address)
+  File "/usr/lib/python3.12/socketserver.py", line 362, in finish_request
+    self.RequestHandlerClass(request, client_address, self)
+  File "/usr/lib/python3.12/http/server.py", line 672, in __init__
+    super().__init__(*args, **kwargs)
+  File "/usr/lib/python3.12/socketserver.py", line 761, in __init__
+    self.handle()
+  File "/usr/lib/python3.12/http/server.py", line 436, in handle
+    self.handle_one_request()
+  File "/usr/lib/python3.12/http/server.py", line 404, in handle_one_request
+    self.raw_requestline = self.rfile.readline(65537)
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/socket.py", line 707, in readinto
+    return self._sock.recv_into(b)
+           ^^^^^^^^^^^^^^^^^^^^^^^
+ConnectionResetError: [Errno 104] Connection reset by peer
+----------------------------------------
+browser-restore cloud-hypervisor/ondemand trial 4: cdp=172.144 shot=995.164 public=1125.333 ok=True 
+browser-restore runsc/plain trial 4: cdp=288.025 shot=1252.33 public=1404.301 ok=True 
+browser-restore runsc/background trial 4: cdp=568.737 shot=1327.357 public=1496.713 ok=True 
+browser-restore firecracker/file trial 5: cdp=37.871 shot=937.247 public=1156.354 ok=True 
+browser-restore cloud-hypervisor/copy trial 5: cdp=369.158 shot=949.194 public=1072.676 ok=True 
+----------------------------------------
+Exception occurred during processing of request from ('172.16.2.2', 45402)
+Traceback (most recent call last):
+  File "/usr/lib/python3.12/socketserver.py", line 692, in process_request_thread
+    self.finish_request(request, client_address)
+  File "/usr/lib/python3.12/socketserver.py", line 362, in finish_request
+    self.RequestHandlerClass(request, client_address, self)
+  File "/usr/lib/python3.12/http/server.py", line 672, in __init__
+    super().__init__(*args, **kwargs)
+  File "/usr/lib/python3.12/socketserver.py", line 761, in __init__
+    self.handle()
+  File "/usr/lib/python3.12/http/server.py", line 436, in handle
+    self.handle_one_request()
+  File "/usr/lib/python3.12/http/server.py", line 404, in handle_one_request
+    self.raw_requestline = self.rfile.readline(65537)
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/socket.py", line 707, in readinto
+    return self._sock.recv_into(b)
+           ^^^^^^^^^^^^^^^^^^^^^^^
+ConnectionResetError: [Errno 104] Connection reset by peer
+----------------------------------------
+----------------------------------------
+Exception occurred during processing of request from ('172.16.2.2', 45404)
+Traceback (most recent call last):
+  File "/usr/lib/python3.12/socketserver.py", line 692, in process_request_thread
+    self.finish_request(request, client_address)
+  File "/usr/lib/python3.12/socketserver.py", line 362, in finish_request
+    self.RequestHandlerClass(request, client_address, self)
+  File "/usr/lib/python3.12/http/server.py", line 672, in __init__
+    super().__init__(*args, **kwargs)
+  File "/usr/lib/python3.12/socketserver.py", line 761, in __init__
+    self.handle()
+  File "/usr/lib/python3.12/http/server.py", line 436, in handle
+    self.handle_one_request()
+  File "/usr/lib/python3.12/http/server.py", line 404, in handle_one_request
+    self.raw_requestline = self.rfile.readline(65537)
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/socket.py", line 707, in readinto
+    return self._sock.recv_into(b)
+           ^^^^^^^^^^^^^^^^^^^^^^^
+ConnectionResetError: [Errno 104] Connection reset by peer
+----------------------------------------
+browser-restore cloud-hypervisor/ondemand trial 5: cdp=187.496 shot=990.441 public=1105.346 ok=True 
+browser-restore runsc/plain trial 5: cdp=318.109 shot=1252.541 public=1397.34 ok=True 
+browser-restore runsc/background trial 5: cdp=252.27 shot=1278.994 public=1400.011 ok=True 
+browser-restore firecracker/file trial 6: cdp=36.587 shot=884.781 public=1033.274 ok=True 
+browser-restore cloud-hypervisor/copy trial 6: cdp=414.307 shot=910.412 public=1025.051 ok=True 
+----------------------------------------
+Exception occurred during processing of request from ('172.16.2.2', 59796)
+Traceback (most recent call last):
+  File "/usr/lib/python3.12/socketserver.py", line 692, in process_request_thread
+    self.finish_request(request, client_address)
+  File "/usr/lib/python3.12/socketserver.py", line 362, in finish_request
+    self.RequestHandlerClass(request, client_address, self)
+  File "/usr/lib/python3.12/http/server.py", line 672, in __init__
+    super().__init__(*args, **kwargs)
+  File "/usr/lib/python3.12/socketserver.py", line 761, in __init__
+    self.handle()
+  File "/usr/lib/python3.12/http/server.py", line 436, in handle
+    self.handle_one_request()
+  File "/usr/lib/python3.12/http/server.py", line 404, in handle_one_request
+    self.raw_requestline = self.rfile.readline(65537)
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/socket.py", line 707, in readinto
+    return self._sock.recv_into(b)
+           ^^^^^^^^^^^^^^^^^^^^^^^
+ConnectionResetError: [Errno 104] Connection reset by peer
+----------------------------------------
+browser-restore cloud-hypervisor/ondemand trial 6: cdp=161.906 shot=958.563 public=1090.573 ok=True 
+browser-restore runsc/plain trial 6: cdp=553.844 shot=1323.522 public=1450.38 ok=True 
+browser-restore runsc/background trial 6: cdp=244.535 shot=1265.685 public=1411.299 ok=True 
+----------------------------------------
+Exception occurred during processing of request from ('172.16.1.2', 45548)
+Traceback (most recent call last):
+  File "/usr/lib/python3.12/socketserver.py", line 692, in process_request_thread
+    self.finish_request(request, client_address)
+  File "/usr/lib/python3.12/socketserver.py", line 362, in finish_request
+    self.RequestHandlerClass(request, client_address, self)
+  File "/usr/lib/python3.12/http/server.py", line 672, in __init__
+    super().__init__(*args, **kwargs)
+  File "/usr/lib/python3.12/socketserver.py", line 761, in __init__
+    self.handle()
+  File "/usr/lib/python3.12/http/server.py", line 436, in handle
+    self.handle_one_request()
+  File "/usr/lib/python3.12/http/server.py", line 404, in handle_one_request
+    self.raw_requestline = self.rfile.readline(65537)
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/socket.py", line 707, in readinto
+    return self._sock.recv_into(b)
+           ^^^^^^^^^^^^^^^^^^^^^^^
+ConnectionResetError: [Errno 104] Connection reset by peer
+----------------------------------------
+browser-restore firecracker/file trial 7: cdp=38.615 shot=897.24 public=1069.307 ok=True 
+browser-restore cloud-hypervisor/copy trial 7: cdp=403.643 shot=1050.798 public=1187.154 ok=True 
+----------------------------------------
+Exception occurred during processing of request from ('172.16.2.2', 60342)
+Traceback (most recent call last):
+  File "/usr/lib/python3.12/socketserver.py", line 692, in process_request_thread
+    self.finish_request(request, client_address)
+  File "/usr/lib/python3.12/socketserver.py", line 362, in finish_request
+    self.RequestHandlerClass(request, client_address, self)
+  File "/usr/lib/python3.12/http/server.py", line 672, in __init__
+    super().__init__(*args, **kwargs)
+  File "/usr/lib/python3.12/socketserver.py", line 761, in __init__
+    self.handle()
+  File "/usr/lib/python3.12/http/server.py", line 436, in handle
+    self.handle_one_request()
+  File "/usr/lib/python3.12/http/server.py", line 404, in handle_one_request
+    self.raw_requestline = self.rfile.readline(65537)
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/socket.py", line 707, in readinto
+    return self._sock.recv_into(b)
+           ^^^^^^^^^^^^^^^^^^^^^^^
+ConnectionResetError: [Errno 104] Connection reset by peer
+----------------------------------------
+browser-restore cloud-hypervisor/ondemand trial 7: cdp=195.938 shot=1016.781 public=1148.299 ok=True 
+browser-restore runsc/plain trial 7: cdp=493.178 shot=1321.818 public=1471.587 ok=True 
+browser-restore runsc/background trial 7: cdp=677.269 shot=1355.05 public=1512.138 ok=True 
+browser-restore firecracker/file trial 8: cdp=37.288 shot=881.253 public=1048.914 ok=True 
+browser-restore cloud-hypervisor/copy trial 8: cdp=322.562 shot=805.318 public=927.615 ok=True 
+----------------------------------------
+Exception occurred during processing of request from ('172.16.2.2', 48724)
+Traceback (most recent call last):
+  File "/usr/lib/python3.12/socketserver.py", line 692, in process_request_thread
+    self.finish_request(request, client_address)
+  File "/usr/lib/python3.12/socketserver.py", line 362, in finish_request
+    self.RequestHandlerClass(request, client_address, self)
+  File "/usr/lib/python3.12/http/server.py", line 672, in __init__
+    super().__init__(*args, **kwargs)
+  File "/usr/lib/python3.12/socketserver.py", line 761, in __init__
+    self.handle()
+  File "/usr/lib/python3.12/http/server.py", line 436, in handle
+    self.handle_one_request()
+  File "/usr/lib/python3.12/http/server.py", line 404, in handle_one_request
+    self.raw_requestline = self.rfile.readline(65537)
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/socket.py", line 707, in readinto
+    return self._sock.recv_into(b)
+           ^^^^^^^^^^^^^^^^^^^^^^^
+ConnectionResetError: [Errno 104] Connection reset by peer
+----------------------------------------
+browser-restore cloud-hypervisor/ondemand trial 8: cdp=180.507 shot=934.039 public=1061.862 ok=True 
+browser-restore runsc/plain trial 8: cdp=327.655 shot=1349.333 public=1469.093 ok=True 
+browser-restore runsc/background trial 8: cdp=314.499 shot=1431.129 public=1528.983 ok=True 
+----------------------------------------
+Exception occurred during processing of request from ('172.16.1.2', 45558)
+Traceback (most recent call last):
+  File "/usr/lib/python3.12/socketserver.py", line 692, in process_request_thread
+    self.finish_request(request, client_address)
+  File "/usr/lib/python3.12/socketserver.py", line 362, in finish_request
+    self.RequestHandlerClass(request, client_address, self)
+  File "/usr/lib/python3.12/http/server.py", line 672, in __init__
+    super().__init__(*args, **kwargs)
+  File "/usr/lib/python3.12/socketserver.py", line 761, in __init__
+    self.handle()
+  File "/usr/lib/python3.12/http/server.py", line 436, in handle
+    self.handle_one_request()
+  File "/usr/lib/python3.12/http/server.py", line 404, in handle_one_request
+    self.raw_requestline = self.rfile.readline(65537)
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/socket.py", line 707, in readinto
+    return self._sock.recv_into(b)
+           ^^^^^^^^^^^^^^^^^^^^^^^
+ConnectionResetError: [Errno 104] Connection reset by peer
+----------------------------------------
+browser-restore firecracker/file trial 9: cdp=37.4 shot=897.021 public=1074.832 ok=True 
+browser-restore cloud-hypervisor/copy trial 9: cdp=355.262 shot=875.735 public=1007.557 ok=True 
+----------------------------------------
+Exception occurred during processing of request from ('172.16.2.2', 38156)
+Traceback (most recent call last):
+  File "/usr/lib/python3.12/socketserver.py", line 692, in process_request_thread
+    self.finish_request(request, client_address)
+  File "/usr/lib/python3.12/socketserver.py", line 362, in finish_request
+    self.RequestHandlerClass(request, client_address, self)
+  File "/usr/lib/python3.12/http/server.py", line 672, in __init__
+    super().__init__(*args, **kwargs)
+  File "/usr/lib/python3.12/socketserver.py", line 761, in __init__
+    self.handle()
+  File "/usr/lib/python3.12/http/server.py", line 436, in handle
+    self.handle_one_request()
+  File "/usr/lib/python3.12/http/server.py", line 404, in handle_one_request
+    self.raw_requestline = self.rfile.readline(65537)
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/socket.py", line 707, in readinto
+    return self._sock.recv_into(b)
+           ^^^^^^^^^^^^^^^^^^^^^^^
+ConnectionResetError: [Errno 104] Connection reset by peer
+----------------------------------------
+browser-restore cloud-hypervisor/ondemand trial 9: cdp=187.982 shot=946.917 public=1040.383 ok=True 
+browser-restore runsc/plain trial 9: cdp=597.073 shot=1336.21 public=1465.412 ok=True 
+browser-restore runsc/background trial 9: cdp=611.169 shot=1371.38 public=1509.869 ok=True 
+=== browser-restore exit 0 2026-10-13T03:27:14Z
+=== parallel 2026-10-13T03:27:14Z
+{"time": "2026-10-13T03:27:14Z", "host": "sandbox-lab", "kernel": "6.8.0-142-generic", "loadavg": [0.98291015625, 0.5986328125, 0.48291015625], "clocksource": "kvm-clock", "mem_available_kib": "MemAvailable:    7350680 kB", "userns_sysctl": "0", "scenario": "parallel", "args": {"scenario": "parallel", "backends": ["firecracker", "cloud-hypervisor", "runsc", "runc"], "trials": 3, "warmup": 0, "rounds": 3, "k": null, "mem_mib": null, "workloads": null, "gap": 0.5, "pilot": false, "max_load": 1.0}, "load_at_start": 0.98291015625}
+parallel firecracker k=1 round 0: p50=262.661 p95=262.661 max=262.661 fail=0 dMemAvail=48.4 MiB
+parallel cloud-hypervisor k=1 round 0: p50=173.945 p95=173.945 max=173.945 fail=0 dMemAvail=86.7 MiB
+parallel runsc k=1 round 0: p50=75.933 p95=75.933 max=75.933 fail=0 dMemAvail=10.8 MiB
+parallel runc k=1 round 0: p50=33.395 p95=33.395 max=33.395 fail=0 dMemAvail=-0.4 MiB
+parallel firecracker k=1 round 1: p50=255.228 p95=255.228 max=255.228 fail=0 dMemAvail=87.6 MiB
+parallel cloud-hypervisor k=1 round 1: p50=175.473 p95=175.473 max=175.473 fail=0 dMemAvail=89.6 MiB
+parallel runsc k=1 round 1: p50=62.825 p95=62.825 max=62.825 fail=0 dMemAvail=5.5 MiB
+parallel runc k=1 round 1: p50=33.353 p95=33.353 max=33.353 fail=0 dMemAvail=-0.4 MiB
+parallel firecracker k=1 round 2: p50=255.723 p95=255.723 max=255.723 fail=0 dMemAvail=88.3 MiB
+parallel cloud-hypervisor k=1 round 2: p50=168.929 p95=168.929 max=168.929 fail=0 dMemAvail=95.5 MiB
+parallel runsc k=1 round 2: p50=64.884 p95=64.884 max=64.884 fail=0 dMemAvail=13.1 MiB
+parallel runc k=1 round 2: p50=33.82 p95=33.82 max=33.82 fail=0 dMemAvail=-1.0 MiB
+parallel firecracker k=5 round 0: p50=351.837 p95=382.74760000000003 max=390.411 fail=0 dMemAvail=423.2 MiB
+parallel cloud-hypervisor k=5 round 0: p50=268.534 p95=281.98560000000003 max=282.42 fail=0 dMemAvail=422.5 MiB
+parallel runsc k=5 round 0: p50=124.09200000000001 p95=129.1784 max=129.839 fail=0 dMemAvail=54.8 MiB
+parallel runc k=5 round 0: p50=36.415 p95=36.778800000000004 max=36.853 fail=0 dMemAvail=24.1 MiB
+parallel firecracker k=5 round 1: p50=339.422 p95=355.6678 max=358.012 fail=0 dMemAvail=398.1 MiB
+parallel cloud-hypervisor k=5 round 1: p50=249.12600000000003 p95=252.3954 max=252.408 fail=0 dMemAvail=429.5 MiB
+parallel runsc k=5 round 1: p50=111.15 p95=114.02799999999999 max=114.5 fail=0 dMemAvail=40.5 MiB
+parallel runc k=5 round 1: p50=36.454 p95=37.3372 max=37.462 fail=0 dMemAvail=2.9 MiB
+parallel firecracker k=5 round 2: p50=358.448 p95=371.52799999999996 max=373.597 fail=0 dMemAvail=389.9 MiB
+parallel cloud-hypervisor k=5 round 2: p50=245.959 p95=261.37679999999995 max=263.042 fail=0 dMemAvail=441.8 MiB
+parallel runsc k=5 round 2: p50=120.189 p95=123.527 max=123.955 fail=0 dMemAvail=33.0 MiB
+parallel runc k=5 round 2: p50=34.748 p95=35.982200000000006 max=36.247 fail=0 dMemAvail=5.3 MiB
+parallel firecracker k=10 round 0: p50=859.5520000000001 p95=884.46465 max=889.785 fail=0 dMemAvail=779.3 MiB
+parallel cloud-hypervisor k=10 round 0: p50=635.909 p95=656.3349 max=656.685 fail=0 dMemAvail=599.4 MiB
+parallel runsc k=10 round 0: p50=200.77900000000002 p95=209.78740000000002 max=211.078 fail=0 dMemAvail=205.8 MiB
+parallel runc k=10 round 0: p50=47.57149999999999 p95=48.9666 max=49.269 fail=0 dMemAvail=21.3 MiB
+parallel firecracker k=10 round 1: p50=816.6510000000001 p95=886.16295 max=904.032 fail=0 dMemAvail=778.4 MiB
+parallel cloud-hypervisor k=10 round 1: p50=655.25 p95=700.02775 max=704.908 fail=0 dMemAvail=607.8 MiB
+parallel runsc k=10 round 1: p50=190.99099999999999 p95=216.47795 max=219.857 fail=0 dMemAvail=206.3 MiB
+parallel runc k=10 round 1: p50=41.727 p95=42.18275 max=42.203 fail=0 dMemAvail=32.9 MiB
+parallel firecracker k=10 round 2: p50=810.64 p95=841.18065 max=841.83 fail=0 dMemAvail=789.5 MiB
+parallel cloud-hypervisor k=10 round 2: p50=616.615 p95=652.8593 max=653.375 fail=0 dMemAvail=568.2 MiB
+parallel runsc k=10 round 2: p50=218.90050000000002 p95=240.5526 max=243.348 fail=0 dMemAvail=193.1 MiB
+parallel runc k=10 round 2: p50=42.141000000000005 p95=43.029250000000005 max=43.036 fail=0 dMemAvail=51.9 MiB
+parallel firecracker k=20 round 0: p50=1615.3390000000002 p95=1771.3295 max=1787.831 fail=0 dMemAvail=1560.5 MiB
+parallel cloud-hypervisor k=20 round 0: p50=1609.9395000000002 p95=1704.7692000000002 max=1720.562 fail=0 dMemAvail=1313.9 MiB
+parallel runsc k=20 round 0: p50=375.3575 p95=438.25770000000006 max=505.93 fail=0 dMemAvail=378.3 MiB
+parallel runc k=20 round 0: p50=81.801 p95=92.9252 max=93.157 fail=0 dMemAvail=50.3 MiB
+parallel firecracker k=20 round 1: p50=1597.116 p95=1698.4635500000002 max=1700.146 fail=0 dMemAvail=1598.4 MiB
+parallel cloud-hypervisor k=20 round 1: p50=1459.1809999999998 p95=1644.8566 max=1655.014 fail=0 dMemAvail=1440.1 MiB
+parallel runsc k=20 round 1: p50=381.723 p95=426.13039999999995 max=426.404 fail=0 dMemAvail=406.3 MiB
+parallel runc k=20 round 1: p50=75.2295 p95=87.51810000000002 max=87.9 fail=0 dMemAvail=61.3 MiB
+parallel firecracker k=20 round 2: p50=1643.555 p95=1740.4466999999997 max=1760.562 fail=0 dMemAvail=1538.8 MiB
+parallel cloud-hypervisor k=20 round 2: p50=1385.0735 p95=1475.5116999999998 max=1480.598 fail=0 dMemAvail=1500.5 MiB
+parallel runsc k=20 round 2: p50=367.7785 p95=410.02354999999994 max=411.003 fail=0 dMemAvail=388.4 MiB
+parallel runc k=20 round 2: p50=80.41149999999999 p95=82.3026 max=84.233 fail=0 dMemAvail=52.6 MiB
+=== parallel exit 0 2026-10-13T03:32:13Z
+=== memory 2026-10-13T03:32:13Z
+load 1.76 > 1.0, waiting
+load 1.37 > 1.0, waiting
+load 1.06 > 1.0, waiting
+{"time": "2026-10-13T03:32:58Z", "host": "sandbox-lab", "kernel": "6.8.0-142-generic", "loadavg": [0.828125, 0.9267578125, 0.6328125], "clocksource": "kvm-clock", "mem_available_kib": "MemAvailable:    7429016 kB", "userns_sysctl": "0", "scenario": "memory", "args": {"scenario": "memory", "backends": ["firecracker", "cloud-hypervisor", "runsc", "runc", "docker-runsc", "docker-runc", "docker-runsc-kvm"], "trials": 1, "warmup": 0, "rounds": 3, "k": null, "mem_mib": null, "workloads": null, "gap": 0.5, "pilot": false, "max_load": 1.0}, "load_at_start": 0.828125}
+memory firecracker: dMemAvail=777.2 MiB pss_total=753510 KiB fail=0
+memory cloud-hypervisor: dMemAvail=911.5 MiB pss_total=931340 KiB fail=0
+memory runsc: dMemAvail=168.9 MiB pss_total=205051 KiB fail=0
+memory runc: dMemAvail=27.0 MiB pss_total=14044 KiB fail=0
+memory docker-runsc: dMemAvail=256.4 MiB pss_total=254745 KiB fail=0
+memory docker-runc: dMemAvail=94.1 MiB pss_total=57987 KiB fail=0
+memory docker-runsc-kvm: dMemAvail=374.5 MiB pss_total=253706 KiB fail=0
+=== memory exit 0 2026-10-13T03:35:00Z
+=== workloads 2026-10-13T03:35:00Z
+{"time": "2026-10-13T03:35:00Z", "host": "sandbox-lab", "kernel": "6.8.0-142-generic", "loadavg": [0.2177734375, 0.66796875, 0.5732421875], "clocksource": "kvm-clock", "mem_available_kib": "MemAvailable:    7388020 kB", "userns_sysctl": "0", "scenario": "workloads", "args": {"scenario": "workloads", "backends": ["firecracker", "cloud-hypervisor", "runsc", "runc"], "trials": 5, "warmup": 1, "rounds": 3, "k": null, "mem_mib": null, "workloads": null, "gap": 0.5, "pilot": false, "max_load": 1.0}, "load_at_start": 0.2177734375}
+workload cpu-1t firecracker trial 0: 10.0188s value=3718.45 ok=True 
+workload cpu-1t cloud-hypervisor trial 0: 10.0126s value=3805.13 ok=True 
+workload cpu-1t runsc trial 0: 10.032s value=3603.46 ok=True 
+workload cpu-1t runc trial 0: 10.006s value=3812.42 ok=True 
+workload cpu-1t firecracker trial 1: 10.0067s value=3766.55 ok=True 
+workload cpu-1t cloud-hypervisor trial 1: 10.0061s value=3756.08 ok=True 
+workload cpu-1t runsc trial 1: 10.0185s value=3651.78 ok=True 
+workload cpu-1t runc trial 1: 10.0057s value=3798.49 ok=True 
+workload cpu-1t firecracker trial 2: 10.006s value=3757.9 ok=True 
+workload cpu-1t cloud-hypervisor trial 2: 10.0058s value=3773.2 ok=True 
+workload cpu-1t runsc trial 2: 10.0183s value=3649.18 ok=True 
+workload cpu-1t runc trial 2: 10.0058s value=3780.04 ok=True 
+workload cpu-1t firecracker trial 3: 10.0079s value=3755.6 ok=True 
+workload cpu-1t cloud-hypervisor trial 3: 10.0057s value=3788.59 ok=True 
+workload cpu-1t runsc trial 3: 10.0183s value=3616.79 ok=True 
+workload cpu-1t runc trial 3: 10.0055s value=3778.95 ok=True 
+workload cpu-1t firecracker trial 4: 10.0056s value=3761.56 ok=True 
+workload cpu-1t cloud-hypervisor trial 4: 10.0058s value=3755.11 ok=True 
+workload cpu-1t runsc trial 4: 10.0177s value=3601.29 ok=True 
+workload cpu-1t runc trial 4: 10.0055s value=3798.08 ok=True 
+workload cpu-1t firecracker trial 5: 10.0071s value=3750.72 ok=True 
+workload cpu-1t cloud-hypervisor trial 5: 10.0059s value=3800.37 ok=True 
+workload cpu-1t runsc trial 5: 10.0195s value=3669.03 ok=True 
+workload cpu-1t runc trial 5: 10.0059s value=3792.89 ok=True 
+workload cpu-2t firecracker trial 0: 10.0057s value=7554.39 ok=True 
+workload cpu-2t cloud-hypervisor trial 0: 10.0053s value=7580.1 ok=True 
+workload cpu-2t runsc trial 0: 10.0179s value=7131.52 ok=True 
+workload cpu-2t runc trial 0: 10.0058s value=7512.38 ok=True 
+workload cpu-2t firecracker trial 1: 10.0061s value=7455.81 ok=True 
+workload cpu-2t cloud-hypervisor trial 1: 10.0057s value=7403.03 ok=True 
+workload cpu-2t runsc trial 1: 10.0195s value=7233.73 ok=True 
+workload cpu-2t runc trial 1: 10.0056s value=7523.41 ok=True 
+workload cpu-2t firecracker trial 2: 10.0054s value=7637.37 ok=True 
+workload cpu-2t cloud-hypervisor trial 2: 10.0056s value=7449.18 ok=True 
+workload cpu-2t runsc trial 2: 10.0188s value=7185.03 ok=True 
+workload cpu-2t runc trial 2: 10.0057s value=7556.07 ok=True 
+workload cpu-2t firecracker trial 3: 10.0056s value=7410.85 ok=True 
+workload cpu-2t cloud-hypervisor trial 3: 10.0054s value=7627.45 ok=True 
+workload cpu-2t runsc trial 3: 10.0186s value=7248.58 ok=True 
+workload cpu-2t runc trial 3: 10.0057s value=7531.75 ok=True 
+workload cpu-2t firecracker trial 4: 10.0057s value=7385.1 ok=True 
+workload cpu-2t cloud-hypervisor trial 4: 10.0056s value=7431.13 ok=True 
+workload cpu-2t runsc trial 4: 10.0185s value=7192.17 ok=True 
+workload cpu-2t runc trial 4: 10.0057s value=7601.79 ok=True 
+workload cpu-2t firecracker trial 5: 10.0055s value=7499.88 ok=True 
+workload cpu-2t cloud-hypervisor trial 5: 10.0053s value=7428.44 ok=True 
+workload cpu-2t runsc trial 5: 10.018s value=7153.9 ok=True 
+workload cpu-2t runc trial 5: 10.0058s value=7521.59 ok=True 
+workload spawn firecracker trial 0: 0.9478s value=0.9478 ok=True 
+workload spawn cloud-hypervisor trial 0: 0.8738s value=0.8738 ok=True 
+workload spawn runsc trial 0: 4.5632s value=4.5632 ok=True 
+workload spawn runc trial 0: 0.7634s value=0.7634 ok=True 
+workload spawn firecracker trial 1: 0.8586s value=0.8586 ok=True 
+workload spawn cloud-hypervisor trial 1: 0.8871s value=0.8871 ok=True 
+workload spawn runsc trial 1: 4.544s value=4.544 ok=True 
+workload spawn runc trial 1: 0.7754s value=0.7754 ok=True 
+workload spawn firecracker trial 2: 0.8795s value=0.8795 ok=True 
+workload spawn cloud-hypervisor trial 2: 0.8694s value=0.8694 ok=True 
+workload spawn runsc trial 2: 4.6836s value=4.6836 ok=True 
+workload spawn runc trial 2: 0.7687s value=0.7687 ok=True 
+workload spawn firecracker trial 3: 0.8938s value=0.8938 ok=True 
+workload spawn cloud-hypervisor trial 3: 0.8629s value=0.8629 ok=True 
+workload spawn runsc trial 3: 4.5882s value=4.5882 ok=True 
+workload spawn runc trial 3: 0.7913s value=0.7913 ok=True 
+workload spawn firecracker trial 4: 0.8803s value=0.8803 ok=True 
+workload spawn cloud-hypervisor trial 4: 0.8582s value=0.8582 ok=True 
+workload spawn runsc trial 4: 4.5998s value=4.5998 ok=True 
+workload spawn runc trial 4: 0.7593s value=0.7593 ok=True 
+workload spawn firecracker trial 5: 0.8689s value=0.8689 ok=True 
+workload spawn cloud-hypervisor trial 5: 0.8559s value=0.8559 ok=True 
+workload spawn runsc trial 5: 4.541s value=4.541 ok=True 
+workload spawn runc trial 5: 0.7623s value=0.7623 ok=True 
+workload python firecracker trial 0: 0.3779s value=0.3779 ok=True 
+workload python cloud-hypervisor trial 0: 0.3597s value=0.3597 ok=True 
+workload python runsc trial 0: 0.6748s value=0.6748 ok=True 
+workload python runc trial 0: 0.3995s value=0.3995 ok=True 
+workload python firecracker trial 1: 0.3666s value=0.3666 ok=True 
+workload python cloud-hypervisor trial 1: 0.3571s value=0.3571 ok=True 
+workload python runsc trial 1: 0.6568s value=0.6568 ok=True 
+workload python runc trial 1: 0.3926s value=0.3926 ok=True 
+workload python firecracker trial 2: 0.372s value=0.372 ok=True 
+workload python cloud-hypervisor trial 2: 0.3585s value=0.3585 ok=True 
+workload python runsc trial 2: 0.6703s value=0.6703 ok=True 
+workload python runc trial 2: 0.4041s value=0.4041 ok=True 
+workload python firecracker trial 3: 0.3647s value=0.3647 ok=True 
+workload python cloud-hypervisor trial 3: 0.3792s value=0.3792 ok=True 
+workload python runsc trial 3: 0.6654s value=0.6654 ok=True 
+workload python runc trial 3: 0.4034s value=0.4034 ok=True 
+workload python firecracker trial 4: 0.3778s value=0.3778 ok=True 
+workload python cloud-hypervisor trial 4: 0.378s value=0.378 ok=True 
+workload python runsc trial 4: 0.6531s value=0.6531 ok=True 
+workload python runc trial 4: 0.4059s value=0.4059 ok=True 
+workload python firecracker trial 5: 0.3663s value=0.3663 ok=True 
+workload python cloud-hypervisor trial 5: 0.3689s value=0.3689 ok=True 
+workload python runsc trial 5: 0.6636s value=0.6636 ok=True 
+workload python runc trial 5: 0.3984s value=0.3984 ok=True 
+workload files firecracker trial 0: 0.3212s value=0.3212 ok=True 
+workload files cloud-hypervisor trial 0: 0.1941s value=0.1941 ok=True 
+workload files runsc trial 0: 0.7033s value=0.7033 ok=True 
+workload files runc trial 0: 0.1881s value=0.1881 ok=True 
+workload files firecracker trial 1: 0.1626s value=0.1626 ok=True 
+workload files cloud-hypervisor trial 1: 0.1736s value=0.1736 ok=True 
+workload files runsc trial 1: 0.6774s value=0.6774 ok=True 
+workload files runc trial 1: 0.1749s value=0.1749 ok=True 
+workload files firecracker trial 2: 0.1522s value=0.1522 ok=True 
+workload files cloud-hypervisor trial 2: 0.1652s value=0.1652 ok=True 
+workload files runsc trial 2: 0.6873s value=0.6873 ok=True 
+workload files runc trial 2: 0.195s value=0.195 ok=True 
+workload files firecracker trial 3: 0.1587s value=0.1587 ok=True 
+workload files cloud-hypervisor trial 3: 0.1515s value=0.1515 ok=True 
+workload files runsc trial 3: 0.6944s value=0.6944 ok=True 
+workload files runc trial 3: 0.1804s value=0.1804 ok=True 
+workload files firecracker trial 4: 0.1543s value=0.1543 ok=True 
+workload files cloud-hypervisor trial 4: 0.1569s value=0.1569 ok=True 
+workload files runsc trial 4: 0.6873s value=0.6873 ok=True 
+workload files runc trial 4: 0.1769s value=0.1769 ok=True 
+workload files firecracker trial 5: 0.152s value=0.152 ok=True 
+workload files cloud-hypervisor trial 5: 0.1592s value=0.1592 ok=True 
+workload files runsc trial 5: 0.6858s value=0.6858 ok=True 
+workload files runc trial 5: 0.1725s value=0.1725 ok=True 
+workload untar firecracker trial 0: 1.0058s value=1.0058 ok=True 
+workload untar cloud-hypervisor trial 0: 0.251s value=0.251 ok=True 
+workload untar runsc trial 0: 0.8915s value=0.8915 ok=True 
+workload untar runc trial 0: 0.2608s value=0.2608 ok=True 
+workload untar firecracker trial 1: 0.1533s value=0.1533 ok=True 
+workload untar cloud-hypervisor trial 1: 0.1447s value=0.1447 ok=True 
+workload untar runsc trial 1: 0.6906s value=0.6906 ok=True 
+workload untar runc trial 1: 0.1805s value=0.1805 ok=True 
+workload untar firecracker trial 2: 0.2367s value=0.2367 ok=True 
+workload untar cloud-hypervisor trial 2: 0.1401s value=0.1401 ok=True 
+workload untar runsc trial 2: 0.6718s value=0.6718 ok=True 
+workload untar runc trial 2: 0.1781s value=0.1781 ok=True 
+workload untar firecracker trial 3: 0.15s value=0.15 ok=True 
+workload untar cloud-hypervisor trial 3: 0.1507s value=0.1507 ok=True 
+workload untar runsc trial 3: 0.6539s value=0.6539 ok=True 
+workload untar runc trial 3: 0.184s value=0.184 ok=True 
+workload untar firecracker trial 4: 0.1428s value=0.1428 ok=True 
+workload untar cloud-hypervisor trial 4: 0.1452s value=0.1452 ok=True 
+workload untar runsc trial 4: 0.651s value=0.651 ok=True 
+workload untar runc trial 4: 0.1804s value=0.1804 ok=True 
+workload untar firecracker trial 5: 0.1601s value=0.1601 ok=True 
+workload untar cloud-hypervisor trial 5: 0.1418s value=0.1418 ok=True 
+workload untar runsc trial 5: 0.6593s value=0.6593 ok=True 
+workload untar runc trial 5: 0.1801s value=0.1801 ok=True 
+workload node-require firecracker trial 0: 0.6515s value=0.6515 ok=True 
+workload node-require cloud-hypervisor trial 0: 0.5307s value=0.5307 ok=True 
+workload node-require runsc trial 0: 0.7013s value=0.7013 ok=True 
+workload node-require runc trial 0: 0.5062s value=0.5062 ok=True 
+workload node-require firecracker trial 1: 0.5635s value=0.5635 ok=True 
+workload node-require cloud-hypervisor trial 1: 0.4449s value=0.4449 ok=True 
+workload node-require runsc trial 1: 0.5973s value=0.5973 ok=True 
+workload node-require runc trial 1: 0.4208s value=0.4208 ok=True 
+workload node-require firecracker trial 2: 0.4387s value=0.4387 ok=True 
+workload node-require cloud-hypervisor trial 2: 0.4241s value=0.4241 ok=True 
+workload node-require runsc trial 2: 0.6103s value=0.6103 ok=True 
+workload node-require runc trial 2: 0.431s value=0.431 ok=True 
+workload node-require firecracker trial 3: 0.4718s value=0.4718 ok=True 
+workload node-require cloud-hypervisor trial 3: 0.4396s value=0.4396 ok=True 
+workload node-require runsc trial 3: 0.6057s value=0.6057 ok=True 
+workload node-require runc trial 3: 0.422s value=0.422 ok=True 
+workload node-require firecracker trial 4: 0.434s value=0.434 ok=True 
+workload node-require cloud-hypervisor trial 4: 0.422s value=0.422 ok=True 
+workload node-require runsc trial 4: 0.5873s value=0.5873 ok=True 
+workload node-require runc trial 4: 0.4276s value=0.4276 ok=True 
+workload node-require firecracker trial 5: 0.4337s value=0.4337 ok=True 
+workload node-require cloud-hypervisor trial 5: 0.4269s value=0.4269 ok=True 
+workload node-require runsc trial 5: 0.609s value=0.609 ok=True 
+workload node-require runc trial 5: 0.4275s value=0.4275 ok=True 
+workload git firecracker trial 0: 0.702s value=0.702 ok=True 
+workload git cloud-hypervisor trial 0: 0.6359s value=0.6359 ok=True 
+workload git runsc trial 0: 1.0915s value=1.0915 ok=True 
+workload git runc trial 0: 0.5848s value=0.5848 ok=True 
+workload git firecracker trial 1: 0.5561s value=0.5561 ok=True 
+workload git cloud-hypervisor trial 1: 0.5467s value=0.5467 ok=True 
+workload git runsc trial 1: 0.9498s value=0.9498 ok=True 
+workload git runc trial 1: 0.5634s value=0.5634 ok=True 
+workload git firecracker trial 2: 0.5428s value=0.5428 ok=True 
+workload git cloud-hypervisor trial 2: 0.5386s value=0.5386 ok=True 
+workload git runsc trial 2: 0.8976s value=0.8976 ok=True 
+workload git runc trial 2: 0.5461s value=0.5461 ok=True 
+workload git firecracker trial 3: 0.5922s value=0.5922 ok=True 
+workload git cloud-hypervisor trial 3: 0.5329s value=0.5329 ok=True 
+workload git runsc trial 3: 0.9066s value=0.9066 ok=True 
+workload git runc trial 3: 0.5587s value=0.5587 ok=True 
+workload git firecracker trial 4: 0.7779s value=0.7779 ok=True 
+workload git cloud-hypervisor trial 4: 0.543s value=0.543 ok=True 
+workload git runsc trial 4: 0.9016s value=0.9016 ok=True 
+workload git runc trial 4: 0.546s value=0.546 ok=True 
+workload git firecracker trial 5: 0.5242s value=0.5242 ok=True 
+workload git cloud-hypervisor trial 5: 0.5424s value=0.5424 ok=True 
+workload git runsc trial 5: 0.9042s value=0.9042 ok=True 
+workload git runc trial 5: 0.5406s value=0.5406 ok=True 
+workload compile firecracker trial 0: 18.3572s value=18.3572 ok=True 
+workload compile cloud-hypervisor trial 0: 18.0503s value=18.0503 ok=True 
+workload compile runsc trial 0: 18.8572s value=18.8572 ok=True 
+workload compile runc trial 0: 17.1129s value=17.1129 ok=True 
+workload compile firecracker trial 1: 18.6753s value=18.6753 ok=True 
+workload compile cloud-hypervisor trial 1: 17.9546s value=17.9546 ok=True 
+workload compile runsc trial 1: 18.6871s value=18.6871 ok=True 
+workload compile runc trial 1: 17.793s value=17.793 ok=True 
+workload compile firecracker trial 2: 17.8934s value=17.8934 ok=True 
+workload compile cloud-hypervisor trial 2: 17.888s value=17.888 ok=True 
+workload compile runsc trial 2: 18.6699s value=18.6699 ok=True 
+workload compile runc trial 2: 17.3696s value=17.3696 ok=True 
+workload compile firecracker trial 3: 17.6508s value=17.6508 ok=True 
+workload compile cloud-hypervisor trial 3: 17.5055s value=17.5055 ok=True 
+workload compile runsc trial 3: 18.6145s value=18.6145 ok=True 
+workload compile runc trial 3: 17.1824s value=17.1824 ok=True 
+workload compile firecracker trial 4: 17.6461s value=17.6461 ok=True 
+workload compile cloud-hypervisor trial 4: 17.6769s value=17.6769 ok=True 
+workload compile runsc trial 4: 18.3886s value=18.3886 ok=True 
+workload compile runc trial 4: 17.3588s value=17.3588 ok=True 
+workload compile firecracker trial 5: 17.6397s value=17.6397 ok=True 
+workload compile cloud-hypervisor trial 5: 17.7665s value=17.7665 ok=True 
+workload compile runsc trial 5: 18.3932s value=18.3932 ok=True 
+workload compile runc trial 5: 17.4389s value=17.4389 ok=True 
+workload fio-root firecracker trial 0: 5.3981s value=789442.111578 ok=True 
+workload fio-root cloud-hypervisor trial 0: 5.3595s value=791957.808438 ok=True 
+workload fio-root runsc trial 0: 5.4158s value=257332.133573 ok=True 
+workload fio-root runc trial 0: 5.5854s value=922212.157568 ok=True 
+workload fio-root firecracker trial 1: 5.333s value=792506.89862 ok=True 
+workload fio-root cloud-hypervisor trial 1: 5.3336s value=786257.94841 ok=True 
+workload fio-root runsc trial 1: 5.3679s value=255146.370726 ok=True 
+workload fio-root runc trial 1: 5.3334s value=918549.490102 ok=True 
+workload fio-root firecracker trial 2: 5.3338s value=788665.066987 ok=True 
+workload fio-root cloud-hypervisor trial 2: 5.3323s value=781186.962607 ok=True 
+workload fio-root runsc trial 2: 5.3683s value=257400.319936 ok=True 
+workload fio-root runc trial 2: 5.3333s value=912751.24975 ok=True 
+workload fio-root firecracker trial 3: 5.3336s value=798119.176165 ok=True 
+workload fio-root cloud-hypervisor trial 3: 5.3319s value=771759.04819 ok=True 
+workload fio-root runsc trial 3: 5.3658s value=244884.823035 ok=True 
+workload fio-root runc trial 3: 5.3375s value=861543.491302 ok=True 
+workload fio-root firecracker trial 4: 5.3351s value=758765.846831 ok=True 
+workload fio-root cloud-hypervisor trial 4: 5.3355s value=590494.90102 ok=True 
+workload fio-root runsc trial 4: 5.371s value=208631.273745 ok=True 
+workload fio-root runc trial 4: 5.3357s value=871544.091182 ok=True 
+workload fio-root firecracker trial 5: 5.3355s value=757925.414917 ok=True 
+workload fio-root cloud-hypervisor trial 5: 5.3342s value=591158.168366 ok=True 
+workload fio-root runsc trial 5: 5.3715s value=207001.19976 ok=True 
+workload fio-root runc trial 5: 5.3355s value=680447.310538 ok=True 
+=== workloads exit 0 2026-10-13T03:54:05Z
+=== network 2026-10-13T03:54:05Z
+load 1.19 > 1.0, waiting
+{"time": "2026-10-13T03:54:20Z", "host": "sandbox-lab", "kernel": "6.8.0-142-generic", "loadavg": [0.92333984375, 1.1015625, 1.05517578125], "clocksource": "kvm-clock", "mem_available_kib": "MemAvailable:    7400408 kB", "userns_sysctl": "0", "scenario": "network", "args": {"scenario": "network", "backends": ["firecracker", "cloud-hypervisor", "runsc", "runc"], "trials": 3, "warmup": 0, "rounds": 3, "k": null, "mem_mib": null, "workloads": null, "gap": 0.5, "pilot": false, "max_load": 1.0}, "load_at_start": 0.92333984375}
+network http-rtt-egress-lab firecracker trial 0: 0.638 ms p50 ok=True 
+network http-rtt-egress-lab cloud-hypervisor trial 0: 0.538 ms p50 ok=True 
+network http-rtt-egress-lab runsc trial 0: 0.655 ms p50 ok=True 
+network http-rtt-egress-lab runc trial 0: 0.377 ms p50 ok=True 
+network http-rtt-egress-lab firecracker trial 1: 0.607 ms p50 ok=True 
+network http-rtt-egress-lab cloud-hypervisor trial 1: 0.504 ms p50 ok=True 
+network http-rtt-egress-lab runsc trial 1: 0.645 ms p50 ok=True 
+network http-rtt-egress-lab runc trial 1: 0.383 ms p50 ok=True 
+network http-rtt-egress-lab firecracker trial 2: 0.575 ms p50 ok=True 
+network http-rtt-egress-lab cloud-hypervisor trial 2: 0.51 ms p50 ok=True 
+network http-rtt-egress-lab runsc trial 2: 0.641 ms p50 ok=True 
+network http-rtt-egress-lab runc trial 2: 0.364 ms p50 ok=True 
+network ingress-http firecracker trial 0: 0.585 ms p50 ok=True 
+network ingress-http cloud-hypervisor trial 0: 0.411 ms p50 ok=True 
+network ingress-http runsc trial 0: 0.796 ms p50 ok=True 
+network ingress-http runc trial 0: 0.375 ms p50 ok=True 
+network ingress-http firecracker trial 1: 0.58 ms p50 ok=True 
+network ingress-http cloud-hypervisor trial 1: 0.412 ms p50 ok=True 
+network ingress-http runsc trial 1: 0.818 ms p50 ok=True 
+network ingress-http runc trial 1: 0.382 ms p50 ok=True 
+network ingress-http firecracker trial 2: 0.57 ms p50 ok=True 
+network ingress-http cloud-hypervisor trial 2: 0.406 ms p50 ok=True 
+network ingress-http runsc trial 2: 0.823 ms p50 ok=True 
+network ingress-http runc trial 2: 0.404 ms p50 ok=True 
+network iperf3-up firecracker trial 0: 36.145 Gbit/s ok=True 
+network iperf3-up cloud-hypervisor trial 0: 35.122 Gbit/s ok=True 
+network iperf3-up runsc trial 0: 24.451 Gbit/s ok=True 
+network iperf3-up runc trial 0: 58.34 Gbit/s ok=True 
+network iperf3-up firecracker trial 1: 41.426 Gbit/s ok=True 
+network iperf3-up cloud-hypervisor trial 1: 35.663 Gbit/s ok=True 
+network iperf3-up runsc trial 1: 24.825 Gbit/s ok=True 
+network iperf3-up runc trial 1: 67.379 Gbit/s ok=True 
+network iperf3-up firecracker trial 2: 39.772 Gbit/s ok=True 
+network iperf3-up cloud-hypervisor trial 2: 33.82 Gbit/s ok=True 
+network iperf3-up runsc trial 2: 24.148 Gbit/s ok=True 
+network iperf3-up runc trial 2: 57.47 Gbit/s ok=True 
+network iperf3-down firecracker trial 0: 36.802 Gbit/s ok=True 
+network iperf3-down cloud-hypervisor trial 0: 43.761 Gbit/s ok=True 
+network iperf3-down runsc trial 0: 32.406 Gbit/s ok=True 
+network iperf3-down runc trial 0: 70.948 Gbit/s ok=True 
+network iperf3-down firecracker trial 1: 37.613 Gbit/s ok=True 
+network iperf3-down cloud-hypervisor trial 1: 44.818 Gbit/s ok=True 
+network iperf3-down runsc trial 1: 32.64 Gbit/s ok=True 
+network iperf3-down runc trial 1: 58.643 Gbit/s ok=True 
+network iperf3-down firecracker trial 2: 45.73 Gbit/s ok=True 
+network iperf3-down cloud-hypervisor trial 2: 43.823 Gbit/s ok=True 
+network iperf3-down runsc trial 2: 32.685 Gbit/s ok=True 
+network iperf3-down runc trial 2: 58.563 Gbit/s ok=True 
+network egress-https firecracker trial 0: 70.0 ms median of 5 ok=True 
+network egress-https cloud-hypervisor trial 0: 72.6 ms median of 5 ok=True 
+network egress-https runsc trial 0: 72.4 ms median of 5 ok=True 
+network egress-https runc trial 0: 68.8 ms median of 5 ok=True 
+network egress-https firecracker trial 1: 68.6 ms median of 5 ok=True 
+network egress-https cloud-hypervisor trial 1: 68.8 ms median of 5 ok=True 
+network egress-https runsc trial 1: 72.3 ms median of 5 ok=True 
+network egress-https runc trial 1: 67.9 ms median of 5 ok=True 
+network egress-https firecracker trial 2: 69.2 ms median of 5 ok=True 
+network egress-https cloud-hypervisor trial 2: 70.3 ms median of 5 ok=True 
+network egress-https runsc trial 2: 74.5 ms median of 5 ok=True 
+network egress-https runc trial 2: 69.1 ms median of 5 ok=True 
+=== network exit 0 2026-10-13T03:56:31Z
+=== compat 2026-10-13T03:56:31Z
+load 2.05 > 1.0, waiting
+load 1.59 > 1.0, waiting
+load 1.24 > 1.0, waiting
+{"time": "2026-10-13T03:57:16Z", "host": "sandbox-lab", "kernel": "6.8.0-142-generic", "loadavg": [0.96435546875, 1.3212890625, 1.1669921875], "clocksource": "kvm-clock", "mem_available_kib": "MemAvailable:    7418736 kB", "userns_sysctl": "0", "scenario": "compat", "args": {"scenario": "compat", "backends": ["firecracker", "cloud-hypervisor", "runsc", "runc", "docker-runsc", "docker-runc"], "trials": 1, "warmup": 0, "rounds": 3, "k": null, "mem_mib": null, "workloads": null, "gap": 0.5, "pilot": false, "max_load": 1.0}, "load_at_start": 0.96435546875}
+compat firecracker chromium-own-sandbox: PASS Sandbox Status | Layer 1 Sandbox	Namespace | PID namespaces	Yes | Network namespaces	Yes | Seccomp-BPF sandbox	Yes | Seccomp-BPF sandbox supports TSYNC	Ye
+compat firecracker unshare-userns-agent: PASS rc=0
+compat firecracker unshare-userns-root: PASS rc=0
+compat firecracker inotify-fs-watch: PASS rc=0
+compat firecracker ping-lab: PASS rc=0
+compat firecracker ping-internet: PASS rc=0
+compat firecracker mount-tmpfs: PASS rc=0
+compat firecracker apt-get-install: PASS rc=0
+compat cloud-hypervisor chromium-own-sandbox: PASS Sandbox Status | Layer 1 Sandbox	Namespace | PID namespaces	Yes | Network namespaces	Yes | Seccomp-BPF sandbox	Yes | Seccomp-BPF sandbox supports TSY
+compat cloud-hypervisor unshare-userns-agent: PASS rc=0
+compat cloud-hypervisor unshare-userns-root: PASS rc=0
+compat cloud-hypervisor inotify-fs-watch: PASS rc=0
+compat cloud-hypervisor ping-lab: PASS rc=0
+compat cloud-hypervisor ping-internet: PASS rc=0
+compat cloud-hypervisor mount-tmpfs: PASS rc=0
+compat cloud-hypervisor apt-get-install: PASS rc=0
+compat runsc chromium-own-sandbox: PASS Sandbox Status | Layer 1 Sandbox	Namespace | PID namespaces	Yes | Network namespaces	Yes | Seccomp-BPF sandbox	Yes | Seccomp-BPF sandbox supports TSYNC	Yes | Pt
+compat runsc unshare-userns-agent: PASS rc=0
+compat runsc unshare-userns-root: PASS rc=0
+compat runsc inotify-fs-watch: PASS rc=0
+compat runsc ping-lab: PASS rc=0
+compat runsc ping-internet: PASS rc=0
+compat runsc mount-tmpfs: FAIL rc=32
+compat runsc apt-get-install: PASS rc=0
+compat runc chromium-own-sandbox: PASS Sandbox Status | Layer 1 Sandbox	Namespace | PID namespaces	Yes | Network namespaces	Yes | Seccomp-BPF sandbox	Yes | Seccomp-BPF sandbox supports TSYNC	Yes | Ptr
+compat runc unshare-userns-agent: PASS rc=0
+compat runc unshare-userns-root: PASS rc=0
+compat runc inotify-fs-watch: PASS rc=0
+compat runc ping-lab: PASS rc=0
+compat runc ping-internet: PASS rc=0
+compat runc mount-tmpfs: FAIL rc=32
+compat runc apt-get-install: PASS rc=0
+compat docker-runsc chromium-own-sandbox: PASS Sandbox Status | Layer 1 Sandbox	Namespace | PID namespaces	Yes | Network namespaces	Yes | Seccomp-BPF sandbox	Yes | Seccomp-BPF sandbox supports TSYNC	Y
+compat docker-runc chromium-own-sandbox: FAIL [29:29:1013/035757.730477:ERROR:content/browser/zygote_host/zygote_host_impl_linux.cc:130] No usable sandbox! If this is a Debian system, please install t
+compat firecracker clock-skew-after-restore[file]: FAIL firecracker/file: snapshot age 2951 s, guest minus lab = -2952.054 s (lab round trip 69.4 ms)
+compat firecracker urandom-after-restore[file]: PASS 2nd 9f49a7b0f6794a6ebce850ff92ba041e2e93ab33f2c150b7fc2b0bfd2f2a4bc6
+compat cloud-hypervisor clock-skew-after-restore[copy]: PASS cloud-hypervisor/copy: snapshot age 2947 s, guest minus lab = -0.018 s (lab round trip 5.3 ms)
+compat cloud-hypervisor urandom-after-restore[copy]: PASS 2nd 98b43caa279bacfdd0eae61394240b97b663f578f27ca3fc246389f6fdd794f5
+compat cloud-hypervisor clock-skew-after-restore[ondemand]: PASS cloud-hypervisor/ondemand: snapshot age 2949 s, guest minus lab = -0.003 s (lab round trip 38.0 ms)
+compat cloud-hypervisor urandom-after-restore[ondemand]: PASS 2nd c409f0c8860835202042b7151b6426f8614c6acb80bc37095ae6d3595964b5e0
+compat runsc clock-skew-after-restore[plain]: PASS runsc/plain: snapshot age 2946 s, guest minus lab = +0.008 s (lab round trip 18.2 ms)
+compat runsc urandom-after-restore[plain]: PASS 2nd 178da965492e24bc3c56eb915e5eb23d595bd1877f6653648b73164806933443
+compat runsc clock-skew-after-restore[background]: PASS runsc/background: snapshot age 2943 s, guest minus lab = +0.007 s (lab round trip 16.1 ms)
+compat runsc urandom-after-restore[background]: PASS 2nd 2226e3d936e091a2018a5fd54c5277994bd07b2a4a8ae66c5327c602934d2686
+compat firecracker clock_realtime-restore: FAIL 2026-10-13T03:58:11.576783833 [sbx-fc-1:main] RunWithApiError error: Failed to build MicroVM: Loading snapshot failed..
+=== compat exit 0 2026-10-13T03:58:11Z

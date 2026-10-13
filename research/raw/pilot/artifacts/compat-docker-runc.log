@@ -1,0 +1,5 @@
+===== chromium-own-sandbox
+sbx-browser (sandbox requested) failed rc=1:
+SBX_BROWSER failed sandbox=1
+[30:30:1013/025544.485975:ERROR:content/browser/zygote_host/zygote_host_impl_linux.cc:130] No usable sandbox! If this is a Debian system, please install the chromium-sandbox package to solve this problem. If you are running on Ubuntu 23.10+ or another Linux distro that has disabled unprivileged user namespaces with AppArmor, see https://chromium.googlesource.com/chromium/src/+/main/docs/security/apparmor-userns-restrictions.md. If you want to live dangerously and need an immediate workaround, you can try using --no-sandbox.
+

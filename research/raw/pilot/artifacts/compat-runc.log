@@ -1,0 +1,46 @@
+===== chromium-own-sandbox
+Sandbox Status | Layer 1 Sandbox	Namespace | PID namespaces	Yes | Network namespaces	Yes | Seccomp-BPF sandbox	Yes | Seccomp-BPF sandbox supports TSYNC	Yes | Ptrace Protection with Yama LSM (Broker)	Yes | Ptrace Protection with Yama LSM (Non-broker)	No | You are adequately sandboxed.
+===== unshare-userns-agent
+$ runuser -u agent -- unshare -Ur true && echo agent-userns-ok
+agent-userns-ok
+
+rc=0
+===== unshare-userns-root
+$ unshare -Ur true && echo root-userns-ok
+root-userns-ok
+
+rc=0
+===== inotify-fs-watch
+KeyError: 'recursive'
+===== ping-lab
+$ ping -c 3 -W 2 {host}
+PING 172.18.4.1 (172.18.4.1) 56(84) bytes of data.
+64 bytes from 172.18.4.1: icmp_seq=1 ttl=64 time=0.036 ms
+64 bytes from 172.18.4.1: icmp_seq=2 ttl=64 time=0.063 ms
+64 bytes from 172.18.4.1: icmp_seq=3 ttl=64 time=0.037 ms
+
+--- 172.18.4.1 ping statistics ---
+3 packets transmitted, 3 received, 0% packet loss, time 2031ms
+rtt min/avg/max/mdev = 0.036/0.045/0.063/0.012 ms
+
+rc=0
+===== ping-internet
+$ ping -c 3 -W 2 1.1.1.1
+PING 1.1.1.1 (1.1.1.1) 56(84) bytes of data.
+64 bytes from 1.1.1.1: icmp_seq=1 ttl=56 time=11.9 ms
+64 bytes from 1.1.1.1: icmp_seq=2 ttl=56 time=11.3 ms
+64 bytes from 1.1.1.1: icmp_seq=3 ttl=56 time=11.5 ms
+
+--- 1.1.1.1 ping statistics ---
+3 packets transmitted, 3 received, 0% packet loss, time 2003ms
+rtt min/avg/max/mdev = 11.317/11.559/11.863/0.227 ms
+
+rc=0
+===== mount-tmpfs
+$ mkdir -p /mnt/t && mount -t tmpfs tmpfs /mnt/t && findmnt /mnt/t && umount /mnt/t
+mount: /mnt/t: permission denied.
+       dmesg(1) may have more information after failed mount system call.
+
+rc=32
+===== apt-get-install
+ConnectionError: agent closed before marker: b'Setting up libjq1:amd64 (1.7.1-6+deb13u4) ...\r\nSetting up jq (1.7.1-6+deb13u4) ...\r\nProcessing triggers for libc-bin (2.41-12+deb13u4) ...\r\njq-1.7\n'

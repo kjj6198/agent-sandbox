@@ -1,0 +1,778 @@
+{"time": "2026-10-13T04:19:34Z", "host": "sandbox-lab", "kernel": "6.8.0-142-generic", "loadavg": [0.5, 0.32861328125, 0.46044921875], "clocksource": "kvm-clock", "mem_available_kib": "MemAvailable:    7343112 kB", "userns_sysctl": "0", "scenario": "browser-cold", "args": {"scenario": "browser-cold", "backends": ["firecracker", "cloud-hypervisor", "runsc", "runc"], "trials": 10, "warmup": 1, "rounds": 3, "k": null, "mem_mib": null, "workloads": null, "gap": 0.5, "pilot": false, "tag": "s2", "max_load": 2.5}, "load_at_start": 0.5}
+browser-cold firecracker trial -1: cdp=1278.145 shot=2115.878 public=2243.633 ok=True 
+browser-cold cloud-hypervisor trial -1: cdp=850.381 shot=1545.469 public=1636.012 ok=True 
+browser-cold runsc trial -1: cdp=1076.414 shot=2307.89 public=2443.539 ok=True 
+browser-cold runc trial -1: cdp=248.203 shot=951.653 public=1050.822 ok=True 
+browser-cold firecracker trial 0: cdp=1236.336 shot=2142.547 public=2294.061 ok=True 
+browser-cold cloud-hypervisor trial 0: cdp=653.84 shot=1321.124 public=1433.375 ok=True 
+browser-cold runsc trial 0: cdp=1034.09 shot=2178.128 public=2340.288 ok=True 
+browser-cold runc trial 0: cdp=266.784 shot=901.197 public=1010.669 ok=True 
+browser-cold firecracker trial 1: cdp=1219.6 shot=2069.625 public=2207.786 ok=True 
+browser-cold cloud-hypervisor trial 1: cdp=650.143 shot=1330.33 public=1454.075 ok=True 
+browser-cold runsc trial 1: cdp=1060.915 shot=2308.893 public=2468.813 ok=True 
+browser-cold runc trial 1: cdp=265.548 shot=1027.98 public=1129.757 ok=True 
+browser-cold firecracker trial 2: cdp=1248.715 shot=2152.391 public=2299.177 ok=True 
+browser-cold cloud-hypervisor trial 2: cdp=740.427 shot=1457.549 public=1581.343 ok=True 
+browser-cold runsc trial 2: cdp=1084.858 shot=2293.697 public=2477.899 ok=True 
+browser-cold runc trial 2: cdp=258.677 shot=1005.922 public=1106.384 ok=True 
+browser-cold firecracker trial 3: cdp=1205.2 shot=2027.805 public=2137.233 ok=True 
+browser-cold cloud-hypervisor trial 3: cdp=701.877 shot=1346.725 public=1480.185 ok=True 
+browser-cold runsc trial 3: cdp=1088.631 shot=2304.545 public=2463.694 ok=True 
+browser-cold runc trial 3: cdp=290.383 shot=938.555 public=1053.903 ok=True 
+browser-cold firecracker trial 4: cdp=1236.898 shot=2107.708 public=2238.136 ok=True 
+browser-cold cloud-hypervisor trial 4: cdp=624.961 shot=1332.456 public=1448.507 ok=True 
+browser-cold runsc trial 4: cdp=1056.501 shot=2198.718 public=2356.957 ok=True 
+browser-cold runc trial 4: cdp=238.799 shot=949.513 public=1058.826 ok=True 
+browser-cold firecracker trial 5: cdp=1249.132 shot=2128.827 public=2262.305 ok=True 
+browser-cold cloud-hypervisor trial 5: cdp=660.501 shot=1332.209 public=1465.571 ok=True 
+browser-cold runsc trial 5: cdp=1062.379 shot=2184.642 public=2353.965 ok=True 
+browser-cold runc trial 5: cdp=278.497 shot=970.727 public=1078.554 ok=True 
+browser-cold firecracker trial 6: cdp=1184.676 shot=2012.789 public=2133.604 ok=True 
+browser-cold cloud-hypervisor trial 6: cdp=643.776 shot=1325.205 public=1482.881 ok=True 
+browser-cold runsc trial 6: cdp=1104.106 shot=2238.619 public=2393.064 ok=True 
+browser-cold runc trial 6: cdp=262.016 shot=1004.607 public=1123.035 ok=True 
+browser-cold firecracker trial 7: cdp=1262.436 shot=2123.47 public=2271.652 ok=True 
+browser-cold cloud-hypervisor trial 7: cdp=680.23 shot=1419.096 public=1559.955 ok=True 
+browser-cold runsc trial 7: cdp=1109.745 shot=2409.28 public=2576.334 ok=True 
+browser-cold runc trial 7: cdp=251.157 shot=927.521 public=1042.523 ok=True 
+browser-cold firecracker trial 8: cdp=1231.763 shot=2118.81 public=2234.735 ok=True 
+browser-cold cloud-hypervisor trial 8: cdp=682.586 shot=1432.76 public=1557.476 ok=True 
+browser-cold runsc trial 8: cdp=1094.336 shot=2555.698 public=2690.53 ok=True 
+browser-cold runc trial 8: cdp=287.397 shot=1024.134 public=1132.842 ok=True 
+browser-cold firecracker trial 9: cdp=1151.071 shot=1960.471 public=2104.664 ok=True 
+browser-cold cloud-hypervisor trial 9: cdp=645.104 shot=1339.158 public=1458.138 ok=True 
+browser-cold runsc trial 9: cdp=1089.862 shot=2312.108 public=2451.424 ok=True 
+browser-cold runc trial 9: cdp=259.73 shot=991.3 public=1114.85 ok=True 
+{"time": "2026-10-13T04:23:01Z", "host": "sandbox-lab", "kernel": "6.8.0-142-generic", "loadavg": [0.66748046875, 0.54736328125, 0.52197265625], "clocksource": "kvm-clock", "mem_available_kib": "MemAvailable:    7292108 kB", "userns_sysctl": "0", "scenario": "browser-restore", "args": {"scenario": "browser-restore", "backends": ["firecracker", "cloud-hypervisor", "runsc"], "trials": 10, "warmup": 1, "rounds": 3, "k": null, "mem_mib": null, "workloads": null, "gap": 0.5, "pilot": false, "tag": "s2", "max_load": 2.5}, "load_at_start": 0.66748046875}
+snapshot firecracker/file browser=True: 1224.782776 ms, mem=1073741824 ok=True
+snapshot cloud-hypervisor/copy browser=True: 1037.361227 ms, mem=1073741824 ok=True
+snapshot runsc/plain browser=True: 302.653904 ms, mem=155521024 ok=True
+snapshot runsc/background browser=True: 428.017148 ms, mem=155209728 ok=True
+browser-restore firecracker/file trial -1: cdp=51.492 shot=988.113 public=1146.787 ok=True 
+browser-restore cloud-hypervisor/copy trial -1: cdp=764.371 shot=1311.886 public=1436.959 ok=True 
+----------------------------------------
+Exception occurred during processing of request from ('172.16.2.2', 48526)
+Traceback (most recent call last):
+  File "/usr/lib/python3.12/socketserver.py", line 692, in process_request_thread
+    self.finish_request(request, client_address)
+  File "/usr/lib/python3.12/socketserver.py", line 362, in finish_request
+    self.RequestHandlerClass(request, client_address, self)
+  File "/usr/lib/python3.12/http/server.py", line 672, in __init__
+    super().__init__(*args, **kwargs)
+  File "/usr/lib/python3.12/socketserver.py", line 761, in __init__
+    self.handle()
+  File "/usr/lib/python3.12/http/server.py", line 436, in handle
+    self.handle_one_request()
+  File "/usr/lib/python3.12/http/server.py", line 404, in handle_one_request
+    self.raw_requestline = self.rfile.readline(65537)
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/socket.py", line 707, in readinto
+    return self._sock.recv_into(b)
+           ^^^^^^^^^^^^^^^^^^^^^^^
+ConnectionResetError: [Errno 104] Connection reset by peer
+----------------------------------------
+browser-restore cloud-hypervisor/ondemand trial -1: cdp=143.663 shot=882.143 public=991.938 ok=True 
+browser-restore runsc/plain trial -1: cdp=380.135 shot=1096.328 public=1322.782 ok=True 
+browser-restore runsc/background trial -1: cdp=338.634 shot=1017.416 public=1253.667 ok=True 
+browser-restore firecracker/file trial 0: cdp=57.938 shot=1023.138 public=1224.419 ok=True 
+browser-restore cloud-hypervisor/copy trial 0: cdp=704.698 shot=1306.341 public=1459.02 ok=True 
+----------------------------------------
+Exception occurred during processing of request from ('172.16.2.2', 60760)
+Traceback (most recent call last):
+  File "/usr/lib/python3.12/socketserver.py", line 692, in process_request_thread
+    self.finish_request(request, client_address)
+  File "/usr/lib/python3.12/socketserver.py", line 362, in finish_request
+    self.RequestHandlerClass(request, client_address, self)
+  File "/usr/lib/python3.12/http/server.py", line 672, in __init__
+    super().__init__(*args, **kwargs)
+  File "/usr/lib/python3.12/socketserver.py", line 761, in __init__
+    self.handle()
+  File "/usr/lib/python3.12/http/server.py", line 436, in handle
+    self.handle_one_request()
+  File "/usr/lib/python3.12/http/server.py", line 404, in handle_one_request
+    self.raw_requestline = self.rfile.readline(65537)
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/socket.py", line 707, in readinto
+    return self._sock.recv_into(b)
+           ^^^^^^^^^^^^^^^^^^^^^^^
+ConnectionResetError: [Errno 104] Connection reset by peer
+----------------------------------------
+browser-restore cloud-hypervisor/ondemand trial 0: cdp=174.364 shot=1055.339 public=1208.194 ok=True 
+browser-restore runsc/plain trial 0: cdp=370.795 shot=1311.28 public=1473.646 ok=True 
+browser-restore runsc/background trial 0: cdp=597.085 shot=1413.262 public=1565.285 ok=True 
+browser-restore firecracker/file trial 1: cdp=63.331 shot=1127.803 public=1376.961 ok=True 
+browser-restore cloud-hypervisor/copy trial 1: cdp=553.654 shot=1179.302 public=1307.036 ok=True 
+----------------------------------------
+Exception occurred during processing of request from ('172.16.2.2', 41392)
+Traceback (most recent call last):
+  File "/usr/lib/python3.12/socketserver.py", line 692, in process_request_thread
+    self.finish_request(request, client_address)
+  File "/usr/lib/python3.12/socketserver.py", line 362, in finish_request
+    self.RequestHandlerClass(request, client_address, self)
+  File "/usr/lib/python3.12/http/server.py", line 672, in __init__
+    super().__init__(*args, **kwargs)
+  File "/usr/lib/python3.12/socketserver.py", line 761, in __init__
+    self.handle()
+  File "/usr/lib/python3.12/http/server.py", line 436, in handle
+    self.handle_one_request()
+  File "/usr/lib/python3.12/http/server.py", line 404, in handle_one_request
+    self.raw_requestline = self.rfile.readline(65537)
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/socket.py", line 707, in readinto
+    return self._sock.recv_into(b)
+           ^^^^^^^^^^^^^^^^^^^^^^^
+ConnectionResetError: [Errno 104] Connection reset by peer
+----------------------------------------
+browser-restore cloud-hypervisor/ondemand trial 1: cdp=231.632 shot=1051.359 public=1197.912 ok=True 
+browser-restore runsc/plain trial 1: cdp=322.411 shot=1379.233 public=1527.431 ok=True 
+browser-restore runsc/background trial 1: cdp=326.71 shot=1376.641 public=1528.044 ok=True 
+browser-restore firecracker/file trial 2: cdp=37.55 shot=929.643 public=1148.054 ok=True 
+browser-restore cloud-hypervisor/copy trial 2: cdp=482.872 shot=1013.793 public=1150.637 ok=True 
+browser-restore cloud-hypervisor/ondemand trial 2: cdp=181.99 shot=1007.794 public=1132.661 ok=True 
+browser-restore runsc/plain trial 2: cdp=347.286 shot=1324.731 public=1489.742 ok=True 
+browser-restore runsc/background trial 2: cdp=557.543 shot=1427.373 public=1575.596 ok=True 
+browser-restore firecracker/file trial 3: cdp=44.464 shot=990.285 public=1204.012 ok=True 
+browser-restore cloud-hypervisor/copy trial 3: cdp=490.066 shot=1020.019 public=1143.029 ok=True 
+browser-restore cloud-hypervisor/ondemand trial 3: cdp=196.763 shot=962.571 public=1083.493 ok=True 
+browser-restore runsc/plain trial 3: cdp=931.528 shot=1614.989 public=1775.537 ok=True 
+browser-restore runsc/background trial 3: cdp=322.968 shot=1388.318 public=1531.951 ok=True 
+----------------------------------------
+Exception occurred during processing of request from ('172.16.1.2', 36218)
+Traceback (most recent call last):
+  File "/usr/lib/python3.12/socketserver.py", line 692, in process_request_thread
+    self.finish_request(request, client_address)
+  File "/usr/lib/python3.12/socketserver.py", line 362, in finish_request
+    self.RequestHandlerClass(request, client_address, self)
+  File "/usr/lib/python3.12/http/server.py", line 672, in __init__
+    super().__init__(*args, **kwargs)
+  File "/usr/lib/python3.12/socketserver.py", line 761, in __init__
+    self.handle()
+  File "/usr/lib/python3.12/http/server.py", line 436, in handle
+    self.handle_one_request()
+  File "/usr/lib/python3.12/http/server.py", line 404, in handle_one_request
+    self.raw_requestline = self.rfile.readline(65537)
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/socket.py", line 707, in readinto
+    return self._sock.recv_into(b)
+           ^^^^^^^^^^^^^^^^^^^^^^^
+ConnectionResetError: [Errno 104] Connection reset by peer
+----------------------------------------
+browser-restore firecracker/file trial 4: cdp=38.697 shot=927.745 public=1134.435 ok=True 
+browser-restore cloud-hypervisor/copy trial 4: cdp=386.485 shot=865.483 public=977.589 ok=True 
+browser-restore cloud-hypervisor/ondemand trial 4: cdp=239.051 shot=1087.212 public=1195.15 ok=True 
+browser-restore runsc/plain trial 4: cdp=411.504 shot=1447.968 public=1607.47 ok=True 
+browser-restore runsc/background trial 4: cdp=595.697 shot=1471.611 public=1627.962 ok=True 
+----------------------------------------
+Exception occurred during processing of request from ('172.16.1.2', 36216)
+Traceback (most recent call last):
+  File "/usr/lib/python3.12/socketserver.py", line 692, in process_request_thread
+    self.finish_request(request, client_address)
+  File "/usr/lib/python3.12/socketserver.py", line 362, in finish_request
+    self.RequestHandlerClass(request, client_address, self)
+  File "/usr/lib/python3.12/http/server.py", line 672, in __init__
+    super().__init__(*args, **kwargs)
+  File "/usr/lib/python3.12/socketserver.py", line 761, in __init__
+    self.handle()
+  File "/usr/lib/python3.12/http/server.py", line 436, in handle
+    self.handle_one_request()
+  File "/usr/lib/python3.12/http/server.py", line 404, in handle_one_request
+    self.raw_requestline = self.rfile.readline(65537)
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/socket.py", line 707, in readinto
+    return self._sock.recv_into(b)
+           ^^^^^^^^^^^^^^^^^^^^^^^
+ConnectionResetError: [Errno 104] Connection reset by peer
+----------------------------------------
+browser-restore firecracker/file trial 5: cdp=50.572 shot=984.213 public=1227.778 ok=True 
+browser-restore cloud-hypervisor/copy trial 5: cdp=388.252 shot=949.547 public=1067.715 ok=True 
+browser-restore cloud-hypervisor/ondemand trial 5: cdp=195.254 shot=994.511 public=1118.872 ok=True 
+browser-restore runsc/plain trial 5: cdp=345.655 shot=1226.549 public=1362.393 ok=True 
+browser-restore runsc/background trial 5: cdp=336.352 shot=1324.986 public=1476.826 ok=True 
+----------------------------------------
+Exception occurred during processing of request from ('172.16.1.2', 36220)
+Traceback (most recent call last):
+  File "/usr/lib/python3.12/socketserver.py", line 692, in process_request_thread
+    self.finish_request(request, client_address)
+  File "/usr/lib/python3.12/socketserver.py", line 362, in finish_request
+    self.RequestHandlerClass(request, client_address, self)
+  File "/usr/lib/python3.12/http/server.py", line 672, in __init__
+    super().__init__(*args, **kwargs)
+  File "/usr/lib/python3.12/socketserver.py", line 761, in __init__
+    self.handle()
+  File "/usr/lib/python3.12/http/server.py", line 436, in handle
+    self.handle_one_request()
+  File "/usr/lib/python3.12/http/server.py", line 404, in handle_one_request
+    self.raw_requestline = self.rfile.readline(65537)
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/socket.py", line 707, in readinto
+    return self._sock.recv_into(b)
+           ^^^^^^^^^^^^^^^^^^^^^^^
+ConnectionResetError: [Errno 104] Connection reset by peer
+----------------------------------------
+browser-restore firecracker/file trial 6: cdp=38.176 shot=938.155 public=1160.382 ok=True 
+browser-restore cloud-hypervisor/copy trial 6: cdp=468.058 shot=1017.455 public=1134.638 ok=True 
+browser-restore cloud-hypervisor/ondemand trial 6: cdp=154.906 shot=1039.999 public=1174.497 ok=True 
+browser-restore runsc/plain trial 6: cdp=336.782 shot=1320.759 public=1474.457 ok=True 
+browser-restore runsc/background trial 6: cdp=583.002 shot=1566.044 public=1732.313 ok=True 
+browser-restore firecracker/file trial 7: cdp=41.824 shot=915.927 public=1121.248 ok=True 
+browser-restore cloud-hypervisor/copy trial 7: cdp=373.893 shot=890.925 public=1020.696 ok=True 
+browser-restore cloud-hypervisor/ondemand trial 7: cdp=173.525 shot=999.234 public=1130.649 ok=True 
+browser-restore runsc/plain trial 7: cdp=536.257 shot=1415.482 public=1555.718 ok=True 
+browser-restore runsc/background trial 7: cdp=541.429 shot=1379.772 public=1528.448 ok=True 
+browser-restore firecracker/file trial 8: cdp=37.806 shot=921.506 public=1133.503 ok=True 
+browser-restore cloud-hypervisor/copy trial 8: cdp=361.968 shot=910.47 public=996.135 ok=True 
+browser-restore cloud-hypervisor/ondemand trial 8: cdp=144.39 shot=942.596 public=1074.204 ok=True 
+browser-restore runsc/plain trial 8: cdp=567.207 shot=1439.693 public=1565.214 ok=True 
+browser-restore runsc/background trial 8: cdp=589.106 shot=1387.177 public=1541.135 ok=True 
+----------------------------------------
+Exception occurred during processing of request from ('172.16.1.2', 36228)
+Traceback (most recent call last):
+  File "/usr/lib/python3.12/socketserver.py", line 692, in process_request_thread
+    self.finish_request(request, client_address)
+  File "/usr/lib/python3.12/socketserver.py", line 362, in finish_request
+    self.RequestHandlerClass(request, client_address, self)
+  File "/usr/lib/python3.12/http/server.py", line 672, in __init__
+    super().__init__(*args, **kwargs)
+  File "/usr/lib/python3.12/socketserver.py", line 761, in __init__
+    self.handle()
+  File "/usr/lib/python3.12/http/server.py", line 436, in handle
+    self.handle_one_request()
+  File "/usr/lib/python3.12/http/server.py", line 404, in handle_one_request
+    self.raw_requestline = self.rfile.readline(65537)
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/socket.py", line 707, in readinto
+    return self._sock.recv_into(b)
+           ^^^^^^^^^^^^^^^^^^^^^^^
+ConnectionResetError: [Errno 104] Connection reset by peer
+----------------------------------------
+browser-restore firecracker/file trial 9: cdp=41.625 shot=919.646 public=1106.955 ok=True 
+browser-restore cloud-hypervisor/copy trial 9: cdp=399.166 shot=915.261 public=1037.445 ok=True 
+browser-restore cloud-hypervisor/ondemand trial 9: cdp=187.836 shot=933.847 public=1055.596 ok=True 
+browser-restore runsc/plain trial 9: cdp=606.938 shot=1365.154 public=1486.306 ok=True 
+browser-restore runsc/background trial 9: cdp=601.836 shot=1380.231 public=1517.411 ok=True 
+{"time": "2026-10-13T04:29:16Z", "host": "sandbox-lab", "kernel": "6.8.0-142-generic", "loadavg": [0.86083984375, 0.62353515625, 0.53662109375], "clocksource": "kvm-clock", "mem_available_kib": "MemAvailable:    7376576 kB", "userns_sysctl": "0", "scenario": "browser-cold", "args": {"scenario": "browser-cold", "backends": ["firecracker", "cloud-hypervisor", "runsc", "runc"], "trials": 10, "warmup": 1, "rounds": 3, "k": null, "mem_mib": null, "workloads": null, "gap": 0.5, "pilot": false, "tag": "s2-tab", "max_load": 2.5}, "load_at_start": 0.86083984375}
+browser-cold firecracker trial -1: cdp=982.954 shot=1687.256 public=1775.497 ok=True 
+browser-cold cloud-hypervisor trial -1: cdp=574.174 shot=1078.438 public=1195.634 ok=True 
+browser-cold runsc trial -1: cdp=950.09 shot=1851.363 public=2004.551 ok=True 
+browser-cold runc trial -1: cdp=217.874 shot=834.858 public=938.151 ok=True 
+browser-cold firecracker trial 0: cdp=1005.161 shot=1676.915 public=1794.162 ok=True 
+browser-cold cloud-hypervisor trial 0: cdp=554.26 shot=1104.701 public=1227.116 ok=True 
+browser-cold runsc trial 0: cdp=927.777 shot=1877.882 public=2047.111 ok=True 
+browser-cold runc trial 0: cdp=240.15 shot=878.05 public=978.559 ok=True 
+browser-cold firecracker trial 1: cdp=1021.358 shot=1686.479 public=1782.417 ok=True 
+browser-cold cloud-hypervisor trial 1: cdp=558.593 shot=1344.42 public=1448.915 ok=True 
+browser-cold runsc trial 1: cdp=942.178 shot=1862.39 public=1998.678 ok=True 
+browser-cold runc trial 1: cdp=233.512 shot=791.425 public=898.151 ok=True 
+browser-cold firecracker trial 2: cdp=1011.77 shot=1694.54 public=1792.455 ok=True 
+browser-cold cloud-hypervisor trial 2: cdp=562.208 shot=1106.949 public=1234.518 ok=True 
+browser-cold runsc trial 2: cdp=928.244 shot=1840.97 public=1954.287 ok=True 
+browser-cold runc trial 2: cdp=253.979 shot=864.352 public=965.455 ok=True 
+browser-cold firecracker trial 3: cdp=1017.533 shot=1700.251 public=1831.013 ok=True 
+browser-cold cloud-hypervisor trial 3: cdp=599.962 shot=1138.693 public=1264.556 ok=True 
+browser-cold runsc trial 3: cdp=904.315 shot=1796.893 public=1947.322 ok=True 
+browser-cold runc trial 3: cdp=219.154 shot=801.924 public=903.042 ok=True 
+browser-cold firecracker trial 4: cdp=988.807 shot=1674.261 public=1757.591 ok=True 
+browser-cold cloud-hypervisor trial 4: cdp=554.47 shot=1063.522 public=1181.799 ok=True 
+browser-cold runsc trial 4: cdp=945.287 shot=1866.39 public=1996.729 ok=True 
+browser-cold runc trial 4: cdp=218.136 shot=754.604 public=860.523 ok=True 
+browser-cold firecracker trial 5: cdp=992.541 shot=1654.317 public=1764.992 ok=True 
+browser-cold cloud-hypervisor trial 5: cdp=566.429 shot=1111.806 public=1219.205 ok=True 
+browser-cold runsc trial 5: cdp=917.89 shot=1803.298 public=1940.313 ok=True 
+browser-cold runc trial 5: cdp=216.766 shot=753.922 public=846.891 ok=True 
+browser-cold firecracker trial 6: cdp=985.573 shot=1680.421 public=1784.703 ok=True 
+browser-cold cloud-hypervisor trial 6: cdp=549.682 shot=1101.077 public=1207.823 ok=True 
+browser-cold runsc trial 6: cdp=970.832 shot=1894.03 public=2038.605 ok=True 
+browser-cold runc trial 6: cdp=238.267 shot=808.226 public=913.869 ok=True 
+browser-cold firecracker trial 7: cdp=975.22 shot=1614.119 public=1733.42 ok=True 
+browser-cold cloud-hypervisor trial 7: cdp=566.289 shot=1094.893 public=1193.871 ok=True 
+browser-cold runsc trial 7: cdp=959.024 shot=1870.114 public=2023.558 ok=True 
+browser-cold runc trial 7: cdp=218.457 shot=764.274 public=880.919 ok=True 
+browser-cold firecracker trial 8: cdp=1003.521 shot=1701.081 public=1835.074 ok=True 
+browser-cold cloud-hypervisor trial 8: cdp=591.387 shot=1105.206 public=1213.382 ok=True 
+browser-cold runsc trial 8: cdp=920.116 shot=1802.356 public=1941.17 ok=True 
+browser-cold runc trial 8: cdp=233.801 shot=773.111 public=854.422 ok=True 
+browser-cold firecracker trial 9: cdp=1009.375 shot=1693.64 public=1794.852 ok=True 
+browser-cold cloud-hypervisor trial 9: cdp=542.728 shot=1070.597 public=1178.057 ok=True 
+browser-cold runsc trial 9: cdp=910.543 shot=1798.054 public=1925.856 ok=True 
+browser-cold runc trial 9: cdp=225.309 shot=829.553 public=941.852 ok=True 
+{"time": "2026-10-13T04:32:26Z", "host": "sandbox-lab", "kernel": "6.8.0-142-generic", "loadavg": [0.60595703125, 0.62841796875, 0.55224609375], "clocksource": "kvm-clock", "mem_available_kib": "MemAvailable:    7375620 kB", "userns_sysctl": "0", "scenario": "browser-restore", "args": {"scenario": "browser-restore", "backends": ["firecracker", "cloud-hypervisor", "runsc"], "trials": 10, "warmup": 1, "rounds": 3, "k": null, "mem_mib": null, "workloads": null, "gap": 0.5, "pilot": false, "tag": "s2-tab", "max_load": 2.5}, "load_at_start": 0.60595703125}
+snapshot firecracker/file browser=True: 767.494876 ms, mem=1073741824 ok=True
+snapshot cloud-hypervisor/copy browser=True: 654.188509 ms, mem=1073741824 ok=True
+snapshot runsc/plain browser=True: 319.558014 ms, mem=172699648 ok=True
+snapshot runsc/background browser=True: 324.798822 ms, mem=172081152 ok=True
+browser-restore firecracker/file trial -1: cdp=128.582 shot=1094.57 public=1367.893 ok=True 
+browser-restore cloud-hypervisor/copy trial -1: cdp=947.682 shot=1379.46 public=1501.683 ok=True 
+----------------------------------------
+Exception occurred during processing of request from ('172.16.2.2', 44424)
+Traceback (most recent call last):
+  File "/usr/lib/python3.12/socketserver.py", line 692, in process_request_thread
+    self.finish_request(request, client_address)
+  File "/usr/lib/python3.12/socketserver.py", line 362, in finish_request
+    self.RequestHandlerClass(request, client_address, self)
+  File "/usr/lib/python3.12/http/server.py", line 672, in __init__
+    super().__init__(*args, **kwargs)
+  File "/usr/lib/python3.12/socketserver.py", line 761, in __init__
+    self.handle()
+  File "/usr/lib/python3.12/http/server.py", line 436, in handle
+    self.handle_one_request()
+  File "/usr/lib/python3.12/http/server.py", line 404, in handle_one_request
+    self.raw_requestline = self.rfile.readline(65537)
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/socket.py", line 707, in readinto
+    return self._sock.recv_into(b)
+           ^^^^^^^^^^^^^^^^^^^^^^^
+ConnectionResetError: [Errno 104] Connection reset by peer
+----------------------------------------
+browser-restore cloud-hypervisor/ondemand trial -1: cdp=522.851 shot=2704.348 public=2877.714 ok=True 
+browser-restore runsc/plain trial -1: cdp=325.424 shot=833.64 public=1069.468 ok=True 
+browser-restore runsc/background trial -1: cdp=295.129 shot=761.322 public=1001.441 ok=True 
+----------------------------------------
+Exception occurred during processing of request from ('172.16.1.2', 51100)
+Traceback (most recent call last):
+  File "/usr/lib/python3.12/socketserver.py", line 692, in process_request_thread
+    self.finish_request(request, client_address)
+  File "/usr/lib/python3.12/socketserver.py", line 362, in finish_request
+    self.RequestHandlerClass(request, client_address, self)
+  File "/usr/lib/python3.12/http/server.py", line 672, in __init__
+    super().__init__(*args, **kwargs)
+  File "/usr/lib/python3.12/socketserver.py", line 761, in __init__
+    self.handle()
+  File "/usr/lib/python3.12/http/server.py", line 436, in handle
+    self.handle_one_request()
+  File "/usr/lib/python3.12/http/server.py", line 404, in handle_one_request
+    self.raw_requestline = self.rfile.readline(65537)
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/socket.py", line 707, in readinto
+    return self._sock.recv_into(b)
+           ^^^^^^^^^^^^^^^^^^^^^^^
+ConnectionResetError: [Errno 104] Connection reset by peer
+----------------------------------------
+browser-restore firecracker/file trial 0: cdp=42.549 shot=766.495 public=979.0 ok=True 
+browser-restore cloud-hypervisor/copy trial 0: cdp=775.412 shot=1213.538 public=1339.366 ok=True 
+browser-restore cloud-hypervisor/ondemand trial 0: cdp=536.816 shot=2481.528 public=2611.179 ok=True 
+browser-restore runsc/plain trial 0: cdp=287.782 shot=916.37 public=1175.139 ok=True 
+browser-restore runsc/background trial 0: cdp=282.304 shot=898.026 public=1106.446 ok=True 
+----------------------------------------
+Exception occurred during processing of request from ('172.16.1.2', 51100)
+Traceback (most recent call last):
+  File "/usr/lib/python3.12/socketserver.py", line 692, in process_request_thread
+    self.finish_request(request, client_address)
+  File "/usr/lib/python3.12/socketserver.py", line 362, in finish_request
+    self.RequestHandlerClass(request, client_address, self)
+  File "/usr/lib/python3.12/http/server.py", line 672, in __init__
+    super().__init__(*args, **kwargs)
+  File "/usr/lib/python3.12/socketserver.py", line 761, in __init__
+    self.handle()
+  File "/usr/lib/python3.12/http/server.py", line 436, in handle
+    self.handle_one_request()
+  File "/usr/lib/python3.12/http/server.py", line 404, in handle_one_request
+    self.raw_requestline = self.rfile.readline(65537)
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/socket.py", line 707, in readinto
+    return self._sock.recv_into(b)
+           ^^^^^^^^^^^^^^^^^^^^^^^
+ConnectionResetError: [Errno 104] Connection reset by peer
+----------------------------------------
+browser-restore firecracker/file trial 1: cdp=41.567 shot=797.298 public=1026.496 ok=True 
+browser-restore cloud-hypervisor/copy trial 1: cdp=750.211 shot=1377.056 public=1498.866 ok=True 
+browser-restore cloud-hypervisor/ondemand trial 1: cdp=626.72 shot=2538.562 public=2689.619 ok=True 
+browser-restore runsc/plain trial 1: cdp=320.709 shot=1079.59 public=1320.459 ok=True 
+browser-restore runsc/background trial 1: cdp=321.507 shot=1058.534 public=1234.336 ok=True 
+----------------------------------------
+Exception occurred during processing of request from ('172.16.1.2', 51100)
+Traceback (most recent call last):
+  File "/usr/lib/python3.12/socketserver.py", line 692, in process_request_thread
+    self.finish_request(request, client_address)
+  File "/usr/lib/python3.12/socketserver.py", line 362, in finish_request
+    self.RequestHandlerClass(request, client_address, self)
+  File "/usr/lib/python3.12/http/server.py", line 672, in __init__
+    super().__init__(*args, **kwargs)
+  File "/usr/lib/python3.12/socketserver.py", line 761, in __init__
+    self.handle()
+  File "/usr/lib/python3.12/http/server.py", line 436, in handle
+    self.handle_one_request()
+  File "/usr/lib/python3.12/http/server.py", line 404, in handle_one_request
+    self.raw_requestline = self.rfile.readline(65537)
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/socket.py", line 707, in readinto
+    return self._sock.recv_into(b)
+           ^^^^^^^^^^^^^^^^^^^^^^^
+ConnectionResetError: [Errno 104] Connection reset by peer
+----------------------------------------
+browser-restore firecracker/file trial 2: cdp=49.088 shot=752.827 public=984.32 ok=True 
+browser-restore cloud-hypervisor/copy trial 2: cdp=852.717 shot=1405.76 public=1535.906 ok=True 
+browser-restore cloud-hypervisor/ondemand trial 2: cdp=605.188 shot=2299.3 public=2434.488 ok=True 
+browser-restore runsc/plain trial 2: cdp=347.584 shot=1242.538 public=1408.98 ok=True 
+browser-restore runsc/background trial 2: cdp=320.719 shot=959.027 public=1197.162 ok=True 
+----------------------------------------
+Exception occurred during processing of request from ('172.16.1.2', 51100)
+Traceback (most recent call last):
+  File "/usr/lib/python3.12/socketserver.py", line 692, in process_request_thread
+    self.finish_request(request, client_address)
+  File "/usr/lib/python3.12/socketserver.py", line 362, in finish_request
+    self.RequestHandlerClass(request, client_address, self)
+  File "/usr/lib/python3.12/http/server.py", line 672, in __init__
+    super().__init__(*args, **kwargs)
+  File "/usr/lib/python3.12/socketserver.py", line 761, in __init__
+    self.handle()
+  File "/usr/lib/python3.12/http/server.py", line 436, in handle
+    self.handle_one_request()
+  File "/usr/lib/python3.12/http/server.py", line 404, in handle_one_request
+    self.raw_requestline = self.rfile.readline(65537)
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/socket.py", line 707, in readinto
+    return self._sock.recv_into(b)
+           ^^^^^^^^^^^^^^^^^^^^^^^
+ConnectionResetError: [Errno 104] Connection reset by peer
+----------------------------------------
+----------------------------------------
+Exception occurred during processing of request from ('172.16.1.2', 51106)
+Traceback (most recent call last):
+  File "/usr/lib/python3.12/socketserver.py", line 692, in process_request_thread
+    self.finish_request(request, client_address)
+  File "/usr/lib/python3.12/socketserver.py", line 362, in finish_request
+    self.RequestHandlerClass(request, client_address, self)
+  File "/usr/lib/python3.12/http/server.py", line 672, in __init__
+    super().__init__(*args, **kwargs)
+  File "/usr/lib/python3.12/socketserver.py", line 761, in __init__
+    self.handle()
+  File "/usr/lib/python3.12/http/server.py", line 436, in handle
+    self.handle_one_request()
+  File "/usr/lib/python3.12/http/server.py", line 404, in handle_one_request
+    self.raw_requestline = self.rfile.readline(65537)
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/socket.py", line 707, in readinto
+    return self._sock.recv_into(b)
+           ^^^^^^^^^^^^^^^^^^^^^^^
+ConnectionResetError: [Errno 104] Connection reset by peer
+----------------------------------------
+browser-restore firecracker/file trial 3: cdp=41.989 shot=763.942 public=1003.08 ok=True 
+browser-restore cloud-hypervisor/copy trial 3: cdp=914.656 shot=1387.063 public=1525.817 ok=True 
+----------------------------------------
+Exception occurred during processing of request from ('172.16.2.2', 56876)
+Traceback (most recent call last):
+  File "/usr/lib/python3.12/socketserver.py", line 692, in process_request_thread
+    self.finish_request(request, client_address)
+  File "/usr/lib/python3.12/socketserver.py", line 362, in finish_request
+    self.RequestHandlerClass(request, client_address, self)
+  File "/usr/lib/python3.12/http/server.py", line 672, in __init__
+    super().__init__(*args, **kwargs)
+  File "/usr/lib/python3.12/socketserver.py", line 761, in __init__
+    self.handle()
+  File "/usr/lib/python3.12/http/server.py", line 436, in handle
+    self.handle_one_request()
+  File "/usr/lib/python3.12/http/server.py", line 404, in handle_one_request
+    self.raw_requestline = self.rfile.readline(65537)
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/socket.py", line 707, in readinto
+    return self._sock.recv_into(b)
+           ^^^^^^^^^^^^^^^^^^^^^^^
+ConnectionResetError: [Errno 104] Connection reset by peer
+----------------------------------------
+browser-restore cloud-hypervisor/ondemand trial 3: cdp=610.074 shot=2429.39 public=2550.419 ok=True 
+browser-restore runsc/plain trial 3: cdp=302.844 shot=963.151 public=1223.991 ok=True 
+browser-restore runsc/background trial 3: cdp=419.137 shot=1067.957 public=1262.656 ok=True 
+----------------------------------------
+Exception occurred during processing of request from ('172.16.1.2', 51100)
+Traceback (most recent call last):
+  File "/usr/lib/python3.12/socketserver.py", line 692, in process_request_thread
+    self.finish_request(request, client_address)
+  File "/usr/lib/python3.12/socketserver.py", line 362, in finish_request
+    self.RequestHandlerClass(request, client_address, self)
+  File "/usr/lib/python3.12/http/server.py", line 672, in __init__
+    super().__init__(*args, **kwargs)
+  File "/usr/lib/python3.12/socketserver.py", line 761, in __init__
+    self.handle()
+  File "/usr/lib/python3.12/http/server.py", line 436, in handle
+    self.handle_one_request()
+  File "/usr/lib/python3.12/http/server.py", line 404, in handle_one_request
+    self.raw_requestline = self.rfile.readline(65537)
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/socket.py", line 707, in readinto
+    return self._sock.recv_into(b)
+           ^^^^^^^^^^^^^^^^^^^^^^^
+ConnectionResetError: [Errno 104] Connection reset by peer
+----------------------------------------
+----------------------------------------
+Exception occurred during processing of request from ('172.16.1.2', 51106)
+Traceback (most recent call last):
+  File "/usr/lib/python3.12/socketserver.py", line 692, in process_request_thread
+    self.finish_request(request, client_address)
+  File "/usr/lib/python3.12/socketserver.py", line 362, in finish_request
+    self.RequestHandlerClass(request, client_address, self)
+  File "/usr/lib/python3.12/http/server.py", line 672, in __init__
+    super().__init__(*args, **kwargs)
+  File "/usr/lib/python3.12/socketserver.py", line 761, in __init__
+    self.handle()
+  File "/usr/lib/python3.12/http/server.py", line 436, in handle
+    self.handle_one_request()
+  File "/usr/lib/python3.12/http/server.py", line 404, in handle_one_request
+    self.raw_requestline = self.rfile.readline(65537)
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/socket.py", line 707, in readinto
+    return self._sock.recv_into(b)
+           ^^^^^^^^^^^^^^^^^^^^^^^
+ConnectionResetError: [Errno 104] Connection reset by peer
+----------------------------------------
+browser-restore firecracker/file trial 4: cdp=42.156 shot=766.895 public=974.962 ok=True 
+browser-restore cloud-hypervisor/copy trial 4: cdp=742.551 shot=1244.994 public=1376.475 ok=True 
+----------------------------------------
+Exception occurred during processing of request from ('172.16.2.2', 54302)
+Traceback (most recent call last):
+  File "/usr/lib/python3.12/socketserver.py", line 692, in process_request_thread
+    self.finish_request(request, client_address)
+  File "/usr/lib/python3.12/socketserver.py", line 362, in finish_request
+    self.RequestHandlerClass(request, client_address, self)
+  File "/usr/lib/python3.12/http/server.py", line 672, in __init__
+    super().__init__(*args, **kwargs)
+  File "/usr/lib/python3.12/socketserver.py", line 761, in __init__
+    self.handle()
+  File "/usr/lib/python3.12/http/server.py", line 436, in handle
+    self.handle_one_request()
+  File "/usr/lib/python3.12/http/server.py", line 404, in handle_one_request
+    self.raw_requestline = self.rfile.readline(65537)
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/socket.py", line 707, in readinto
+    return self._sock.recv_into(b)
+           ^^^^^^^^^^^^^^^^^^^^^^^
+ConnectionResetError: [Errno 104] Connection reset by peer
+----------------------------------------
+browser-restore cloud-hypervisor/ondemand trial 4: cdp=609.668 shot=2078.51 public=2202.854 ok=True 
+browser-restore runsc/plain trial 4: cdp=274.696 shot=1022.98 public=1281.932 ok=True 
+browser-restore runsc/background trial 4: cdp=325.762 shot=1092.167 public=1310.368 ok=True 
+----------------------------------------
+Exception occurred during processing of request from ('172.16.1.2', 51100)
+Traceback (most recent call last):
+  File "/usr/lib/python3.12/socketserver.py", line 692, in process_request_thread
+    self.finish_request(request, client_address)
+  File "/usr/lib/python3.12/socketserver.py", line 362, in finish_request
+    self.RequestHandlerClass(request, client_address, self)
+  File "/usr/lib/python3.12/http/server.py", line 672, in __init__
+    super().__init__(*args, **kwargs)
+  File "/usr/lib/python3.12/socketserver.py", line 761, in __init__
+    self.handle()
+  File "/usr/lib/python3.12/http/server.py", line 436, in handle
+    self.handle_one_request()
+  File "/usr/lib/python3.12/http/server.py", line 404, in handle_one_request
+    self.raw_requestline = self.rfile.readline(65537)
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/socket.py", line 707, in readinto
+    return self._sock.recv_into(b)
+           ^^^^^^^^^^^^^^^^^^^^^^^
+ConnectionResetError: [Errno 104] Connection reset by peer
+----------------------------------------
+browser-restore firecracker/file trial 5: cdp=42.264 shot=759.954 public=962.04 ok=True 
+browser-restore cloud-hypervisor/copy trial 5: cdp=745.661 shot=1304.663 public=1422.433 ok=True 
+----------------------------------------
+Exception occurred during processing of request from ('172.16.2.2', 41942)
+Traceback (most recent call last):
+  File "/usr/lib/python3.12/socketserver.py", line 692, in process_request_thread
+    self.finish_request(request, client_address)
+  File "/usr/lib/python3.12/socketserver.py", line 362, in finish_request
+    self.RequestHandlerClass(request, client_address, self)
+  File "/usr/lib/python3.12/http/server.py", line 672, in __init__
+    super().__init__(*args, **kwargs)
+  File "/usr/lib/python3.12/socketserver.py", line 761, in __init__
+    self.handle()
+  File "/usr/lib/python3.12/http/server.py", line 436, in handle
+    self.handle_one_request()
+  File "/usr/lib/python3.12/http/server.py", line 404, in handle_one_request
+    self.raw_requestline = self.rfile.readline(65537)
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/socket.py", line 707, in readinto
+    return self._sock.recv_into(b)
+           ^^^^^^^^^^^^^^^^^^^^^^^
+ConnectionResetError: [Errno 104] Connection reset by peer
+----------------------------------------
+browser-restore cloud-hypervisor/ondemand trial 5: cdp=581.322 shot=2057.401 public=2182.814 ok=True 
+browser-restore runsc/plain trial 5: cdp=329.565 shot=1024.979 public=1223.164 ok=True 
+browser-restore runsc/background trial 5: cdp=360.866 shot=1021.296 public=1208.46 ok=True 
+----------------------------------------
+Exception occurred during processing of request from ('172.16.1.2', 51100)
+Traceback (most recent call last):
+  File "/usr/lib/python3.12/socketserver.py", line 692, in process_request_thread
+    self.finish_request(request, client_address)
+  File "/usr/lib/python3.12/socketserver.py", line 362, in finish_request
+    self.RequestHandlerClass(request, client_address, self)
+  File "/usr/lib/python3.12/http/server.py", line 672, in __init__
+    super().__init__(*args, **kwargs)
+  File "/usr/lib/python3.12/socketserver.py", line 761, in __init__
+    self.handle()
+  File "/usr/lib/python3.12/http/server.py", line 436, in handle
+    self.handle_one_request()
+  File "/usr/lib/python3.12/http/server.py", line 404, in handle_one_request
+    self.raw_requestline = self.rfile.readline(65537)
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/socket.py", line 707, in readinto
+    return self._sock.recv_into(b)
+           ^^^^^^^^^^^^^^^^^^^^^^^
+ConnectionResetError: [Errno 104] Connection reset by peer
+----------------------------------------
+----------------------------------------
+Exception occurred during processing of request from ('172.16.1.2', 51116)
+Traceback (most recent call last):
+  File "/usr/lib/python3.12/socketserver.py", line 692, in process_request_thread
+    self.finish_request(request, client_address)
+  File "/usr/lib/python3.12/socketserver.py", line 362, in finish_request
+    self.RequestHandlerClass(request, client_address, self)
+  File "/usr/lib/python3.12/http/server.py", line 672, in __init__
+    super().__init__(*args, **kwargs)
+  File "/usr/lib/python3.12/socketserver.py", line 761, in __init__
+    self.handle()
+  File "/usr/lib/python3.12/http/server.py", line 436, in handle
+    self.handle_one_request()
+  File "/usr/lib/python3.12/http/server.py", line 404, in handle_one_request
+    self.raw_requestline = self.rfile.readline(65537)
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/socket.py", line 707, in readinto
+    return self._sock.recv_into(b)
+           ^^^^^^^^^^^^^^^^^^^^^^^
+ConnectionResetError: [Errno 104] Connection reset by peer
+----------------------------------------
+browser-restore firecracker/file trial 6: cdp=43.83 shot=722.165 public=973.515 ok=True 
+browser-restore cloud-hypervisor/copy trial 6: cdp=779.319 shot=1267.613 public=1384.293 ok=True 
+----------------------------------------
+Exception occurred during processing of request from ('172.16.2.2', 56676)
+Traceback (most recent call last):
+  File "/usr/lib/python3.12/socketserver.py", line 692, in process_request_thread
+    self.finish_request(request, client_address)
+  File "/usr/lib/python3.12/socketserver.py", line 362, in finish_request
+    self.RequestHandlerClass(request, client_address, self)
+  File "/usr/lib/python3.12/http/server.py", line 672, in __init__
+    super().__init__(*args, **kwargs)
+  File "/usr/lib/python3.12/socketserver.py", line 761, in __init__
+    self.handle()
+  File "/usr/lib/python3.12/http/server.py", line 436, in handle
+    self.handle_one_request()
+  File "/usr/lib/python3.12/http/server.py", line 404, in handle_one_request
+    self.raw_requestline = self.rfile.readline(65537)
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/socket.py", line 707, in readinto
+    return self._sock.recv_into(b)
+           ^^^^^^^^^^^^^^^^^^^^^^^
+ConnectionResetError: [Errno 104] Connection reset by peer
+----------------------------------------
+browser-restore cloud-hypervisor/ondemand trial 6: cdp=557.059 shot=2140.237 public=2262.451 ok=True 
+browser-restore runsc/plain trial 6: cdp=256.096 shot=1025.076 public=1267.746 ok=True 
+browser-restore runsc/background trial 6: cdp=730.457 shot=1236.849 public=1428.806 ok=True 
+----------------------------------------
+Exception occurred during processing of request from ('172.16.1.2', 51100)
+Traceback (most recent call last):
+  File "/usr/lib/python3.12/socketserver.py", line 692, in process_request_thread
+    self.finish_request(request, client_address)
+  File "/usr/lib/python3.12/socketserver.py", line 362, in finish_request
+    self.RequestHandlerClass(request, client_address, self)
+  File "/usr/lib/python3.12/http/server.py", line 672, in __init__
+    super().__init__(*args, **kwargs)
+  File "/usr/lib/python3.12/socketserver.py", line 761, in __init__
+    self.handle()
+  File "/usr/lib/python3.12/http/server.py", line 436, in handle
+    self.handle_one_request()
+  File "/usr/lib/python3.12/http/server.py", line 404, in handle_one_request
+    self.raw_requestline = self.rfile.readline(65537)
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/socket.py", line 707, in readinto
+    return self._sock.recv_into(b)
+           ^^^^^^^^^^^^^^^^^^^^^^^
+ConnectionResetError: [Errno 104] Connection reset by peer
+----------------------------------------
+----------------------------------------
+Exception occurred during processing of request from ('172.16.1.2', 51116)
+Traceback (most recent call last):
+  File "/usr/lib/python3.12/socketserver.py", line 692, in process_request_thread
+    self.finish_request(request, client_address)
+  File "/usr/lib/python3.12/socketserver.py", line 362, in finish_request
+    self.RequestHandlerClass(request, client_address, self)
+  File "/usr/lib/python3.12/http/server.py", line 672, in __init__
+    super().__init__(*args, **kwargs)
+  File "/usr/lib/python3.12/socketserver.py", line 761, in __init__
+    self.handle()
+  File "/usr/lib/python3.12/http/server.py", line 436, in handle
+    self.handle_one_request()
+  File "/usr/lib/python3.12/http/server.py", line 404, in handle_one_request
+    self.raw_requestline = self.rfile.readline(65537)
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/socket.py", line 707, in readinto
+    return self._sock.recv_into(b)
+           ^^^^^^^^^^^^^^^^^^^^^^^
+ConnectionResetError: [Errno 104] Connection reset by peer
+----------------------------------------
+browser-restore firecracker/file trial 7: cdp=41.92 shot=706.334 public=940.875 ok=True 
+browser-restore cloud-hypervisor/copy trial 7: cdp=753.959 shot=1234.042 public=1357.822 ok=True 
+browser-restore cloud-hypervisor/ondemand trial 7: cdp=590.763 shot=2036.062 public=2159.914 ok=True 
+browser-restore runsc/plain trial 7: cdp=357.466 shot=1108.388 public=1301.319 ok=True 
+browser-restore runsc/background trial 7: cdp=320.124 shot=1123.529 public=1339.813 ok=True 
+----------------------------------------
+Exception occurred during processing of request from ('172.16.1.2', 51100)
+Traceback (most recent call last):
+  File "/usr/lib/python3.12/socketserver.py", line 692, in process_request_thread
+    self.finish_request(request, client_address)
+  File "/usr/lib/python3.12/socketserver.py", line 362, in finish_request
+    self.RequestHandlerClass(request, client_address, self)
+  File "/usr/lib/python3.12/http/server.py", line 672, in __init__
+    super().__init__(*args, **kwargs)
+  File "/usr/lib/python3.12/socketserver.py", line 761, in __init__
+    self.handle()
+  File "/usr/lib/python3.12/http/server.py", line 436, in handle
+    self.handle_one_request()
+  File "/usr/lib/python3.12/http/server.py", line 404, in handle_one_request
+    self.raw_requestline = self.rfile.readline(65537)
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/socket.py", line 707, in readinto
+    return self._sock.recv_into(b)
+           ^^^^^^^^^^^^^^^^^^^^^^^
+ConnectionResetError: [Errno 104] Connection reset by peer
+----------------------------------------
+----------------------------------------
+Exception occurred during processing of request from ('172.16.1.2', 51106)
+Traceback (most recent call last):
+  File "/usr/lib/python3.12/socketserver.py", line 692, in process_request_thread
+    self.finish_request(request, client_address)
+  File "/usr/lib/python3.12/socketserver.py", line 362, in finish_request
+    self.RequestHandlerClass(request, client_address, self)
+  File "/usr/lib/python3.12/http/server.py", line 672, in __init__
+    super().__init__(*args, **kwargs)
+  File "/usr/lib/python3.12/socketserver.py", line 761, in __init__
+    self.handle()
+  File "/usr/lib/python3.12/http/server.py", line 436, in handle
+    self.handle_one_request()
+  File "/usr/lib/python3.12/http/server.py", line 404, in handle_one_request
+    self.raw_requestline = self.rfile.readline(65537)
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/socket.py", line 707, in readinto
+    return self._sock.recv_into(b)
+           ^^^^^^^^^^^^^^^^^^^^^^^
+ConnectionResetError: [Errno 104] Connection reset by peer
+----------------------------------------
+browser-restore firecracker/file trial 8: cdp=41.547 shot=687.065 public=937.456 ok=True 
+browser-restore cloud-hypervisor/copy trial 8: cdp=742.248 shot=1249.481 public=1397.645 ok=True 
+browser-restore cloud-hypervisor/ondemand trial 8: cdp=533.174 shot=2007.955 public=2122.438 ok=True 
+browser-restore runsc/plain trial 8: cdp=348.068 shot=1158.075 public=1359.312 ok=True 
+browser-restore runsc/background trial 8: cdp=404.833 shot=1063.939 public=1271.158 ok=True 
+----------------------------------------
+Exception occurred during processing of request from ('172.16.1.2', 51100)
+Traceback (most recent call last):
+  File "/usr/lib/python3.12/socketserver.py", line 692, in process_request_thread
+    self.finish_request(request, client_address)
+  File "/usr/lib/python3.12/socketserver.py", line 362, in finish_request
+    self.RequestHandlerClass(request, client_address, self)
+  File "/usr/lib/python3.12/http/server.py", line 672, in __init__
+    super().__init__(*args, **kwargs)
+  File "/usr/lib/python3.12/socketserver.py", line 761, in __init__
+    self.handle()
+  File "/usr/lib/python3.12/http/server.py", line 436, in handle
+    self.handle_one_request()
+  File "/usr/lib/python3.12/http/server.py", line 404, in handle_one_request
+    self.raw_requestline = self.rfile.readline(65537)
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/socket.py", line 707, in readinto
+    return self._sock.recv_into(b)
+           ^^^^^^^^^^^^^^^^^^^^^^^
+ConnectionResetError: [Errno 104] Connection reset by peer
+----------------------------------------
+browser-restore firecracker/file trial 9: cdp=41.763 shot=797.301 public=1035.523 ok=True 
+browser-restore cloud-hypervisor/copy trial 9: cdp=751.864 shot=1258.85 public=1394.22 ok=True 
+browser-restore cloud-hypervisor/ondemand trial 9: cdp=557.391 shot=1945.08 public=2072.094 ok=True 
+browser-restore runsc/plain trial 9: cdp=588.041 shot=1097.118 public=1295.3 ok=True 
+browser-restore runsc/background trial 9: cdp=392.937 shot=1144.335 public=1308.703 ok=True 
+SESSION2_DONE

@@ -1,0 +1,2 @@
+===== chromium-own-sandbox
+Sandbox Status | Layer 1 Sandbox	Namespace | PID namespaces	Yes | Network namespaces	Yes | Seccomp-BPF sandbox	Yes | Seccomp-BPF sandbox supports TSYNC	Yes | Ptrace Protection with Yama LSM (Broker)	Yes | Ptrace Protection with Yama LSM (Non-broker)	No | You are adequately sandboxed.

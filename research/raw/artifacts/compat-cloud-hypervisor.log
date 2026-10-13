@@ -1,0 +1,67 @@
+===== chromium-own-sandbox
+Sandbox Status | Layer 1 Sandbox	Namespace | PID namespaces	Yes | Network namespaces	Yes | Seccomp-BPF sandbox	Yes | Seccomp-BPF sandbox supports TSYNC	Yes | Ptrace Protection with Yama LSM (Broker)	No | Ptrace Protection with Yama LSM (Non-broker)	No | You are adequately sandboxed.
+===== unshare-userns-agent
+$ runuser -u agent -- unshare -Ur true && echo agent-userns-ok
+agent-userns-ok
+
+rc=0
+===== unshare-userns-root
+$ unshare -Ur true && echo root-userns-ok
+root-userns-ok
+
+rc=0
+===== inotify-fs-watch
+$ node - <<'EOF'
+event rename f
+
+rc=0
+===== ping-lab
+$ ping -c 3 -W 2 {host}
+PING 172.16.2.1 (172.16.2.1) 56(84) bytes of data.
+64 bytes from 172.16.2.1: icmp_seq=1 ttl=64 time=0.100 ms
+64 bytes from 172.16.2.1: icmp_seq=2 ttl=64 time=0.180 ms
+64 bytes from 172.16.2.1: icmp_seq=3 ttl=64 time=0.176 ms
+
+--- 172.16.2.1 ping statistics ---
+3 packets transmitted, 3 received, 0% packet loss, time 2025ms
+rtt min/avg/max/mdev = 0.100/0.152/0.180/0.036 ms
+
+rc=0
+===== ping-internet
+$ ping -c 3 -W 2 1.1.1.1
+PING 1.1.1.1 (1.1.1.1) 56(84) bytes of data.
+64 bytes from 1.1.1.1: icmp_seq=1 ttl=56 time=12.2 ms
+64 bytes from 1.1.1.1: icmp_seq=2 ttl=56 time=12.4 ms
+64 bytes from 1.1.1.1: icmp_seq=3 ttl=56 time=12.3 ms
+
+--- 1.1.1.1 ping statistics ---
+3 packets transmitted, 3 received, 0% packet loss, time 2003ms
+rtt min/avg/max/mdev = 12.204/12.308/12.393/0.078 ms
+
+rc=0
+===== mount-tmpfs
+$ mkdir -p /mnt/t && mount -t tmpfs tmpfs /mnt/t && findmnt /mnt/t && umount /mnt/t
+TARGET SOURCE FSTYPE OPTIONS
+/mnt/t tmpfs  tmpfs  rw,relatime
+
+rc=0
+===== apt-get-install
+$ apt-get update -qq 2>&1 | tail -3 && apt-get install -y -qq --no-install-recommends jq >/tmp/apt.log 2>&1; rc=$?; tail -3 /tmp/apt.log; jq --version; [ $rc = 0 ]
+Setting up libjq1:amd64 (1.7.1-6+deb13u4) ...
+Setting up jq (1.7.1-6+deb13u4) ...
+Processing triggers for libc-bin (2.41-12+deb13u4) ...
+jq-1.7
+
+rc=0
+===== clock-skew-after-restore[copy]
+cloud-hypervisor/copy: snapshot age 2947 s, guest minus lab = -0.018 s (lab round trip 5.3 ms)
+===== urandom-after-restore[copy]
+cloud-hypervisor/copy: different
+1st ba9314eddec62438ed200846be0f4514e3a9979e2bcf3c0e8dcf2ec2ec317098
+2nd 98b43caa279bacfdd0eae61394240b97b663f578f27ca3fc246389f6fdd794f5
+===== clock-skew-after-restore[ondemand]
+cloud-hypervisor/ondemand: snapshot age 2949 s, guest minus lab = -0.003 s (lab round trip 38.0 ms)
+===== urandom-after-restore[ondemand]
+cloud-hypervisor/ondemand: different
+1st 6e5ed761b912b869cb7891d58553e29504a42d85175810154d0bb139101c4c71
+2nd c409f0c8860835202042b7151b6426f8614c6acb80bc37095ae6d3595964b5e0

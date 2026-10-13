@@ -1,0 +1,65 @@
+===== chromium-own-sandbox
+Sandbox Status | Layer 1 Sandbox	Namespace | PID namespaces	Yes | Network namespaces	Yes | Seccomp-BPF sandbox	Yes | Seccomp-BPF sandbox supports TSYNC	Yes | Ptrace Protection with Yama LSM (Broker)	No | Ptrace Protection with Yama LSM (Non-broker)	No | You are adequately sandboxed.
+===== unshare-userns-agent
+$ runuser -u agent -- unshare -Ur true && echo agent-userns-ok
+agent-userns-ok
+
+rc=0
+===== unshare-userns-root
+$ unshare -Ur true && echo root-userns-ok
+root-userns-ok
+
+rc=0
+===== inotify-fs-watch
+$ node - <<'EOF'
+event rename f
+
+rc=0
+===== ping-lab
+$ ping -c 3 -W 2 {host}
+PING 172.16.1.1 (172.16.1.1) 56(84) bytes of data.
+64 bytes from 172.16.1.1: icmp_seq=1 ttl=64 time=0.117 ms
+64 bytes from 172.16.1.1: icmp_seq=2 ttl=64 time=0.143 ms
+64 bytes from 172.16.1.1: icmp_seq=3 ttl=64 time=0.096 ms
+
+--- 172.16.1.1 ping statistics ---
+3 packets transmitted, 3 received, 0% packet loss, time 2046ms
+rtt min/avg/max/mdev = 0.096/0.118/0.143/0.019 ms
+
+rc=0
+===== ping-internet
+$ ping -c 3 -W 2 1.1.1.1
+PING 1.1.1.1 (1.1.1.1) 56(84) bytes of data.
+64 bytes from 1.1.1.1: icmp_seq=1 ttl=56 time=11.4 ms
+64 bytes from 1.1.1.1: icmp_seq=2 ttl=56 time=12.0 ms
+64 bytes from 1.1.1.1: icmp_seq=3 ttl=56 time=12.1 ms
+
+--- 1.1.1.1 ping statistics ---
+3 packets transmitted, 3 received, 0% packet loss, time 2002ms
+rtt min/avg/max/mdev = 11.427/11.834/12.062/0.288 ms
+
+rc=0
+===== mount-tmpfs
+$ mkdir -p /mnt/t && mount -t tmpfs tmpfs /mnt/t && findmnt /mnt/t && umount /mnt/t
+TARGET SOURCE FSTYPE OPTIONS
+/mnt/t tmpfs  tmpfs  rw,relatime
+
+rc=0
+===== apt-get-install
+$ apt-get update -qq 2>&1 | tail -3 && apt-get install -y -qq --no-install-recommends jq >/tmp/apt.log 2>&1; rc=$?; tail -3 /tmp/apt.log; jq --version; [ $rc = 0 ]
+Setting up libjq1:amd64 (1.7.1-6+deb13u4) ...
+Setting up jq (1.7.1-6+deb13u4) ...
+Processing triggers for libc-bin (2.41-12+deb13u4) ...
+jq-1.7
+
+rc=0
+===== clock-skew-after-restore[file]
+firecracker/file: snapshot age 2951 s, guest minus lab = -2952.054 s (lab round trip 69.4 ms)
+===== urandom-after-restore[file]
+firecracker/file: different
+1st a9e61f0bd0d819e69505af00721dc49f3462fda44c1e9f3e6d6bb89b397679a4
+2nd 9f49a7b0f6794a6ebce850ff92ba041e2e93ab33f2c150b7fc2b0bfd2f2a4bc6
+===== clock_realtime-restore
+host clocksource kvm-clock: RuntimeError: PUT /snapshot/load -> 400: {"fault_message":"Load snapshot error: Failed to restore from snapshot: Failed to build microVM from snapshot: Failed to restore microVM state: clock_realtime requested but not present in the snapshot state"}; console: main] Snapshot CPU vendor ID: [71, 101, 110, 117, 105, 110, 101, 73, 110, 116, 101, 108]
+2026-10-13T03:58:11.576632786 [sbx-fc-1:fc_api] Received Error. Status code: 400 Bad Request. Message: Load snapshot error: Failed to restore from snapshot: Failed to build microVM from snapshot: Failed to restore microVM state: clock_realtime requested but not present in the snapshot state
+2026-10-13T03:58:11.576783833 [sbx-fc-1:main] RunWithApiError error: Failed to build MicroVM: Loading snapshot failed..

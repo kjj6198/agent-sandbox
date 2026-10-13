@@ -1,0 +1,56 @@
+===== chromium-own-sandbox
+Sandbox Status | Layer 1 Sandbox	Namespace | PID namespaces	Yes | Network namespaces	Yes | Seccomp-BPF sandbox	Yes | Seccomp-BPF sandbox supports TSYNC	Yes | Ptrace Protection with Yama LSM (Broker)	No | Ptrace Protection with Yama LSM (Non-broker)	No | You are adequately sandboxed.
+===== unshare-userns-agent
+$ runuser -u agent -- unshare -Ur true && echo agent-userns-ok
+agent-userns-ok
+
+rc=0
+===== unshare-userns-root
+$ unshare -Ur true && echo root-userns-ok
+root-userns-ok
+
+rc=0
+===== inotify-fs-watch
+KeyError: 'recursive'
+===== ping-lab
+$ ping -c 3 -W 2 {host}
+PING 172.16.1.1 (172.16.1.1) 56(84) bytes of data.
+64 bytes from 172.16.1.1: icmp_seq=1 ttl=64 time=0.136 ms
+64 bytes from 172.16.1.1: icmp_seq=2 ttl=64 time=0.253 ms
+64 bytes from 172.16.1.1: icmp_seq=3 ttl=64 time=0.238 ms
+
+--- 172.16.1.1 ping statistics ---
+3 packets transmitted, 3 received, 0% packet loss, time 2030ms
+rtt min/avg/max/mdev = 0.136/0.209/0.253/0.051 ms
+
+rc=0
+===== ping-internet
+$ ping -c 3 -W 2 1.1.1.1
+PING 1.1.1.1 (1.1.1.1) 56(84) bytes of data.
+64 bytes from 1.1.1.1: icmp_seq=1 ttl=56 time=11.8 ms
+64 bytes from 1.1.1.1: icmp_seq=2 ttl=56 time=11.8 ms
+64 bytes from 1.1.1.1: icmp_seq=3 ttl=56 time=11.9 ms
+
+--- 1.1.1.1 ping statistics ---
+3 packets transmitted, 3 received, 0% packet loss, time 2004ms
+rtt min/avg/max/mdev = 11.776/11.830/11.921/0.064 ms
+
+rc=0
+===== mount-tmpfs
+$ mkdir -p /mnt/t && mount -t tmpfs tmpfs /mnt/t && findmnt /mnt/t && umount /mnt/t
+TARGET SOURCE FSTYPE OPTIONS
+/mnt/t tmpfs  tmpfs  rw,relatime
+
+rc=0
+===== apt-get-install
+ConnectionError: agent closed before marker: b'Setting up libjq1:amd64 (1.7.1-6+deb13u4) ...\r\nSetting up jq (1.7.1-6+deb13u4) ...\r\nProcessing triggers for libc-bin (2.41-12+deb13u4) ...\r\njq-1.7\n'
+===== clock-skew-after-restore[file]
+firecracker/file: snapshot age 2066 s, guest minus lab = -2066.883 s (lab round trip 58.0 ms)
+===== urandom-after-restore[file]
+firecracker/file: different
+1st ba397c51faa4f835b8640720b29d850f5db8a3c37fa8f92fa419fbab0663200b
+2nd d93a97b9ebcdfa6b0cfc3942e75160fe643b1ff441f37a1ba0962f6b4b1e7042
+===== clock_realtime-restore
+host clocksource kvm-clock: RuntimeError: PUT /snapshot/load -> 400: {"fault_message":"Load snapshot error: Failed to restore from snapshot: Failed to build microVM from snapshot: Failed to restore microVM state: clock_realtime requested but not present in the snapshot state"}; console: main] Snapshot CPU vendor ID: [71, 101, 110, 117, 105, 110, 101, 73, 110, 116, 101, 108]
+2026-10-13T02:55:58.114515120 [sbx-fc-1:fc_api] Received Error. Status code: 400 Bad Request. Message: Load snapshot error: Failed to restore from snapshot: Failed to build microVM from snapshot: Failed to restore microVM state: clock_realtime requested but not present in the snapshot state
+2026-10-13T02:55:58.114624226 [sbx-fc-1:main] RunWithApiError error: Failed to build MicroVM: Loading snapshot failed..

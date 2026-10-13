@@ -1,0 +1,142 @@
+{"level": "L1", "case": "firecracker/snapshot-create", "trial": 0, "ok": true, "error": null, "t_create_ms": 1125.611886, "bytes": 1073766949}
+{"level": "L1", "case": "cloud-hypervisor/snapshot-create", "trial": 0, "ok": true, "error": null, "t_create_ms": 800.973099, "bytes": 1073802060}
+{"level": "L1", "case": "firecracker/cold-console", "trial": 0, "ok": true, "error": null, "t_ready_ms": 309.46294, "t_exec_ms": 311.160694, "hello": "SBX_READY 0 0.22"}
+{"level": "L1", "case": "cloud-hypervisor/cold-console", "trial": 0, "ok": true, "error": null, "t_ready_ms": 206.545815, "t_exec_ms": 208.178921, "hello": "SBX_READY 0 0.16"}
+{"level": "L1", "case": "firecracker/cold-noconsole", "trial": 0, "ok": true, "error": null, "t_ready_ms": 289.796582, "t_exec_ms": 291.628146, "hello": "SBX_READY 0 0.20"}
+{"level": "L1", "case": "cloud-hypervisor/cold-noconsole", "trial": 0, "ok": true, "error": null, "t_ready_ms": 194.16134, "t_exec_ms": 195.752995, "hello": "SBX_READY 0 0.15"}
+{"level": "L1", "case": "firecracker/restore-file", "trial": 0, "ok": true, "error": null, "t_loaded_ms": 5.967083, "t_exec_ms": 35.524058}
+{"level": "L1", "case": "cloud-hypervisor/restore-copy", "trial": 0, "ok": true, "error": null, "t_loaded_ms": 0.469792, "t_exec_ms": 1037.012203}
+{"level": "L1", "case": "cloud-hypervisor/restore-ondemand", "trial": 0, "ok": true, "error": null, "t_loaded_ms": 0.47768, "t_exec_ms": 72.236749}
+{"level": "L1", "case": "firecracker/cold-console", "trial": 1, "ok": true, "error": null, "t_ready_ms": 310.376595, "t_exec_ms": 312.343046, "hello": "SBX_READY 0 0.22"}
+{"level": "L1", "case": "cloud-hypervisor/cold-console", "trial": 1, "ok": true, "error": null, "t_ready_ms": 192.903363, "t_exec_ms": 194.672116, "hello": "SBX_READY 0 0.15"}
+{"level": "L1", "case": "firecracker/cold-noconsole", "trial": 1, "ok": true, "error": null, "t_ready_ms": 296.989675, "t_exec_ms": 298.740052, "hello": "SBX_READY 0 0.21"}
+{"level": "L1", "case": "cloud-hypervisor/cold-noconsole", "trial": 1, "ok": true, "error": null, "t_ready_ms": 197.638004, "t_exec_ms": 199.241604, "hello": "SBX_READY 0 0.15"}
+{"level": "L1", "case": "firecracker/restore-file", "trial": 1, "ok": true, "error": null, "t_loaded_ms": 5.079563, "t_exec_ms": 34.707068}
+{"level": "L1", "case": "cloud-hypervisor/restore-copy", "trial": 1, "ok": true, "error": null, "t_loaded_ms": 0.482356, "t_exec_ms": 881.083983}
+{"level": "L1", "case": "cloud-hypervisor/restore-ondemand", "trial": 1, "ok": true, "error": null, "t_loaded_ms": 0.510842, "t_exec_ms": 73.610539}
+{"level": "L1", "case": "firecracker/cold-console", "trial": 2, "ok": true, "error": null, "t_ready_ms": 320.119908, "t_exec_ms": 322.36435, "hello": "SBX_READY 0 0.23"}
+{"level": "L1", "case": "cloud-hypervisor/cold-console", "trial": 2, "ok": true, "error": null, "t_ready_ms": 211.389882, "t_exec_ms": 213.044689, "hello": "SBX_READY 0 0.17"}
+{"level": "L1", "case": "firecracker/cold-noconsole", "trial": 2, "ok": true, "error": null, "t_ready_ms": 316.35339, "t_exec_ms": 318.15938, "hello": "SBX_READY 0 0.22"}
+{"level": "L1", "case": "cloud-hypervisor/cold-noconsole", "trial": 2, "ok": false, "error": "ConnectionRefusedError: [Errno 111] Connect call failed ('172.16.0.2', 7000)"}
+{"level": "L1", "case": "firecracker/restore-file", "trial": 2, "ok": true, "error": null, "t_loaded_ms": 5.90067, "t_exec_ms": 40.337194}
+{"level": "L1", "case": "cloud-hypervisor/restore-copy", "trial": 2, "ok": true, "error": null, "t_loaded_ms": 0.485656, "t_exec_ms": 882.245783}
+{"level": "L1", "case": "cloud-hypervisor/restore-ondemand", "trial": 2, "ok": true, "error": null, "t_loaded_ms": 0.462097, "t_exec_ms": 71.069352}
+{"level": "L1", "case": "firecracker/cold-console", "trial": 3, "ok": true, "error": null, "t_ready_ms": 325.070896, "t_exec_ms": 326.951044, "hello": "SBX_READY 0 0.22"}
+{"level": "L1", "case": "cloud-hypervisor/cold-console", "trial": 3, "ok": true, "error": null, "t_ready_ms": 208.136533, "t_exec_ms": 209.808322, "hello": "SBX_READY 0 0.16"}
+{"level": "L1", "case": "firecracker/cold-noconsole", "trial": 3, "ok": true, "error": null, "t_ready_ms": 296.777727, "t_exec_ms": 298.530111, "hello": "SBX_READY 0 0.21"}
+{"level": "L1", "case": "cloud-hypervisor/cold-noconsole", "trial": 3, "ok": true, "error": null, "t_ready_ms": 193.910956, "t_exec_ms": 195.570576, "hello": "SBX_READY 0 0.15"}
+{"level": "L1", "case": "firecracker/restore-file", "trial": 3, "ok": true, "error": null, "t_loaded_ms": 5.964329, "t_exec_ms": 37.07122}
+{"level": "L1", "case": "cloud-hypervisor/restore-copy", "trial": 3, "ok": true, "error": null, "t_loaded_ms": 0.4525, "t_exec_ms": 829.000047}
+{"level": "L1", "case": "cloud-hypervisor/restore-ondemand", "trial": 3, "ok": true, "error": null, "t_loaded_ms": 0.453309, "t_exec_ms": 70.862836}
+{"level": "L1", "case": "firecracker/cold-console", "trial": 4, "ok": true, "error": null, "t_ready_ms": 306.525806, "t_exec_ms": 308.321599, "hello": "SBX_READY 0 0.22"}
+{"level": "L1", "case": "cloud-hypervisor/cold-console", "trial": 4, "ok": true, "error": null, "t_ready_ms": 198.256713, "t_exec_ms": 200.015433, "hello": "SBX_READY 0 0.16"}
+{"level": "L1", "case": "firecracker/cold-noconsole", "trial": 4, "ok": true, "error": null, "t_ready_ms": 298.229795, "t_exec_ms": 299.977022, "hello": "SBX_READY 0 0.21"}
+{"level": "L1", "case": "cloud-hypervisor/cold-noconsole", "trial": 4, "ok": true, "error": null, "t_ready_ms": 200.265833, "t_exec_ms": 201.943501, "hello": "SBX_READY 0 0.16"}
+{"level": "L1", "case": "firecracker/restore-file", "trial": 4, "ok": true, "error": null, "t_loaded_ms": 5.948264, "t_exec_ms": 1086.824989}
+{"level": "L1", "case": "cloud-hypervisor/restore-copy", "trial": 4, "ok": true, "error": null, "t_loaded_ms": 0.478272, "t_exec_ms": 674.917522}
+{"level": "L1", "case": "cloud-hypervisor/restore-ondemand", "trial": 4, "ok": true, "error": null, "t_loaded_ms": 0.477204, "t_exec_ms": 71.471326}
+{"level": "L1", "case": "firecracker/cold-console", "trial": 5, "ok": true, "error": null, "t_ready_ms": 310.921941, "t_exec_ms": 312.608645, "hello": "SBX_READY 0 0.22"}
+{"level": "L1", "case": "cloud-hypervisor/cold-console", "trial": 5, "ok": true, "error": null, "t_ready_ms": 211.392918, "t_exec_ms": 213.087881, "hello": "SBX_READY 0 0.17"}
+{"level": "L1", "case": "firecracker/cold-noconsole", "trial": 5, "ok": true, "error": null, "t_ready_ms": 290.020444, "t_exec_ms": 292.292171, "hello": "SBX_READY 0 0.20"}
+{"level": "L1", "case": "cloud-hypervisor/cold-noconsole", "trial": 5, "ok": true, "error": null, "t_ready_ms": 197.302109, "t_exec_ms": 198.998409, "hello": "SBX_READY 0 0.16"}
+{"level": "L1", "case": "firecracker/restore-file", "trial": 5, "ok": true, "error": null, "t_loaded_ms": 5.864579, "t_exec_ms": 36.669977}
+{"level": "L1", "case": "cloud-hypervisor/restore-copy", "trial": 5, "ok": true, "error": null, "t_loaded_ms": 0.443775, "t_exec_ms": 623.653473}
+{"level": "L1", "case": "cloud-hypervisor/restore-ondemand", "trial": 5, "ok": true, "error": null, "t_loaded_ms": 0.46532, "t_exec_ms": 69.472057}
+{"level": "L1", "case": "firecracker/cold-console", "trial": 6, "ok": true, "error": null, "t_ready_ms": 305.168269, "t_exec_ms": 307.115474, "hello": "SBX_READY 0 0.22"}
+{"level": "L1", "case": "cloud-hypervisor/cold-console", "trial": 6, "ok": true, "error": null, "t_ready_ms": 196.079807, "t_exec_ms": 197.85242, "hello": "SBX_READY 0 0.15"}
+{"level": "L1", "case": "firecracker/cold-noconsole", "trial": 6, "ok": true, "error": null, "t_ready_ms": 298.996316, "t_exec_ms": 300.978586, "hello": "SBX_READY 0 0.21"}
+{"level": "L1", "case": "cloud-hypervisor/cold-noconsole", "trial": 6, "ok": true, "error": null, "t_ready_ms": 205.397335, "t_exec_ms": 207.106192, "hello": "SBX_READY 0 0.16"}
+{"level": "L1", "case": "firecracker/restore-file", "trial": 6, "ok": true, "error": null, "t_loaded_ms": 5.84611, "t_exec_ms": 37.419058}
+{"level": "L1", "case": "cloud-hypervisor/restore-copy", "trial": 6, "ok": true, "error": null, "t_loaded_ms": 0.479761, "t_exec_ms": 727.395702}
+{"level": "L1", "case": "cloud-hypervisor/restore-ondemand", "trial": 6, "ok": true, "error": null, "t_loaded_ms": 0.443664, "t_exec_ms": 69.312428}
+{"level": "L1", "case": "firecracker/cold-console", "trial": 7, "ok": true, "error": null, "t_ready_ms": 324.221482, "t_exec_ms": 326.03549, "hello": "SBX_READY 0 0.23"}
+{"level": "L1", "case": "cloud-hypervisor/cold-console", "trial": 7, "ok": true, "error": null, "t_ready_ms": 219.487539, "t_exec_ms": 221.095351, "hello": "SBX_READY 0 0.18"}
+{"level": "L1", "case": "firecracker/cold-noconsole", "trial": 7, "ok": true, "error": null, "t_ready_ms": 290.47266, "t_exec_ms": 292.170502, "hello": "SBX_READY 0 0.20"}
+{"level": "L1", "case": "cloud-hypervisor/cold-noconsole", "trial": 7, "ok": true, "error": null, "t_ready_ms": 207.182333, "t_exec_ms": 208.824256, "hello": "SBX_READY 0 0.16"}
+{"level": "L1", "case": "firecracker/restore-file", "trial": 7, "ok": true, "error": null, "t_loaded_ms": 5.842561, "t_exec_ms": 35.511885}
+{"level": "L1", "case": "cloud-hypervisor/restore-copy", "trial": 7, "ok": true, "error": null, "t_loaded_ms": 0.458094, "t_exec_ms": 726.153066}
+{"level": "L1", "case": "cloud-hypervisor/restore-ondemand", "trial": 7, "ok": true, "error": null, "t_loaded_ms": 0.481403, "t_exec_ms": 71.062979}
+{"level": "L1", "case": "firecracker/cold-console", "trial": 8, "ok": true, "error": null, "t_ready_ms": 304.339302, "t_exec_ms": 306.060992, "hello": "SBX_READY 0 0.21"}
+{"level": "L1", "case": "cloud-hypervisor/cold-console", "trial": 8, "ok": true, "error": null, "t_ready_ms": 201.516525, "t_exec_ms": 203.380575, "hello": "SBX_READY 0 0.16"}
+{"level": "L1", "case": "firecracker/cold-noconsole", "trial": 8, "ok": true, "error": null, "t_ready_ms": 289.02105, "t_exec_ms": 290.763031, "hello": "SBX_READY 0 0.20"}
+{"level": "L1", "case": "cloud-hypervisor/cold-noconsole", "trial": 8, "ok": true, "error": null, "t_ready_ms": 192.643449, "t_exec_ms": 194.300243, "hello": "SBX_READY 0 0.15"}
+{"level": "L1", "case": "firecracker/restore-file", "trial": 8, "ok": true, "error": null, "t_loaded_ms": 4.778436, "t_exec_ms": 34.655164}
+{"level": "L1", "case": "cloud-hypervisor/restore-copy", "trial": 8, "ok": true, "error": null, "t_loaded_ms": 0.437016, "t_exec_ms": 674.103056}
+{"level": "L1", "case": "cloud-hypervisor/restore-ondemand", "trial": 8, "ok": true, "error": null, "t_loaded_ms": 0.489244, "t_exec_ms": 70.005944}
+{"level": "L1", "case": "firecracker/cold-console", "trial": 9, "ok": true, "error": null, "t_ready_ms": 312.564228, "t_exec_ms": 314.305615, "hello": "SBX_READY 0 0.23"}
+{"level": "L1", "case": "cloud-hypervisor/cold-console", "trial": 9, "ok": true, "error": null, "t_ready_ms": 198.738521, "t_exec_ms": 200.365506, "hello": "SBX_READY 0 0.16"}
+{"level": "L1", "case": "firecracker/cold-noconsole", "trial": 9, "ok": true, "error": null, "t_ready_ms": 293.365839, "t_exec_ms": 295.180554, "hello": "SBX_READY 0 0.20"}
+{"level": "L1", "case": "cloud-hypervisor/cold-noconsole", "trial": 9, "ok": true, "error": null, "t_ready_ms": 196.972918, "t_exec_ms": 198.691069, "hello": "SBX_READY 0 0.16"}
+{"level": "L1", "case": "firecracker/restore-file", "trial": 9, "ok": true, "error": null, "t_loaded_ms": 5.929303, "t_exec_ms": 36.361705}
+{"level": "L1", "case": "cloud-hypervisor/restore-copy", "trial": 9, "ok": true, "error": null, "t_loaded_ms": 0.506194, "t_exec_ms": 674.823037}
+{"level": "L1", "case": "cloud-hypervisor/restore-ondemand", "trial": 9, "ok": true, "error": null, "t_loaded_ms": 0.468316, "t_exec_ms": 69.490948}
+{"level": "L1", "case": "firecracker/cold-console", "trial": 10, "ok": true, "error": null, "t_ready_ms": 284.875848, "t_exec_ms": 286.990733, "hello": "SBX_READY 0 0.20"}
+{"level": "L1", "case": "cloud-hypervisor/cold-console", "trial": 10, "ok": true, "error": null, "t_ready_ms": 217.457098, "t_exec_ms": 219.182049, "hello": "SBX_READY 0 0.17"}
+{"level": "L1", "case": "firecracker/cold-noconsole", "trial": 10, "ok": true, "error": null, "t_ready_ms": 272.856184, "t_exec_ms": 274.984904, "hello": "SBX_READY 0 0.19"}
+{"level": "L1", "case": "cloud-hypervisor/cold-noconsole", "trial": 10, "ok": true, "error": null, "t_ready_ms": 204.71377, "t_exec_ms": 206.4572, "hello": "SBX_READY 0 0.16"}
+{"level": "L1", "case": "firecracker/restore-file", "trial": 10, "ok": true, "error": null, "t_loaded_ms": 6.063291, "t_exec_ms": 37.014501}
+{"level": "L1", "case": "cloud-hypervisor/restore-copy", "trial": 10, "ok": true, "error": null, "t_loaded_ms": 0.512983, "t_exec_ms": 674.655409}
+{"level": "L1", "case": "cloud-hypervisor/restore-ondemand", "trial": 10, "ok": true, "error": null, "t_loaded_ms": 0.506051, "t_exec_ms": 69.576986}
+{"level": "L1", "case": "firecracker/cold-console", "trial": 11, "ok": true, "error": null, "t_ready_ms": 309.053824, "t_exec_ms": 311.008044, "hello": "SBX_READY 0 0.22"}
+{"level": "L1", "case": "cloud-hypervisor/cold-console", "trial": 11, "ok": true, "error": null, "t_ready_ms": 224.238588, "t_exec_ms": 225.841886, "hello": "SBX_READY 0 0.18"}
+{"level": "L1", "case": "firecracker/cold-noconsole", "trial": 11, "ok": true, "error": null, "t_ready_ms": 286.341667, "t_exec_ms": 288.295373, "hello": "SBX_READY 0 0.20"}
+{"level": "L1", "case": "cloud-hypervisor/cold-noconsole", "trial": 11, "ok": false, "error": "ConnectionRefusedError: [Errno 111] Connect call failed ('172.16.0.2', 7000)"}
+{"level": "L1", "case": "firecracker/restore-file", "trial": 11, "ok": true, "error": null, "t_loaded_ms": 6.133117, "t_exec_ms": 40.804298}
+{"level": "L1", "case": "cloud-hypervisor/restore-copy", "trial": 11, "ok": true, "error": null, "t_loaded_ms": 0.441149, "t_exec_ms": 726.512306}
+{"level": "L1", "case": "cloud-hypervisor/restore-ondemand", "trial": 11, "ok": true, "error": null, "t_loaded_ms": 0.441451, "t_exec_ms": 68.835324}
+{"level": "L1", "case": "firecracker/cold-console", "trial": 12, "ok": true, "error": null, "t_ready_ms": 318.796839, "t_exec_ms": 320.629843, "hello": "SBX_READY 0 0.24"}
+{"level": "L1", "case": "cloud-hypervisor/cold-console", "trial": 12, "ok": true, "error": null, "t_ready_ms": 213.414807, "t_exec_ms": 215.071537, "hello": "SBX_READY 0 0.17"}
+{"level": "L1", "case": "firecracker/cold-noconsole", "trial": 12, "ok": true, "error": null, "t_ready_ms": 310.388532, "t_exec_ms": 312.338494, "hello": "SBX_READY 0 0.22"}
+{"level": "L1", "case": "cloud-hypervisor/cold-noconsole", "trial": 12, "ok": true, "error": null, "t_ready_ms": 198.238526, "t_exec_ms": 199.839348, "hello": "SBX_READY 0 0.16"}
+{"level": "L1", "case": "firecracker/restore-file", "trial": 12, "ok": true, "error": null, "t_loaded_ms": 6.097497, "t_exec_ms": 36.269198}
+{"level": "L1", "case": "cloud-hypervisor/restore-copy", "trial": 12, "ok": true, "error": null, "t_loaded_ms": 0.483664, "t_exec_ms": 623.54804}
+{"level": "L1", "case": "cloud-hypervisor/restore-ondemand", "trial": 12, "ok": true, "error": null, "t_loaded_ms": 0.476831, "t_exec_ms": 69.692362}
+{"level": "L1", "case": "firecracker/cold-console", "trial": 13, "ok": true, "error": null, "t_ready_ms": 299.800148, "t_exec_ms": 301.675671, "hello": "SBX_READY 0 0.22"}
+{"level": "L1", "case": "cloud-hypervisor/cold-console", "trial": 13, "ok": true, "error": null, "t_ready_ms": 202.862079, "t_exec_ms": 204.519119, "hello": "SBX_READY 0 0.16"}
+{"level": "L1", "case": "firecracker/cold-noconsole", "trial": 13, "ok": true, "error": null, "t_ready_ms": 278.07297, "t_exec_ms": 280.696685, "hello": "SBX_READY 0 0.20"}
+{"level": "L1", "case": "cloud-hypervisor/cold-noconsole", "trial": 13, "ok": true, "error": null, "t_ready_ms": 194.309099, "t_exec_ms": 195.976673, "hello": "SBX_READY 0 0.15"}
+{"level": "L1", "case": "firecracker/restore-file", "trial": 13, "ok": true, "error": null, "t_loaded_ms": 4.897523, "t_exec_ms": 35.850581}
+{"level": "L1", "case": "cloud-hypervisor/restore-copy", "trial": 13, "ok": true, "error": null, "t_loaded_ms": 0.483328, "t_exec_ms": 675.01785}
+{"level": "L1", "case": "cloud-hypervisor/restore-ondemand", "trial": 13, "ok": true, "error": null, "t_loaded_ms": 0.4825, "t_exec_ms": 68.759603}
+{"level": "L1", "case": "firecracker/cold-console", "trial": 14, "ok": true, "error": null, "t_ready_ms": 311.850248, "t_exec_ms": 313.654569, "hello": "SBX_READY 0 0.22"}
+{"level": "L1", "case": "cloud-hypervisor/cold-console", "trial": 14, "ok": true, "error": null, "t_ready_ms": 219.014526, "t_exec_ms": 220.640266, "hello": "SBX_READY 0 0.18"}
+{"level": "L1", "case": "firecracker/cold-noconsole", "trial": 14, "ok": true, "error": null, "t_ready_ms": 307.142666, "t_exec_ms": 309.181531, "hello": "SBX_READY 0 0.22"}
+{"level": "L1", "case": "cloud-hypervisor/cold-noconsole", "trial": 14, "ok": true, "error": null, "t_ready_ms": 202.495681, "t_exec_ms": 204.098652, "hello": "SBX_READY 0 0.16"}
+{"level": "L1", "case": "firecracker/restore-file", "trial": 14, "ok": true, "error": null, "t_loaded_ms": 5.955875, "t_exec_ms": 42.979553}
+{"level": "L1", "case": "cloud-hypervisor/restore-copy", "trial": 14, "ok": true, "error": null, "t_loaded_ms": 0.470354, "t_exec_ms": 623.051076}
+{"level": "L1", "case": "cloud-hypervisor/restore-ondemand", "trial": 14, "ok": true, "error": null, "t_loaded_ms": 0.511143, "t_exec_ms": 72.003893}
+{"level": "L1", "case": "firecracker/cold-console", "trial": 15, "ok": true, "error": null, "t_ready_ms": 300.632253, "t_exec_ms": 302.52695, "hello": "SBX_READY 0 0.21"}
+{"level": "L1", "case": "cloud-hypervisor/cold-console", "trial": 15, "ok": true, "error": null, "t_ready_ms": 213.158523, "t_exec_ms": 214.876362, "hello": "SBX_READY 0 0.17"}
+{"level": "L1", "case": "firecracker/cold-noconsole", "trial": 15, "ok": true, "error": null, "t_ready_ms": 319.774623, "t_exec_ms": 322.110335, "hello": "SBX_READY 0 0.23"}
+{"level": "L1", "case": "cloud-hypervisor/cold-noconsole", "trial": 15, "ok": true, "error": null, "t_ready_ms": 213.131919, "t_exec_ms": 214.90398, "hello": "SBX_READY 0 0.17"}
+{"level": "L1", "case": "firecracker/restore-file", "trial": 15, "ok": true, "error": null, "t_loaded_ms": 5.755276, "t_exec_ms": 37.946942}
+{"level": "L1", "case": "cloud-hypervisor/restore-copy", "trial": 15, "ok": true, "error": null, "t_loaded_ms": 0.537206, "t_exec_ms": 675.897821}
+{"level": "L1", "case": "cloud-hypervisor/restore-ondemand", "trial": 15, "ok": true, "error": null, "t_loaded_ms": 0.444375, "t_exec_ms": 70.971134}
+{"level": "L1", "case": "firecracker/cold-console", "trial": 16, "ok": true, "error": null, "t_ready_ms": 320.597456, "t_exec_ms": 322.674429, "hello": "SBX_READY 0 0.23"}
+{"level": "L1", "case": "cloud-hypervisor/cold-console", "trial": 16, "ok": true, "error": null, "t_ready_ms": 210.185775, "t_exec_ms": 212.190103, "hello": "SBX_READY 0 0.16"}
+{"level": "L1", "case": "firecracker/cold-noconsole", "trial": 16, "ok": true, "error": null, "t_ready_ms": 289.893428, "t_exec_ms": 291.950646, "hello": "SBX_READY 0 0.20"}
+{"level": "L1", "case": "cloud-hypervisor/cold-noconsole", "trial": 16, "ok": true, "error": null, "t_ready_ms": 217.866962, "t_exec_ms": 219.60548, "hello": "SBX_READY 0 0.17"}
+{"level": "L1", "case": "firecracker/restore-file", "trial": 16, "ok": true, "error": null, "t_loaded_ms": 5.817339, "t_exec_ms": 38.580418}
+{"level": "L1", "case": "cloud-hypervisor/restore-copy", "trial": 16, "ok": true, "error": null, "t_loaded_ms": 0.494687, "t_exec_ms": 675.345933}
+{"level": "L1", "case": "cloud-hypervisor/restore-ondemand", "trial": 16, "ok": true, "error": null, "t_loaded_ms": 0.45716, "t_exec_ms": 70.394379}
+{"level": "L1", "case": "firecracker/cold-console", "trial": 17, "ok": true, "error": null, "t_ready_ms": 324.909203, "t_exec_ms": 327.218399, "hello": "SBX_READY 0 0.24"}
+{"level": "L1", "case": "cloud-hypervisor/cold-console", "trial": 17, "ok": true, "error": null, "t_ready_ms": 207.012602, "t_exec_ms": 208.714059, "hello": "SBX_READY 0 0.16"}
+{"level": "L1", "case": "firecracker/cold-noconsole", "trial": 17, "ok": true, "error": null, "t_ready_ms": 293.542231, "t_exec_ms": 295.434093, "hello": "SBX_READY 0 0.20"}
+{"level": "L1", "case": "cloud-hypervisor/cold-noconsole", "trial": 17, "ok": true, "error": null, "t_ready_ms": 207.159112, "t_exec_ms": 209.018729, "hello": "SBX_READY 0 0.16"}
+{"level": "L1", "case": "firecracker/restore-file", "trial": 17, "ok": true, "error": null, "t_loaded_ms": 5.674683, "t_exec_ms": 37.440867}
+{"level": "L1", "case": "cloud-hypervisor/restore-copy", "trial": 17, "ok": true, "error": null, "t_loaded_ms": 0.470706, "t_exec_ms": 571.177545}
+{"level": "L1", "case": "cloud-hypervisor/restore-ondemand", "trial": 17, "ok": true, "error": null, "t_loaded_ms": 0.484773, "t_exec_ms": 71.986169}
+{"level": "L1", "case": "firecracker/cold-console", "trial": 18, "ok": true, "error": null, "t_ready_ms": 298.935741, "t_exec_ms": 300.774484, "hello": "SBX_READY 0 0.21"}
+{"level": "L1", "case": "cloud-hypervisor/cold-console", "trial": 18, "ok": true, "error": null, "t_ready_ms": 199.691167, "t_exec_ms": 201.343996, "hello": "SBX_READY 0 0.16"}
+{"level": "L1", "case": "firecracker/cold-noconsole", "trial": 18, "ok": true, "error": null, "t_ready_ms": 301.679498, "t_exec_ms": 303.736822, "hello": "SBX_READY 0 0.21"}
+{"level": "L1", "case": "cloud-hypervisor/cold-noconsole", "trial": 18, "ok": false, "error": "ConnectionRefusedError: [Errno 111] Connect call failed ('172.16.0.2', 7000)"}
+{"level": "L1", "case": "firecracker/restore-file", "trial": 18, "ok": true, "error": null, "t_loaded_ms": 5.733613, "t_exec_ms": 38.144825}
+{"level": "L1", "case": "cloud-hypervisor/restore-copy", "trial": 18, "ok": true, "error": null, "t_loaded_ms": 0.475615, "t_exec_ms": 572.70261}
+{"level": "L1", "case": "cloud-hypervisor/restore-ondemand", "trial": 18, "ok": true, "error": null, "t_loaded_ms": 0.443646, "t_exec_ms": 69.510642}
+{"level": "L1", "case": "firecracker/cold-console", "trial": 19, "ok": true, "error": null, "t_ready_ms": 323.441002, "t_exec_ms": 325.505068, "hello": "SBX_READY 0 0.23"}
+{"level": "L1", "case": "cloud-hypervisor/cold-console", "trial": 19, "ok": true, "error": null, "t_ready_ms": 208.449335, "t_exec_ms": 210.316575, "hello": "SBX_READY 0 0.17"}
+{"level": "L1", "case": "firecracker/cold-noconsole", "trial": 19, "ok": true, "error": null, "t_ready_ms": 294.955164, "t_exec_ms": 296.910268, "hello": "SBX_READY 0 0.21"}
+{"level": "L1", "case": "cloud-hypervisor/cold-noconsole", "trial": 19, "ok": true, "error": null, "t_ready_ms": 194.826023, "t_exec_ms": 196.604808, "hello": "SBX_READY 0 0.15"}
+{"level": "L1", "case": "firecracker/restore-file", "trial": 19, "ok": true, "error": null, "t_loaded_ms": 6.372359, "t_exec_ms": 37.901739}
+{"level": "L1", "case": "cloud-hypervisor/restore-copy", "trial": 19, "ok": true, "error": null, "t_loaded_ms": 0.528365, "t_exec_ms": 623.114967}
+{"level": "L1", "case": "cloud-hypervisor/restore-ondemand", "trial": 19, "ok": true, "error": null, "t_loaded_ms": 0.464031, "t_exec_ms": 69.338886}
