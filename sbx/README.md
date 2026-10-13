@@ -57,7 +57,7 @@ Clients need TCP 7070 for the API and 30000 to 30999 for `sbx expose`. If the ho
 
 ## Watching a sandbox
 
-Every sandbox has a 1280x800 desktop: an X server that serves VNC inside the guest, with openbox. Commands get `DISPLAY=:0`, so any GUI program an agent starts appears there.
+Every sandbox has a 1280x800 desktop: an X server that serves VNC inside the guest, with openbox. Commands get `DISPLAY=:0`, so any GUI program an agent starts appears there. Right-click the desktop for a terminal or a browser.
 
 `sbx view ID`, or `sbx create --view`, opens a small window at the top right of your screen with a live view. It starts in watch mode, so a stray click cannot disturb the agent; click "Watching" to take over the mouse and keyboard. The viewer is a page served by the CLI on 127.0.0.1, embedding [noVNC](https://github.com/novnc/noVNC), and it reaches the screen through the same API tunnel as `sbx forward`. It opens as an app window of Chrome, Edge, Brave, or Chromium, and falls back to a tab in your default browser.
 
