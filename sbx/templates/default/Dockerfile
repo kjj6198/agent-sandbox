@@ -45,3 +45,4 @@ RUN useradd -m -u 1000 -s /bin/bash user \
 COPY profile.sh /etc/profile.d/sbx.sh
 COPY sbx-desktop sbx-browser /usr/local/bin/
 COPY openbox-menu.xml /etc/xdg/openbox/menu.xml
+COPY wallpaper.xbm /usr/local/share/sbx/

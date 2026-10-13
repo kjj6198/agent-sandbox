@@ -18,5 +18,5 @@ if [ ! -S /tmp/.X11-unix/X0 ]; then
   exit 1
 fi
 setsid openbox >/tmp/openbox.log 2>&1 </dev/null &
-xsetroot -solid '#1f2328'
+xsetroot -bitmap /usr/local/share/sbx/wallpaper.xbm -fg '#3d444d' -bg '#1f2328'
 echo "desktop on :0, VNC on 127.0.0.1:5900"
