@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Only what the template installs. The stock Debian menu also offers ObConf, which is not
+     installed, and Exit, which ends the window manager with nothing to restart it. -->
+<openbox_menu xmlns="http://openbox.org/3.4/menu">
+  <menu id="root-menu" label="sbx">
+    <item label="Terminal">
+      <action name="Execute"><execute>xterm -fa Monospace -fs 11</execute></action>
+    </item>
+    <item label="Web browser">
+      <action name="Execute"><execute>chromium --no-first-run --no-default-browser-check</execute></action>
+    </item>
+  </menu>
+</openbox_menu>
