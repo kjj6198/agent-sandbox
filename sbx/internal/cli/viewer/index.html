@@ -6,7 +6,7 @@
 <title>sbx {{ID}}</title>
 <style>
   html, body { margin: 0; height: 100%; background: #111; overflow: hidden;
-    font: 12px -apple-system, system-ui, sans-serif; }
+    font: 12px -apple-system, system-ui, sans-serif; color: #eee; }
   #screen { position: absolute; inset: 0; }
   #bar { position: absolute; bottom: 6px; right: 6px; z-index: 1; display: flex;
     flex-direction: row-reverse; gap: 6px; align-items: center; opacity: 0.6;
@@ -15,11 +15,42 @@
   button { font: inherit; border: 0; border-radius: 6px; padding: 3px 8px; cursor: pointer;
     background: #333; color: #eee; }
   button.control { background: #c2410c; color: #fff; }
+  button.primary { background: #2563eb; color: #fff; }
   #status { color: #bbb; text-shadow: 0 1px 2px #000; }
+  #drop { position: absolute; inset: 0; z-index: 2; display: none; place-items: center;
+    background: rgb(17 17 17 / 0.75); border: 2px dashed #60a5fa; border-radius: 8px;
+    font-size: 14px; pointer-events: none; }
+  body.dragging #drop { display: grid; }
+  #secret { position: absolute; inset: 0; z-index: 3; display: grid; place-items: center;
+    background: rgb(0 0 0 / 0.6); }
+  #secret[hidden] { display: none; }
+  #secret form { width: min(340px, calc(100% - 24px)); box-sizing: border-box; padding: 14px;
+    border-radius: 10px; background: #1f2328; box-shadow: 0 8px 24px rgb(0 0 0 / 0.5);
+    display: grid; gap: 8px; }
+  #secret h1 { margin: 0; font-size: 13px; font-weight: 600; }
+  #secret p { margin: 0; color: #bbb; line-height: 1.4; overflow-wrap: anywhere; }
+  #secret code { color: #eee; }
+  #secret input { font: inherit; font-size: 13px; padding: 6px 8px; border-radius: 6px;
+    border: 1px solid #444; background: #111; color: #eee; }
+  #secret input:focus { outline: 2px solid #2563eb; outline-offset: -1px; }
+  #secret .actions { display: flex; justify-content: flex-end; gap: 6px; }
 </style>
 </head>
 <body>
 <div id="screen"></div>
+<div id="drop">Drop to copy into ~/Downloads</div>
+<div id="secret" hidden>
+  <form>
+    <h1>The agent asks for a secret</h1>
+    <p id="secret-description"></p>
+    <p>Stored as <code id="secret-name"></code>. The agent can type it into the sandbox but never sees it.</p>
+    <input id="secret-value" type="password" autocomplete="off" spellcheck="false" required>
+    <div class="actions">
+      <button type="button" id="secret-decline">Decline</button>
+      <button type="submit" class="primary">Save</button>
+    </div>
+  </form>
+</div>
 <div id="bar">
   <button id="toggle" title="Switch between watching and controlling the sandbox"></button>
   <span id="status"></span>
@@ -41,13 +72,13 @@ function render() {
 
 function connect() {
   status.textContent = "connecting";
-  rfb = new RFB(screen, `ws://${location.host}/ws`);
+  rfb = new RFB(screen, `ws://${location.host}${location.pathname}ws`);
   rfb.scaleViewport = true;
   rfb.background = "#111";
   render();
   rfb.addEventListener("connect", () => { status.textContent = ""; });
   rfb.addEventListener("disconnect", async () => {
-    const alive = await fetch("/alive").then((r) => r.status).catch(() => 0);
+    const alive = await fetch("alive").then((r) => r.status).catch(() => 0);
     if (alive === 410) {
       status.textContent = "sandbox removed";
       return;
@@ -64,6 +95,76 @@ toggle.addEventListener("click", () => {
 });
 
 connect();
+
+const hasFiles = (event) => event.dataTransfer?.types.includes("Files");
+let dragDepth = 0;
+addEventListener("dragenter", (event) => {
+  if (!hasFiles(event)) return;
+  event.preventDefault();
+  dragDepth++;
+  document.body.classList.add("dragging");
+});
+addEventListener("dragleave", () => {
+  dragDepth = Math.max(0, dragDepth - 1);
+  if (dragDepth === 0) document.body.classList.remove("dragging");
+});
+addEventListener("dragover", (event) => {
+  if (hasFiles(event)) event.preventDefault();
+});
+addEventListener("drop", async (event) => {
+  event.preventDefault();
+  dragDepth = 0;
+  document.body.classList.remove("dragging");
+  const files = [...event.dataTransfer.items]
+    .filter((item) => item.kind === "file" && !item.webkitGetAsEntry()?.isDirectory)
+    .map((item) => item.getAsFile());
+  if (files.length < event.dataTransfer.items.length) {
+    status.textContent = "Folders cannot be dropped; zip them first";
+  }
+  for (const file of files) {
+    status.textContent = `Copying ${file.name}`;
+    const response = await fetch(`files?name=${encodeURIComponent(file.name)}`, { method: "POST", body: file })
+      .catch((error) => ({ ok: false, text: async () => error.message }));
+    status.textContent = response.ok
+      ? `Copied to ${await response.text()}`
+      : `Could not copy ${file.name}: ${await response.text()}`;
+  }
+});
+
+const secret = document.getElementById("secret");
+const secretForm = secret.querySelector("form");
+const secretValue = document.getElementById("secret-value");
+let request = null;
+const title = document.title;
+
+function showRequest(next) {
+  if (next?.id === request?.id) return;
+  request = next;
+  secret.hidden = !request;
+  document.title = request ? `Secret requested · ${title}` : title;
+  if (!request) return;
+  document.getElementById("secret-description").textContent = request.description;
+  document.getElementById("secret-name").textContent = request.name;
+  secretValue.value = "";
+  secretValue.focus();
+}
+
+async function answer(value) {
+  const id = request.id;
+  secretValue.value = "";
+  showRequest(null);
+  await fetch(`secrets/${id}`, { method: "POST", body: JSON.stringify({ value }) });
+}
+
+secretForm.addEventListener("submit", (event) => {
+  event.preventDefault();
+  answer(secretValue.value);
+});
+document.getElementById("secret-decline").addEventListener("click", () => answer(null));
+
+new EventSource("secrets").addEventListener("message", (event) => {
+  showRequest(JSON.parse(event.data)[0] ?? null);
+});
 </script>
 </body>
 </html>

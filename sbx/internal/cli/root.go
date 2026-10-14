@@ -41,6 +41,9 @@ Typical use:
 Screen: every sandbox has a desktop. "sbx view $id", or "sbx create --view", opens a small
 window at the top right of your screen showing it live; GUI programs appear there.
 
+Tools: "sbx mcp" serves sandboxes to agents over MCP, including clicking and typing on the
+desktop, and asking the user for a password without the agent seeing it.
+
 Browser: "sbx create browser" starts with Chromium already open on that desktop, its DevTools
 protocol on port 9222. Use "sbx forward $id 9222" and connect Playwright or Puppeteer to
 http://127.0.0.1:9222 with connectOverCDP. With "sbx view" you watch it browse.
@@ -65,7 +68,7 @@ func Main() int {
 	}
 	root.AddCommand(createCmd(), execCmd(), runCmd(), cpCmd(), lsCmd(), inspectCmd(), rmCmd(),
 		ttlCmd(), exposeCmd(), unexposeCmd(), forwardCmd(), viewCmd(), snapshotCmd(), forkCmd(),
-		templateCmd(), statusCmd(), loginCmd())
+		templateCmd(), statusCmd(), loginCmd(), mcpCmd())
 	err := root.Execute()
 	var ee exitError
 	switch {

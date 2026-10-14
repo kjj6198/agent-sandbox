@@ -6,6 +6,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"io"
 	"os"
 	"os/signal"
 	"strings"
@@ -175,7 +176,7 @@ func runExec(ctx context.Context, c *client, id string, req proto.ExecRequest) e
 	if req.Interactive() {
 		res, err = execInteractive(ctx, c, path, req)
 	} else {
-		res, err = execStream(ctx, c, path, req)
+		res, err = execStream(ctx, c, path, req, os.Stdout, os.Stderr)
 	}
 	if err != nil {
 		return err
@@ -196,7 +197,7 @@ func runExec(ctx context.Context, c *client, id string, req proto.ExecRequest) e
 	return nil
 }
 
-func execStream(ctx context.Context, c *client, path string, req proto.ExecRequest) (proto.ExecResult, error) {
+func execStream(ctx context.Context, c *client, path string, req proto.ExecRequest, stdout, stderr io.Writer) (proto.ExecResult, error) {
 	b, _ := json.Marshal(req)
 	hreq, err := c.request(ctx, "POST", path, strings.NewReader(string(b)))
 	if err != nil {
@@ -208,7 +209,7 @@ func execStream(ctx context.Context, c *client, path string, req proto.ExecReque
 		return proto.ExecResult{}, err
 	}
 	defer resp.Body.Close()
-	return readFrames(resp.Body, os.Stdout, os.Stderr)
+	return readFrames(resp.Body, stdout, stderr)
 }
 
 func execInteractive(ctx context.Context, c *client, path string, req proto.ExecRequest) (proto.ExecResult, error) {
