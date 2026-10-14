@@ -1,8 +1,9 @@
 #!/bin/bash
 # Starts the sandbox's desktop: an X server on :0 that serves VNC on 127.0.0.1:5900, with
-# openbox as the window manager. Template builds run this before the snapshot, so every
-# sandbox starts with it running; `sbx view` shows it. VNC needs no password because only
-# the guest agent can reach loopback.
+# openbox as the window manager, a wallpaper, a small dock (browser, files, terminal),
+# and a terminal window. Template builds run this before the snapshot, so every sandbox
+# starts with it running; `sbx view` shows it. VNC needs no password because only the
+# guest agent can reach loopback.
 set -eu
 export DISPLAY=:0
 [ -S /tmp/.X11-unix/X0 ] && exit 0
@@ -18,5 +19,19 @@ if [ ! -S /tmp/.X11-unix/X0 ]; then
   exit 1
 fi
 setsid openbox >/tmp/openbox.log 2>&1 </dev/null &
-xsetroot -bitmap /usr/local/share/sbx/wallpaper.xbm -fg '#3d444d' -bg '#1f2328'
+if command -v feh >/dev/null && [ -f /usr/local/share/sbx/wallpaper.png ]; then
+  feh --bg-fill /usr/local/share/sbx/wallpaper.png >/dev/null 2>&1 || xsetroot -solid '#232323'
+else
+  xsetroot -solid '#232323'
+fi
+if command -v tint2 >/dev/null && ! pgrep -x tint2 >/dev/null; then
+  setsid tint2 -c /usr/local/share/sbx/tint2rc >/tmp/tint2.log 2>&1 </dev/null &
+fi
+# A terminal in the middle of the screen, like a freshly booted desktop. Set
+# SBX_DESKTOP_TERMINAL=0 during a template warmup to start with an empty desktop.
+if [ "${SBX_DESKTOP_TERMINAL:-1}" = 1 ] && command -v xfce4-terminal >/dev/null \
+    && ! pgrep -x xfce4-terminal >/dev/null; then
+  setsid xfce4-terminal --geometry=80x24+300+70 --working-directory="$HOME" \
+    >/tmp/terminal.log 2>&1 </dev/null &
+fi
 echo "desktop on :0, VNC on 127.0.0.1:5900"

@@ -4,10 +4,13 @@
 <openbox_menu xmlns="http://openbox.org/3.4/menu">
   <menu id="root-menu" label="sbx">
     <item label="Terminal">
-      <action name="Execute"><execute>xterm -fa Monospace -fs 11</execute></action>
+      <action name="Execute"><execute>xfce4-terminal</execute></action>
     </item>
-    <item label="Web browser">
+    <item label="Web Browser">
       <action name="Execute"><execute>chromium --no-first-run --no-default-browser-check</execute></action>
+    </item>
+    <item label="Files">
+      <action name="Execute"><execute>thunar</execute></action>
     </item>
   </menu>
 </openbox_menu>

@@ -16,7 +16,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
       jq ripgrep fd-find tree unzip zip xz-utils zstd file rsync sqlite3 \
       ffmpeg imagemagick \
       chromium fonts-noto-cjk fonts-noto-color-emoji fonts-liberation fonts-dejavu-core \
-      tigervnc-standalone-server openbox x11-xserver-utils xterm \
+      tigervnc-standalone-server openbox x11-xserver-utils xfce4-terminal thunar tint2 feh adwaita-icon-theme \
       locales tzdata \
     && ln -s /usr/bin/fdfind /usr/local/bin/fd \
     && sed -i -E 's/^# (en_US|ja_JP|zh_TW)\.UTF-8/\1.UTF-8/' /etc/locale.gen && locale-gen \
@@ -45,4 +45,5 @@ RUN useradd -m -u 1000 -s /bin/bash user \
 COPY profile.sh /etc/profile.d/sbx.sh
 COPY sbx-desktop sbx-browser /usr/local/bin/
 COPY openbox-menu.xml /etc/xdg/openbox/menu.xml
-COPY wallpaper.xbm /usr/local/share/sbx/
+COPY wallpaper.png tint2rc /usr/local/share/sbx/
+COPY launchers/ /usr/local/share/sbx/launchers/
