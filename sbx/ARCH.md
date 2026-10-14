@@ -67,6 +67,7 @@ The main users of `sbx` are LLM agents calling it from a shell, so the design fo
 | Lifecycle | `create [TEMPLATE]`, `ls`, `inspect`, `rm`, `ttl`, `run` |
 | Work | `exec`, `cp` |
 | Reach inside | `expose`, `unexpose`, `forward`, `view` |
+| Tools for agents | `mcp` |
 | State | `snapshot`, `fork`, `template ls / build / rm` |
 | Host | `status`, `login` |
 
@@ -235,6 +236,52 @@ sequenceDiagram
 - noVNC is embedded in the `sbx` binary, so the viewer needs only a browser.
 - Passive requests keep the viewer from extending the sandbox's idle TTL. A forgotten window cannot keep a sandbox alive.
 
+## MCP server and computer use
+
+`sbx mcp` serves the same operations as MCP tools, plus a desktop that agents operate like computer use. It runs where the agent runs, one process per agent session.
+
+```mermaid
+sequenceDiagram
+  participant A as Agent
+  participant M as sbx mcp
+  participant D as sbxd
+  participant X as Xvnc in guest :5900
+  A->>M: click {id, x, y}
+  M->>D: GET sandbox (counts as activity)
+  Note over M,X: one VNC connection per sandbox, opened on first use,<br/>through the /tcp tunnel with passive=1
+  M->>X: pointer events
+  X-->>M: framebuffer updates, applied to M's copy
+  Note over M: wait up to 1 s for a change,<br/>then for 300 ms of stillness, 5 s at most
+  M-->>A: PNG of the screen, or "did not change"
+```
+
+- **The screen is always current in the server.** The VNC client keeps an incremental update request outstanding, so Xvnc sends changed rectangles as they happen. A screenshot is a copy of memory, and every action knows whether and when the screen changed after it.
+- **Activity.** The VNC tunnel is passive, or an open MCP server would keep every sandbox it touched alive forever. Each tool call makes one ordinary API request instead, which resets the idle timer.
+- **Text input.** ASCII goes as key events; Xvnc picks keycodes and shift state. Other characters go through the VNC extended clipboard, which carries UTF-8: the server announces new clipboard text, presses shift+Insert, hands over the text when Xvnc asks for it, and waits until the screen shows it before the next announcement, because a new announcement cancels a paste still in progress. Afterwards it announces an empty clipboard.
+
+### Secrets and dropped files
+
+The MCP server also serves the viewer for each sandbox it touches, in its own process, because both features need that process's memory.
+
+```mermaid
+sequenceDiagram
+  participant A as Agent
+  participant M as sbx mcp
+  participant W as Viewer window
+  participant X as Sandbox
+  A->>M: request_secret {id, name, description}
+  M->>W: open the window if none follows the secret requests
+  M-->>W: server-sent event: the open request
+  W->>M: POST the value from a masked field
+  M-->>A: "Stored secret NAME" (never the value)
+  A->>M: type_text {id, secret: NAME}
+  M->>X: key events and clipboard pastes
+```
+
+- Values live in a map in the server's memory, keyed by the agent's name, and die with the process. They leave it only as input to a sandbox.
+- A dropped file is posted to the viewer server, wrapped in a one-entry tar, and sent to `PUT /files` at `~/Downloads/NAME`. The next tool result for that sandbox tells the agent the path.
+- Every viewer URL holds a random token. Any page in the user's browser can reach a loopback port, and this server drives sandboxes and accepts secrets.
+
 ## Lifecycle and recovery
 
 ```mermaid
@@ -261,6 +308,7 @@ stateDiagram-v2
 | Network namespace + nftables | Guest traffic to the host, LAN, cloud metadata, and IPv6 |
 | vsock-only ingress | Inbound connections to the guest, except through sbxd |
 | API token | Anyone on the network driving sbxd |
+| Token in the viewer URL | Other web pages on the user's machine driving a sandbox or answering a secret prompt |
 | Optional outer VM | A full host escape reaching the LAN, as in `deploy/proxmox` |
 
 The agent inside the guest is unauthenticated. Only the host can reach its vsock port, and a sandbox owns its own guest anyway.
