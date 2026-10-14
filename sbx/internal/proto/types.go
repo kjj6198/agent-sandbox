@@ -117,6 +117,21 @@ type Error struct {
 	Error string `json:"error"`
 }
 
+// Screenshot describes one captured desktop image. The image bytes travel as the body of
+// GET /v1/sandboxes/{id}/screenshot (with the size repeated in X-Screen-* headers); this
+// shape is what `sbx screenshot --json` and the viewer's /screen.json report about it.
+type Screenshot struct {
+	ID     string `json:"id"`
+	Path   string `json:"path,omitempty"`
+	Format string `json:"format"`
+	Width  int    `json:"width"`
+	Height int    `json:"height"`
+	Bytes  int    `json:"bytes,omitempty"`
+	// ScreenshotURL and ViewerURL are set by the viewer server for external renderers.
+	ScreenshotURL string `json:"screenshot_url,omitempty"`
+	ViewerURL     string `json:"viewer_url,omitempty"`
+}
+
 // InitRequest is what sbxd sends to the agent right after every boot or restore.
 type InitRequest struct {
 	// UnixNano is the host's wall clock. A restored guest otherwise keeps the snapshot's time.

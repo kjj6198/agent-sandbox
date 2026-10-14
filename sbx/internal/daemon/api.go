@@ -27,6 +27,7 @@ func (d *Daemon) Handler() http.Handler {
 	mux.HandleFunc("GET /v1/sandboxes/{id}/files", d.withSandbox(proxyTo("/archive")))
 	mux.HandleFunc("PUT /v1/sandboxes/{id}/files", d.withSandbox(proxyTo("/archive")))
 	mux.HandleFunc("GET /v1/sandboxes/{id}/tcp", d.withSandbox(proxyTo("/tcp")))
+	mux.HandleFunc("GET /v1/sandboxes/{id}/screenshot", d.withSandbox(proxyTo("/screenshot")))
 	mux.HandleFunc("POST /v1/sandboxes/{id}/ports", d.withSandbox(d.handleExpose))
 	mux.HandleFunc("DELETE /v1/sandboxes/{id}/ports/{port}", d.withSandbox(d.handleUnexpose))
 	mux.HandleFunc("POST /v1/sandboxes/{id}/snapshot", d.withSandbox(d.handleSnapshot))

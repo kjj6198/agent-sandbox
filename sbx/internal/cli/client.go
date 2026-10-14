@@ -128,6 +128,22 @@ func (c *client) call(ctx context.Context, method, path string, in, out any) err
 	return nil
 }
 
+// getBytes performs a GET and returns the whole body with its headers, for answers that
+// are not JSON, such as a screenshot image.
+func (c *client) getBytes(ctx context.Context, path string) ([]byte, http.Header, error) {
+	req, err := c.request(ctx, "GET", path, nil)
+	if err != nil {
+		return nil, nil, err
+	}
+	resp, err := c.send(req)
+	if err != nil {
+		return nil, nil, err
+	}
+	defer resp.Body.Close()
+	data, err := io.ReadAll(resp.Body)
+	return data, resp.Header, err
+}
+
 // upgrade sends a request that switches the connection to a raw byte stream.
 func (c *client) upgrade(ctx context.Context, method, path, protocol string, body []byte) (io.ReadWriteCloser, error) {
 	var r io.Reader

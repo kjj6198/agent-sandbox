@@ -61,6 +61,9 @@ import RFB from "./novnc/core/rfb.js";
 const screen = document.getElementById("screen");
 const toggle = document.getElementById("toggle");
 const status = document.getElementById("status");
+if (new URLSearchParams(location.search).get("controls") === "0") {
+  document.getElementById("bar").style.display = "none";
+}
 let rfb;
 let control = false;
 

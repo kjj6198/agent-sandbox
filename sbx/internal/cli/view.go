@@ -23,6 +23,7 @@ import (
 	"runtime"
 	"strconv"
 	"strings"
+	"sync"
 	"sync/atomic"
 	"syscall"
 	"time"
@@ -46,8 +47,11 @@ const (
 	viewerLinger = time.Minute
 )
 
+const defaultViewerListen = "127.0.0.1:0"
+
 func viewCmd() *cobra.Command {
 	var foreground, noOpen bool
+	var listen string
 	cmd := &cobra.Command{
 		Use:   "view ID",
 		Short: "Show the sandbox's screen in a small window",
@@ -56,34 +60,62 @@ func viewCmd() *cobra.Command {
 			"and keyboard. GUI programs started in the sandbox appear there, including the browser " +
 			"template's Chromium.\n\n" +
 			"The viewer runs in the background and exits a minute after its window closes or its " +
-			"sandbox is removed. Watching does not keep a sandbox alive.",
-		Example: "  id=$(sbx create browser --view)\n  sbx view $id\n  sbx view --no-open $id   # print the URL only",
-		Args:    cobra.ExactArgs(1),
+			"sandbox is removed. Watching does not keep a sandbox alive.\n\n" +
+			"For external rendering, the viewer also serves the screen as an image: GET " +
+			"screenshot.png under the printed URL (or ?format=jpeg&width=640) returns the " +
+			"current desktop as one image any page can put in an <img>, and screen.json beside " +
+			"it reports its size. The viewer page itself can be embedded in an <iframe>; add " +
+			"?controls=0 to hide its button. The URL carries a random token, which is the " +
+			"viewer's only key. --listen serves beyond this machine, for example --listen " +
+			"0.0.0.0:7681; then anyone who learns the URL, which travels as plain HTTP, can " +
+			"watch and take over with one click. Prefer `sbx screenshot` or the API for " +
+			"untrusted networks.",
+		Example: "  id=$(sbx create browser --view)\n  sbx view $id\n  sbx view --no-open $id   # print the URL only\n" +
+			"  sbx view --no-open --listen 0.0.0.0:7681 $id   # render it from another machine",
+		Args: cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			if foreground {
 				c, err := newClient()
 				if err != nil {
 					return err
 				}
-				return serveViewer(cmd.Context(), c, args[0], !noOpen)
+				return serveViewer(cmd.Context(), c, args[0], !noOpen, listen)
 			}
-			url, err := startViewer(args[0], !noOpen)
+			url, err := startViewer(args[0], !noOpen, listen)
 			if err != nil {
 				return err
+			}
+			if !isLoopbackListen(listen) {
+				fmt.Fprintln(os.Stderr, "sbx: warning: the viewer listens on", listen,
+					"over plain HTTP; anyone with its URL can watch and control the sandbox")
 			}
 			fmt.Println(url)
 			return nil
 		},
 	}
 	cmd.Flags().BoolVar(&noOpen, "no-open", false, "print the viewer URL without opening a window")
+	cmd.Flags().StringVar(&listen, "listen", defaultViewerListen, "address the viewer serves on")
 	cmd.Flags().BoolVar(&foreground, "foreground", false, "serve the viewer in this process")
 	cmd.Flags().MarkHidden("foreground")
 	return cmd
 }
 
+// isLoopbackListen reports whether only this machine can reach a listen address.
+func isLoopbackListen(listen string) bool {
+	host, _, err := net.SplitHostPort(listen)
+	if err != nil {
+		return false
+	}
+	if host == "localhost" {
+		return true
+	}
+	ip := net.ParseIP(host)
+	return ip != nil && ip.IsLoopback()
+}
+
 // startViewer runs `sbx view --foreground` as a detached process, so the caller, often an
 // agent's shell command, returns at once. The child reports its URL or error on fd 3.
-func startViewer(id string, open bool) (string, error) {
+func startViewer(id string, open bool, listen string) (string, error) {
 	exe, err := os.Executable()
 	if err != nil {
 		return "", err
@@ -95,6 +127,9 @@ func startViewer(id string, open bool) (string, error) {
 	args := []string{"view", "--foreground", id}
 	if !open {
 		args = append(args, "--no-open")
+	}
+	if listen != "" && listen != defaultViewerListen {
+		args = append(args, "--listen", listen)
 	}
 	cmd := exec.Command(exe, args...)
 	cmd.ExtraFiles = []*os.File{w}
@@ -141,8 +176,12 @@ type viewer struct {
 	c      *client
 	id     string
 	url    string
+	prefix string // path of the viewer's pages: a slash and the URL's random token
 	active atomic.Int32
 	gone   atomic.Bool
+	// lastSeen is the last time anyone used the viewer, by screen or by screenshot,
+	// as Unix nanoseconds. It decides when a viewer with no window exits.
+	lastSeen atomic.Int64
 	// watchers counts open windows, which follow the secret requests.
 	watchers atomic.Int32
 	// secrets is set when the viewer runs inside `sbx mcp`, which asks the user for secrets.
@@ -150,6 +189,10 @@ type viewer struct {
 	// dropped hears about files the user dropped on the window, by their path in the sandbox.
 	dropped func(paths []string)
 	srv     *http.Server
+
+	mu     sync.Mutex
+	shot   proto.Screenshot // last full-size screenshot, for screen.json
+	shotAt time.Time
 }
 
 var sandboxID = regexp.MustCompile(`^[A-Za-z0-9][A-Za-z0-9_-]{0,63}$`)
@@ -165,17 +208,22 @@ func checkID(id string) error {
 // dropDir is where files dropped on the viewer land, relative to the user's home.
 const dropDir = "Downloads"
 
-// startViewerServer serves the viewer for sandbox id on a random loopback port. The URL
-// carries a random token, because any web page the user opens could reach the port, and the
-// page can drive the sandbox and answer its secret prompts.
-func startViewerServer(ctx context.Context, v *viewer) error {
+func (v *viewer) touch() { v.lastSeen.Store(time.Now().UnixNano()) }
+
+// startViewerServer serves the viewer for sandbox id on listen, a random loopback port by
+// default. The URL carries a random token, because any web page the user opens could reach
+// the port, and the page can drive the sandbox and answer its secret prompts.
+func startViewerServer(ctx context.Context, v *viewer, listen string) error {
 	if err := checkID(v.id); err != nil {
 		return err
 	}
 	if _, err := v.exists(ctx); err != nil {
 		return err
 	}
-	ln, err := net.Listen("tcp", "127.0.0.1:0")
+	if listen == "" {
+		listen = defaultViewerListen
+	}
+	ln, err := net.Listen("tcp", listen)
 	if err != nil {
 		return err
 	}
@@ -183,6 +231,7 @@ func startViewerServer(ctx context.Context, v *viewer) error {
 	files, _ := fs.Sub(viewerFiles, "viewer")
 	mux := http.NewServeMux()
 	prefix := "/" + token
+	v.prefix = prefix
 	mux.Handle("GET "+prefix+"/novnc/", http.StripPrefix(prefix, http.FileServerFS(files)))
 	mux.HandleFunc("GET "+prefix+"/{$}", func(w http.ResponseWriter, r *http.Request) {
 		page, _ := fs.ReadFile(files, "index.html")
@@ -195,18 +244,21 @@ func startViewerServer(ctx context.Context, v *viewer) error {
 		}
 	})
 	mux.HandleFunc("GET "+prefix+"/ws", v.serveScreen)
+	mux.HandleFunc("GET "+prefix+"/screenshot.png", v.serveScreenshot)
+	mux.HandleFunc("GET "+prefix+"/screen.json", v.serveScreenJSON)
 	mux.HandleFunc("POST "+prefix+"/files", v.serveDrop)
 	mux.HandleFunc("GET "+prefix+"/secrets", v.serveSecretRequests)
 	mux.HandleFunc("POST "+prefix+"/secrets/{request}", v.serveSecretAnswer)
 	v.srv = &http.Server{Handler: mux}
 	go v.srv.Serve(ln)
-	v.url = "http://" + ln.Addr().String() + prefix + "/"
+	v.url = viewerURL(ln) + token + "/"
 	return nil
 }
 
-func serveViewer(ctx context.Context, c *client, id string, open bool) error {
+func serveViewer(ctx context.Context, c *client, id string, open bool, listen string) error {
 	v := &viewer{c: c, id: id}
-	if err := startViewerServer(ctx, v); err != nil {
+	v.touch()
+	if err := startViewerServer(ctx, v, listen); err != nil {
 		report("", err)
 		return err
 	}
@@ -215,6 +267,18 @@ func serveViewer(ctx context.Context, c *client, id string, open bool) error {
 		openWindow(v.url)
 	}
 	return v.wait(ctx)
+}
+
+// viewerURL is the server's root to open locally: a wildcard listen still opens on loopback.
+func viewerURL(ln net.Listener) string {
+	host, port, err := net.SplitHostPort(ln.Addr().String())
+	if err != nil {
+		return "http://" + ln.Addr().String() + "/"
+	}
+	if ip := net.ParseIP(host); ip != nil && ip.IsUnspecified() {
+		host = "127.0.0.1"
+	}
+	return "http://" + net.JoinHostPort(host, port) + "/"
 }
 
 // exists reports whether the sandbox is still there, without counting as activity.
@@ -227,8 +291,10 @@ func (v *viewer) exists(ctx context.Context) (bool, error) {
 }
 
 // wait returns once the window has been closed, or the sandbox removed, for viewerLinger.
+// Screenshot and screen.json requests count as use, so an external page polling the image
+// keeps its viewer, and nothing else needs to stay open.
 func (v *viewer) wait(ctx context.Context) error {
-	idleSince, goneSince := time.Now(), time.Time{}
+	goneSince := time.Time{}
 	t := time.NewTicker(5 * time.Second)
 	defer t.Stop()
 	for {
@@ -238,8 +304,9 @@ func (v *viewer) wait(ctx context.Context) error {
 		case <-t.C:
 		}
 		now := time.Now()
+		last := time.Unix(0, v.lastSeen.Load())
 		if v.active.Load() > 0 {
-			idleSince = now
+			last = now
 		}
 		if goneSince.IsZero() {
 			if ok, err := v.exists(ctx); !ok && isNotFound(err) {
@@ -247,14 +314,93 @@ func (v *viewer) wait(ctx context.Context) error {
 				goneSince = now
 			}
 		}
-		if now.Sub(idleSince) > viewerLinger || (!goneSince.IsZero() && now.Sub(goneSince) > viewerLinger) {
+		if now.Sub(last) > viewerLinger || (!goneSince.IsZero() && now.Sub(goneSince) > viewerLinger) {
 			return nil
 		}
 	}
 }
 
+// serveScreenshot returns the desktop as one image for external renderers: a page can
+// poll it from an <img> without speaking VNC. Query: format=png|jpeg, width=<px>.
+func (v *viewer) serveScreenshot(w http.ResponseWriter, r *http.Request) {
+	v.touch()
+	width := 0
+	if s := r.URL.Query().Get("width"); s != "" {
+		n, err := strconv.Atoi(s)
+		if err != nil || n < 0 {
+			v.writeError(w, http.StatusBadRequest, fmt.Errorf("width %q must be a pixel count", s))
+			return
+		}
+		width = n
+	}
+	data, shot, err := fetchScreenshot(r.Context(), v.c, v.id, r.URL.Query().Get("format"), width, true)
+	if err != nil {
+		status := http.StatusBadGateway
+		if isNotFound(err) {
+			status = http.StatusNotFound
+		}
+		v.writeError(w, status, err)
+		return
+	}
+	if width == 0 {
+		v.mu.Lock()
+		v.shot, v.shotAt = shot, time.Now()
+		v.mu.Unlock()
+	}
+	contentType := "image/png"
+	if shot.Format == "jpeg" {
+		contentType = "image/jpeg"
+	}
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.Header().Set("Content-Type", contentType)
+	w.Header().Set("Cache-Control", "no-store")
+	w.Header().Set("X-Screen-Width", strconv.Itoa(shot.Width))
+	w.Header().Set("X-Screen-Height", strconv.Itoa(shot.Height))
+	w.Header().Set("Content-Length", strconv.Itoa(len(data)))
+	w.Write(data)
+}
+
+// serveScreenJSON reports the screen's size and where to render it, for pages that lay
+// out around the image before loading it.
+func (v *viewer) serveScreenJSON(w http.ResponseWriter, r *http.Request) {
+	v.touch()
+	v.mu.Lock()
+	shot, at := v.shot, v.shotAt
+	v.mu.Unlock()
+	if shot.Width == 0 || time.Since(at) > 5*time.Second {
+		_, fresh, err := fetchScreenshot(r.Context(), v.c, v.id, "png", 0, true)
+		if err != nil {
+			status := http.StatusBadGateway
+			if isNotFound(err) {
+				status = http.StatusNotFound
+			}
+			v.writeError(w, status, err)
+			return
+		}
+		shot = fresh
+		v.mu.Lock()
+		v.shot, v.shotAt = shot, time.Now()
+		v.mu.Unlock()
+	}
+	shot.Path = ""
+	shot.ScreenshotURL = v.prefix + "/screenshot.png"
+	shot.ViewerURL = v.prefix + "/"
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.Header().Set("Content-Type", "application/json")
+	w.Header().Set("Cache-Control", "no-store")
+	json.NewEncoder(w).Encode(shot)
+}
+
+func (v *viewer) writeError(w http.ResponseWriter, status int, err error) {
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(status)
+	json.NewEncoder(w).Encode(proto.Error{Error: err.Error()})
+}
+
 // serveScreen bridges the page's WebSocket to the sandbox's VNC port through the sbx API.
 func (v *viewer) serveScreen(w http.ResponseWriter, r *http.Request) {
+	v.touch()
 	ws, err := websocket.Accept(w, r, nil)
 	if err != nil {
 		return
