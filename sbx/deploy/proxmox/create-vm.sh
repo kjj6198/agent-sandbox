@@ -33,7 +33,7 @@ fi
 qm create "$VMID" --name "$NAME" --ostype l26 --cpu host --sockets 1 --cores "$CORES" \
   --affinity "$AFFINITY" --memory "$MEMORY" --balloon 0 --scsihw virtio-scsi-single \
   --serial0 socket --vga serial0 --net0 "virtio,bridge=$BRIDGE,firewall=1" --onboot 1 \
-  --description "sbx: Firecracker microVM host for AI agent sandboxes. See sbx/README.md in agent-sandbox-eval."
+  --description "sbx: Firecracker microVM host for AI agent sandboxes. See sbx/README.md in github.com/kjj6198/agent-sandbox."
 
 qm disk import "$VMID" "$IMAGE" "$STORAGE" >/dev/null
 qm set "$VMID" --scsi0 "$STORAGE:vm-$VMID-disk-0,discard=on,iothread=1,ssd=1" --boot order=scsi0

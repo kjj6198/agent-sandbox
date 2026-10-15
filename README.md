@@ -1,7 +1,7 @@
 > [!WARNING]  
 > HIGHLY EXPERIMENTAL, USE AT YOUR OWN RISK!
 
-# agent-sandbox-eval
+# agent-sandbox
 
 An evaluation of gVisor, Firecracker, and Cloud Hypervisor for giving an AI agent a fresh, isolated Linux machine as fast as possible. The machine still has to run programs, use the network, and drive a browser. Everything ran on a home Proxmox server with an Intel i5-13400F and 31 GiB of RAM, mostly inside an Ubuntu VM and partly on the host itself.
 
