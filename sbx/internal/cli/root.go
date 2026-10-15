@@ -40,6 +40,8 @@ Typical use:
 
 Screen: every sandbox has a desktop. "sbx view $id", or "sbx create --view", opens a small
 window at the top right of your screen showing it live; GUI programs appear there.
+"sbx screenshot $id" saves that screen as an image file (or to stdout with "-") to render,
+attach, or hand to a vision model.
 
 Tools: "sbx mcp" serves sandboxes to agents over MCP, including clicking and typing on the
 desktop, and asking the user for a password without the agent seeing it.
@@ -67,7 +69,7 @@ func Main() int {
 		SilenceErrors: true,
 	}
 	root.AddCommand(createCmd(), execCmd(), runCmd(), cpCmd(), lsCmd(), inspectCmd(), rmCmd(),
-		ttlCmd(), exposeCmd(), unexposeCmd(), forwardCmd(), viewCmd(), snapshotCmd(), forkCmd(),
+		ttlCmd(), exposeCmd(), unexposeCmd(), forwardCmd(), viewCmd(), screenshotCmd(), snapshotCmd(), forkCmd(),
 		templateCmd(), statusCmd(), loginCmd(), mcpCmd())
 	err := root.Execute()
 	var ee exitError
@@ -153,7 +155,7 @@ func createCmd() *cobra.Command {
 				return err
 			}
 			if view {
-				url, err := startViewer(sb.ID, true)
+				url, err := startViewer(sb.ID, true, defaultViewerListen)
 				if err != nil {
 					fmt.Fprintln(os.Stderr, "sbx: viewer:", err)
 				} else {

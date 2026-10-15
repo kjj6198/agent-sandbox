@@ -202,8 +202,10 @@ func (a *agentClient) proxy(w http.ResponseWriter, r *http.Request, path string)
 	// the request context. Closing the guest connection makes the agent kill the command.
 	stop := context.AfterFunc(r.Context(), func() { conn.Close() })
 	defer stop()
-	if ct := resp.Header.Get("Content-Type"); ct != "" {
-		w.Header().Set("Content-Type", ct)
+	for _, h := range []string{"Content-Type", "Cache-Control", "X-Screen-Width", "X-Screen-Height"} {
+		if v := resp.Header.Get(h); v != "" {
+			w.Header().Set(h, v)
+		}
 	}
 	w.WriteHeader(resp.StatusCode)
 	copyFlush(w, resp.Body)

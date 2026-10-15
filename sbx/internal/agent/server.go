@@ -46,6 +46,7 @@ func RunServer() {
 	mux.HandleFunc("GET /archive", s.getArchive)
 	mux.HandleFunc("PUT /archive", s.putArchive)
 	mux.HandleFunc("GET /tcp", s.tcp)
+	mux.HandleFunc("GET /screenshot", s.screenshot)
 	fmt.Fprintf(os.Stderr, "sbx-agent %s: serving on vsock port %d\n", proto.Version, proto.AgentPort)
 	if err := (&http.Server{Handler: mux}).Serve(l); err != nil {
 		fmt.Fprintf(os.Stderr, "sbx-agent: %v\n", err)

@@ -447,7 +447,7 @@ func (m *mcpServer) viewer(ctx context.Context, id string) (*viewer, error) {
 		m.dropped[id] = append(m.dropped[id], paths...)
 		m.mu.Unlock()
 	}}
-	if err := startViewerServer(ctx, v); err != nil {
+	if err := startViewerServer(ctx, v, defaultViewerListen); err != nil {
 		return nil, err
 	}
 	m.viewers[id] = v

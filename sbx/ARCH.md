@@ -66,7 +66,7 @@ The main users of `sbx` are LLM agents calling it from a shell, so the design fo
 |---|---|
 | Lifecycle | `create [TEMPLATE]`, `ls`, `inspect`, `rm`, `ttl`, `run` |
 | Work | `exec`, `cp` |
-| Reach inside | `expose`, `unexpose`, `forward`, `view` |
+| Reach inside | `expose`, `unexpose`, `forward`, `view`, `screenshot` |
 | Tools for agents | `mcp` |
 | State | `snapshot`, `fork`, `template ls / build / rm` |
 | Host | `status`, `login` |
@@ -232,9 +232,10 @@ sequenceDiagram
   Note over V: exits 1 min after the window closes or the sandbox is gone
 ```
 
-- Every template runs `sbx-desktop` before its snapshot: Xvnc on display `:0`, VNC on the guest's loopback with no password, and openbox. Commands get `DISPLAY=:0`.
+- Every template runs `sbx-desktop` before its snapshot: Xvnc on display `:0`, VNC on the guest's loopback with no password, openbox, a wallpaper, a tint2 dock (browser, files, terminal), and an open terminal window. Commands get `DISPLAY=:0`.
 - noVNC is embedded in the `sbx` binary, so the viewer needs only a browser.
 - Passive requests keep the viewer from extending the sandbox's idle TTL. A forgotten window cannot keep a sandbox alive.
+- The screen also leaves as a still image. The agent's `GET /screenshot` runs ImageMagick's `import` as the desktop's user and returns a PNG or JPEG with its size in headers; sbxd proxies it as `GET /v1/sandboxes/{id}/screenshot`. `sbx screenshot` writes it to a file or stdout, and the viewer re-serves it as `screenshot.png` with `screen.json` beside it, under its tokenized URL, so an external page can render the screen from an `<img>` or embed the live viewer in an `<iframe>` without the API token or a VNC client. `--listen` moves the viewer off loopback for renderers on other machines; the URL's token is then its only key, over plain HTTP.
 
 ## MCP server and computer use
 
@@ -308,7 +309,7 @@ stateDiagram-v2
 | Network namespace + nftables | Guest traffic to the host, LAN, cloud metadata, and IPv6 |
 | vsock-only ingress | Inbound connections to the guest, except through sbxd |
 | API token | Anyone on the network driving sbxd |
-| Token in the viewer URL | Other web pages on the user's machine driving a sandbox or answering a secret prompt |
+| Token in the viewer URL | Other web pages on the user's machine reading a sandbox's screen, driving it, or answering a secret prompt |
 | Optional outer VM | A full host escape reaching the LAN, as in `deploy/proxmox` |
 
 The agent inside the guest is unauthenticated. Only the host can reach its vsock port, and a sandbox owns its own guest anyway.

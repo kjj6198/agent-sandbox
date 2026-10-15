@@ -57,13 +57,38 @@ Clients need TCP 7070 for the API and 30000 to 30999 for `sbx expose`. If the ho
 
 ## Watching a sandbox
 
-Every sandbox has a 1280x800 desktop: an X server that serves VNC inside the guest, with openbox. Commands get `DISPLAY=:0`, so any GUI program an agent starts appears there. Right-click the desktop for a terminal or a browser.
+Every sandbox has a 1280x800 desktop: an X server that serves VNC inside the guest, with openbox, a dark wallpaper, a dock at the bottom (browser, files, terminal), and a terminal window already open. Commands get `DISPLAY=:0`, so any GUI program an agent starts appears there. Right-click the desktop for a terminal, a browser, or files.
 
 `sbx view ID`, or `sbx create --view`, opens a small window at the top right of your screen with a live view. It starts in watch mode, so a stray click cannot disturb the agent; click "Watching" to take over the mouse and keyboard. The viewer is a page served by the CLI on 127.0.0.1, embedding [noVNC](https://github.com/novnc/noVNC), and it reaches the screen through the same API tunnel as `sbx forward`. It opens as an app window of Chrome, Edge, Brave, or Chromium, and falls back to a tab in your default browser.
 
 The viewer runs in the background, so an agent's `sbx create --view` returns at once. It exits a minute after its window closes or its sandbox is removed, and watching does not keep an idle sandbox alive.
 
 Drop files on the viewer window to copy them into the sandbox's `~/Downloads`, where a browser's file picker finds them. Folders need zipping first.
+
+### Rendering the screen elsewhere
+
+`sbx screenshot ID` saves the desktop as an image another program can render, attach, or hand to a vision model, without a VNC connection:
+
+```sh
+sbx screenshot $id                     # ./sbx-$id.png
+sbx screenshot $id - > screen.png      # or the bytes on stdout
+sbx screenshot --width 640 --json $id thumb.png
+curl -H "Authorization: Bearer $SBX_TOKEN" \
+  "http://sbx-host:7070/v1/sandboxes/$id/screenshot?format=jpeg&width=800" > screen.jpg
+```
+
+A running viewer serves the same image without the API token, so a web page can show a live-ish screen by polling it, or embed the real live view. The viewer's URL carries a random token of its own, so use the URL `sbx view --no-open` prints:
+
+```sh
+sbx view --no-open --listen 127.0.0.1:7681 $id   # http://127.0.0.1:7681/TOKEN/
+```
+
+```html
+<img src="http://127.0.0.1:7681/TOKEN/screenshot.png" alt="sandbox screen">
+<iframe src="http://127.0.0.1:7681/TOKEN/?controls=0" width="640" height="400"></iframe>
+```
+
+`screen.json` beside them reports the image's size and those URLs. To render from another machine, serve the viewer beyond loopback with `--listen 0.0.0.0:7681` and put the machine's address in the URL. The token is the viewer's only key and travels as plain HTTP: anyone who learns the URL can watch and take over, so keep it on trusted networks and prefer the token-checked API elsewhere.
 
 ## Agents over MCP
 
@@ -193,6 +218,7 @@ sbxd serves HTTP on port 7070. Every request needs `Authorization: Bearer <token
 | `POST /v1/sandboxes/{id}/exec` | `{"script", "env", "cwd", "user", "timeout", "detach", "stdin", "tty"}` | frame stream, see `internal/proto/exec.go` |
 | `GET`, `PUT /v1/sandboxes/{id}/files?path=&user=` | tar | tar |
 | `GET /v1/sandboxes/{id}/tcp?port=` | | `101 Switching Protocols`, then raw TCP. Port 5900 is the screen's VNC |
+| `GET /v1/sandboxes/{id}/screenshot?format=png\|jpeg&width=` | | the desktop as one image, size in `X-Screen-Width` and `X-Screen-Height` |
 | `POST /v1/sandboxes/{id}/ports` | `{"port"}` | `{"port", "host_port", "url"}` |
 | `DELETE /v1/sandboxes/{id}/ports/{port}` | | |
 | `POST /v1/sandboxes/{id}/snapshot` | `{"name"}` | the template |
