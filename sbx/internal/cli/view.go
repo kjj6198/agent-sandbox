@@ -304,10 +304,10 @@ func (v *viewer) wait(ctx context.Context) error {
 		case <-t.C:
 		}
 		now := time.Now()
-		last := time.Unix(0, v.lastSeen.Load())
 		if v.active.Load() > 0 {
-			last = now
+			v.touch()
 		}
+		last := time.Unix(0, v.lastSeen.Load())
 		if goneSince.IsZero() {
 			if ok, err := v.exists(ctx); !ok && isNotFound(err) {
 				v.gone.Store(true)
