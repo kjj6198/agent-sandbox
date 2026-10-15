@@ -82,6 +82,12 @@ func dialScreen(ctx context.Context, c *client, id string) (*screen, error) {
 		return nil, fmt.Errorf("screen of %s: %w", id, cmp.Or(ctx.Err(), err))
 	}
 	go s.readLoop()
+	// The framebuffer stays blank until the update the handshake requested arrives, and a
+	// screenshot taken before it would be empty.
+	if ok, err := s.Settle(ctx, 0, 5*time.Second, 0, 5*time.Second); !ok {
+		s.Close()
+		return nil, fmt.Errorf("screen of %s: %w", id, cmp.Or(err, errors.New("the VNC server sent no picture within 5 s")))
+	}
 	return s, nil
 }
 
