@@ -33,7 +33,9 @@ One-off command: `sbx run -- python3 -c 'print(1)'` creates, runs, and removes a
 
 ## Screen
 
-Every sandbox has a desktop, and GUI programs you start appear on it. When the user wants to watch, create with `sbx create --view`, or run `sbx view $id` later. It opens a small window on the user's screen and returns at once.
+Every sandbox has a desktop, and GUI programs you start appear on it. When the user wants to watch, create with `sbx create --view`, or run `sbx view $id` later. It opens a small window on the user's screen and returns at once. Files the user drops on that window land in `~/Downloads` in the sandbox.
+
+To click and type on the desktop, or to sign in with the user's password, use the `sbx mcp` server's tools if they are available. Each action returns the screen, and `request_secret` asks the user for a password without you ever seeing it. Never ask the user to paste a password into the chat.
 
 ## Browser
 

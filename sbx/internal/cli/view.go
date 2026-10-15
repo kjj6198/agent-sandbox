@@ -1,18 +1,25 @@
 package cli
 
 import (
+	"archive/tar"
 	"bufio"
 	"context"
+	"crypto/rand"
 	"embed"
+	"encoding/json"
 	"errors"
 	"fmt"
+	"html"
 	"io"
 	"io/fs"
 	"net"
 	"net/http"
+	"net/url"
 	"os"
 	"os/exec"
+	"path"
 	"path/filepath"
+	"regexp"
 	"runtime"
 	"strconv"
 	"strings"
@@ -22,6 +29,8 @@ import (
 
 	"github.com/coder/websocket"
 	"github.com/spf13/cobra"
+
+	"github.com/kjj6198/agent-sandbox-eval/sbx/internal/proto"
 )
 
 //go:embed viewer
@@ -131,41 +140,79 @@ func report(url string, err error) {
 type viewer struct {
 	c      *client
 	id     string
+	url    string
 	active atomic.Int32
 	gone   atomic.Bool
+	// watchers counts open windows, which follow the secret requests.
+	watchers atomic.Int32
+	// secrets is set when the viewer runs inside `sbx mcp`, which asks the user for secrets.
+	secrets *secretStore
+	// dropped hears about files the user dropped on the window, by their path in the sandbox.
+	dropped func(paths []string)
+	srv     *http.Server
 }
 
-func serveViewer(ctx context.Context, c *client, id string, open bool) error {
-	v := &viewer{c: c, id: id}
+var sandboxID = regexp.MustCompile(`^[A-Za-z0-9][A-Za-z0-9_-]{0,63}$`)
+
+// checkID rejects IDs that are not plain names before they go into a URL or the viewer page.
+func checkID(id string) error {
+	if !sandboxID.MatchString(id) {
+		return fmt.Errorf("%q is not a sandbox ID; see sbx ls", id)
+	}
+	return nil
+}
+
+// dropDir is where files dropped on the viewer land, relative to the user's home.
+const dropDir = "Downloads"
+
+// startViewerServer serves the viewer for sandbox id on a random loopback port. The URL
+// carries a random token, because any web page the user opens could reach the port, and the
+// page can drive the sandbox and answer its secret prompts.
+func startViewerServer(ctx context.Context, v *viewer) error {
+	if err := checkID(v.id); err != nil {
+		return err
+	}
 	if _, err := v.exists(ctx); err != nil {
-		report("", err)
 		return err
 	}
 	ln, err := net.Listen("tcp", "127.0.0.1:0")
 	if err != nil {
-		report("", err)
 		return err
 	}
+	token := rand.Text()
 	files, _ := fs.Sub(viewerFiles, "viewer")
 	mux := http.NewServeMux()
-	mux.Handle("GET /novnc/", http.FileServerFS(files))
-	mux.HandleFunc("GET /{$}", func(w http.ResponseWriter, r *http.Request) {
+	prefix := "/" + token
+	mux.Handle("GET "+prefix+"/novnc/", http.StripPrefix(prefix, http.FileServerFS(files)))
+	mux.HandleFunc("GET "+prefix+"/{$}", func(w http.ResponseWriter, r *http.Request) {
 		page, _ := fs.ReadFile(files, "index.html")
 		w.Header().Set("Content-Type", "text/html; charset=utf-8")
-		w.Write([]byte(strings.ReplaceAll(string(page), "{{ID}}", id)))
+		w.Write([]byte(strings.ReplaceAll(string(page), "{{ID}}", html.EscapeString(v.id))))
 	})
-	mux.HandleFunc("GET /alive", func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc("GET "+prefix+"/alive", func(w http.ResponseWriter, r *http.Request) {
 		if v.gone.Load() {
 			w.WriteHeader(http.StatusGone)
 		}
 	})
-	mux.HandleFunc("GET /ws", v.serveScreen)
-	go http.Serve(ln, mux)
+	mux.HandleFunc("GET "+prefix+"/ws", v.serveScreen)
+	mux.HandleFunc("POST "+prefix+"/files", v.serveDrop)
+	mux.HandleFunc("GET "+prefix+"/secrets", v.serveSecretRequests)
+	mux.HandleFunc("POST "+prefix+"/secrets/{request}", v.serveSecretAnswer)
+	v.srv = &http.Server{Handler: mux}
+	go v.srv.Serve(ln)
+	v.url = "http://" + ln.Addr().String() + prefix + "/"
+	return nil
+}
 
-	url := "http://" + ln.Addr().String() + "/"
-	report(url, nil)
+func serveViewer(ctx context.Context, c *client, id string, open bool) error {
+	v := &viewer{c: c, id: id}
+	if err := startViewerServer(ctx, v); err != nil {
+		report("", err)
+		return err
+	}
+	report(v.url, nil)
 	if open {
-		openWindow(url)
+		openWindow(v.url)
 	}
 	return v.wait(ctx)
 }
@@ -229,6 +276,85 @@ func (v *viewer) serveScreen(w http.ResponseWriter, r *http.Request) {
 	go func() { io.Copy(remote, local); done <- struct{}{} }()
 	go func() { io.Copy(local, remote); done <- struct{}{} }()
 	<-done
+}
+
+// serveDrop copies a file the user dropped on the window into the sandbox's ~/Downloads.
+func (v *viewer) serveDrop(w http.ResponseWriter, r *http.Request) {
+	name := filepath.Base(r.URL.Query().Get("name"))
+	if name == "." || name == "/" || name == ".." || r.ContentLength < 0 {
+		http.Error(w, "a file name and Content-Length are required", http.StatusBadRequest)
+		return
+	}
+	pr, pw := io.Pipe()
+	go func() {
+		tw := tar.NewWriter(pw)
+		err := tw.WriteHeader(&tar.Header{Name: name, Mode: 0o644, Size: r.ContentLength, ModTime: time.Now()})
+		if err == nil {
+			_, err = io.Copy(tw, r.Body)
+		}
+		if err == nil {
+			err = tw.Close()
+		}
+		pw.CloseWithError(err)
+	}()
+	dst := path.Join(dropDir, name)
+	req, err := v.c.request(r.Context(), "PUT", "/v1/sandboxes/"+v.id+"/files?path="+url.QueryEscape(dst), pr)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	req.Header.Set("Content-Type", "application/x-tar")
+	resp, err := v.c.send(req)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadGateway)
+		return
+	}
+	resp.Body.Close()
+	if v.dropped != nil {
+		v.dropped([]string{"/home/" + proto.DefaultUser + "/" + dst})
+	}
+	fmt.Fprintf(w, "~/%s", dst)
+}
+
+// serveSecretRequests streams this sandbox's open secret requests as server-sent events,
+// sending the whole list each time it changes.
+func (v *viewer) serveSecretRequests(w http.ResponseWriter, r *http.Request) {
+	v.watchers.Add(1)
+	defer v.watchers.Add(-1)
+	w.Header().Set("Content-Type", "text/event-stream")
+	w.Header().Set("Cache-Control", "no-store")
+	flusher, _ := w.(http.Flusher)
+	for {
+		var pending []secretRequest
+		var changed <-chan struct{}
+		if v.secrets != nil {
+			pending, changed = v.secrets.pendingFor(v.id)
+		}
+		b, _ := json.Marshal(pending)
+		fmt.Fprintf(w, "data: %s\n\n", b)
+		if flusher != nil {
+			flusher.Flush()
+		}
+		select {
+		case <-r.Context().Done():
+			return
+		case <-changed:
+		}
+	}
+}
+
+// serveSecretAnswer takes the user's answer to a secret request. An empty body declines.
+func (v *viewer) serveSecretAnswer(w http.ResponseWriter, r *http.Request) {
+	var answer struct {
+		Value *string `json:"value"`
+	}
+	if v.secrets == nil || json.NewDecoder(io.LimitReader(r.Body, 64<<10)).Decode(&answer) != nil {
+		http.Error(w, "bad request", http.StatusBadRequest)
+		return
+	}
+	if !v.secrets.answer(r.PathValue("request"), answer.Value) {
+		http.Error(w, "the request is no longer open", http.StatusGone)
+	}
 }
 
 func truncate(s string, n int) string {

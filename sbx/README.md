@@ -63,6 +63,36 @@ Every sandbox has a 1280x800 desktop: an X server that serves VNC inside the gue
 
 The viewer runs in the background, so an agent's `sbx create --view` returns at once. It exits a minute after its window closes or its sandbox is removed, and watching does not keep an idle sandbox alive.
 
+Drop files on the viewer window to copy them into the sandbox's `~/Downloads`, where a browser's file picker finds them. Folders need zipping first.
+
+## Agents over MCP
+
+`sbx mcp` is an MCP server on stdin and stdout, for agents that work through tools rather than a shell:
+
+```sh
+claude mcp add sbx -- sbx mcp
+```
+
+| Tools | What they do |
+|---|---|
+| `sandbox_create`, `sandbox_list`, `sandbox_remove`, `exec` | Lifecycle and commands, as in the CLI |
+| `click`, `move_mouse`, `drag`, `scroll`, `type_text`, `press_key` | Operate the desktop and return the screen once it settles |
+| `screenshot` | Look again after waiting |
+| `request_secret` | Ask the user for a password or code in the viewer window |
+| `view` | Open the viewer window |
+
+Every screen action returns the screen after the action. The server keeps a VNC connection open and its own copy of the screen current, so it knows when the screen last changed. After an action it waits up to a second for a change, then until the screen has been still for 300 ms, at most 5 s in total. If nothing changed it says so and sends no image, which saves the agent about 1,400 tokens per call. A screen action takes 300 to 700 ms against a LAN host.
+
+`type_text` presses keys for ASCII and pastes everything else through the VNC clipboard, then empties the clipboard. Keystrokes for characters outside the keyboard map are unreliable: Xvnc binds them to spare keycodes and reuses those, and Chromium typed 日 for 京 after the keycode had moved on.
+
+### Signing in for the user
+
+An agent that needs the user's password, for example to sign in to Google in the sandbox's browser, calls `request_secret`. The viewer window opens if it is not already open and shows a masked field with the agent's reason. The value stays in the memory of the `sbx mcp` process, under a name the agent chose, until the process exits. The agent then calls `type_text {"secret": "google.password"}`, and the value reaches the sandbox only as input. It is never in a tool result, so it stays out of the agent's context, the transcript, and the provider's logs.
+
+The screen is not filtered. A secret typed into a field that shows its text appears in the next screenshot, so agents are told to type secrets only into password fields. A full Google sign-in with a real account has not been tried. Google's sign-in page accepts the typed address, but Google may refuse a browser it considers automated, and the `browser` template's Chromium runs with its DevTools port open.
+
+The viewer page can drive the sandbox and answer secret prompts, so its URL carries a random token. Other web pages the user opens cannot guess the address.
+
 ## Templates
 
 | Template | Content |
@@ -95,7 +125,7 @@ sbx fork $id                         # the same, as a one-off clone
 
 | Part | Where it runs | What it does |
 |---|---|---|
-| `sbx` | where agents run | CLI. Talks HTTP to sbxd with a bearer token, and serves the screen viewer |
+| `sbx` | where agents run | CLI. Talks HTTP to sbxd with a bearer token, serves the screen viewer, and serves MCP with `sbx mcp` |
 | `sbxd` | sbx host | Daemon. Restores sandboxes, builds templates, publishes ports, removes idle sandboxes |
 | `sbx-agent` | inside every sandbox | PID 1. Builds the root filesystem, then serves exec, files, and TCP over vsock |
 | `templates/default` | sbx host | Dockerfile of the default image |
