@@ -7,7 +7,7 @@
       <action name="Execute"><execute>xfce4-terminal</execute></action>
     </item>
     <item label="Web Browser">
-      <action name="Execute"><execute>chromium --no-first-run --no-default-browser-check</execute></action>
+      <action name="Execute"><execute>chromium --password-store=basic --start-maximized --no-first-run --no-default-browser-check</execute></action>
     </item>
     <item label="Files">
       <action name="Execute"><execute>thunar</execute></action>
