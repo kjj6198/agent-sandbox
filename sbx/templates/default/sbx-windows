@@ -1,0 +1,13 @@
+#!/bin/bash
+# Lists the desktop's windows with geometry, the focused window, and the pointer position, so an agent
+# driving this screen can aim at a window or check focus without reading pixels.
+set -eu
+export DISPLAY="${DISPLAY:-:0}"
+wmctrl -lG
+active=$(xdotool getactivewindow 2>/dev/null || true)
+if [ -n "$active" ]; then
+  echo "active: $(xdotool getwindowname "$active" 2>/dev/null) ($active)"
+else
+  echo "active: none"
+fi
+xdotool getmouselocation

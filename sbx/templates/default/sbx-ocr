@@ -1,0 +1,13 @@
+#!/bin/bash
+# Prints the text on the screen via tesseract: the whole screen, or a region given as
+# "WxH+X+Y" (ImageMagick geometry), for example sbx-ocr 400x200+100+50. A second argument
+# overrides the OCR languages.
+set -eu
+export DISPLAY="${DISPLAY:-:0}"
+region="${1:-}"
+langs="${2:-eng+chi_tra+jpn}"
+if [ -n "$region" ]; then
+  import -window root -crop "$region" png:- | tesseract stdin stdout -l "$langs" 2>/dev/null
+else
+  import -window root png:- | tesseract stdin stdout -l "$langs" 2>/dev/null
+fi

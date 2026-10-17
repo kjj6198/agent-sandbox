@@ -1,7 +1,7 @@
 [Desktop Entry]
 Type=Application
 Name=Web Browser
-Exec=chromium --no-first-run --no-default-browser-check
+Exec=chromium --password-store=basic --start-maximized --no-first-run --no-default-browser-check
 Icon=chromium
 Terminal=false
 Categories=Network;WebBrowser;

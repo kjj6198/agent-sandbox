@@ -10,7 +10,10 @@ if curl -fsS "http://127.0.0.1:$port/json/version" >/dev/null 2>&1; then
   echo "chromium already listening on $port"
   exit 0
 fi
-profile=$(mktemp -d /tmp/chromium-profile.XXXXXX)
+# A fixed profile dir, so hosts can sync it across sandboxes; the basic password store keeps saved
+# passwords readable after such a restore. Override with SBX_BROWSER_PROFILE for a throwaway one.
+profile="${SBX_BROWSER_PROFILE:-$HOME/.config/chromium}"
+mkdir -p "$profile"
 sbx-desktop >/dev/null
 setsid chromium --start-maximized --password-store=basic \
   --remote-debugging-address=127.0.0.1 --remote-debugging-port="$port" \

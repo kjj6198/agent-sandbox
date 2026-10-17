@@ -17,6 +17,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
       ffmpeg imagemagick \
       chromium fonts-noto-cjk fonts-noto-color-emoji fonts-liberation fonts-dejavu-core \
       tigervnc-standalone-server openbox x11-xserver-utils xfce4-terminal thunar tint2 feh adwaita-icon-theme \
+      xdotool wmctrl xclip scrot tesseract-ocr tesseract-ocr-eng tesseract-ocr-chi-tra tesseract-ocr-jpn \
+      at-spi2-core python3-pyatspi dbus-x11 \
       locales tzdata \
     && ln -s /usr/bin/fdfind /usr/local/bin/fd \
     && sed -i -E 's/^# (en_US|ja_JP|zh_TW)\.UTF-8/\1.UTF-8/' /etc/locale.gen && locale-gen \
@@ -43,7 +45,7 @@ RUN useradd -m -u 1000 -s /bin/bash user \
     && echo 'user ALL=(ALL) NOPASSWD:ALL' >/etc/sudoers.d/user && chmod 0440 /etc/sudoers.d/user
 
 COPY profile.sh /etc/profile.d/sbx.sh
-COPY sbx-desktop sbx-browser /usr/local/bin/
+COPY sbx-desktop sbx-browser sbx-windows sbx-ocr /usr/local/bin/
 COPY openbox-menu.xml /etc/xdg/openbox/menu.xml
 COPY wallpaper.png tint2rc /usr/local/share/sbx/
 COPY launchers/ /usr/local/share/sbx/launchers/
