@@ -28,6 +28,7 @@ One-off command: `sbx run -- python3 -c 'print(1)'` creates, runs, and removes a
 - Long-running servers: `sbx exec -d $id 'cd app && pnpm dev'` returns the PID and a log path. Read the log with `sbx exec $id 'tail -50 /tmp/sbx-PID.log'`.
 - To open a server from outside: `sbx expose $id PORT` prints a LAN URL. `sbx forward $id PORT` tunnels it to 127.0.0.1 instead.
 - Use `--timeout` on commands that might hang.
+- For untrusted code, limit the network: `sbx create --allow registry.npmjs.org,github.com`, or `--offline`. A failed command then tells you which hosts were blocked. Ask the user before `sbx allow $id HOST` for a host the task did not call for, because the list is what stops code in the sandbox from sending data elsewhere.
 - Sandboxes are removed after 1 hour without activity. Change it with `sbx ttl $id 4h`, or `0` to keep. Remove sandboxes you no longer need.
 - Save a prepared machine with `sbx snapshot $id NAME`, then `sbx create NAME`. Try alternatives from one state with `sbx fork $id`.
 
