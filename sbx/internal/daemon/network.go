@@ -38,19 +38,24 @@ func vethAddrs(slot int) (string, string) {
 	return fmt.Sprintf("10.200.%d.%d", n>>8, n&255), fmt.Sprintf("10.200.%d.%d", n>>8, n&255+1)
 }
 
-// hostRules isolate sandboxes from the host and the LAN and NAT them to the internet.
-// Re-applying them replaces the whole table.
-const hostRules = `table inet sbx
+// hostRules isolate sandboxes from the host and the LAN and NAT them to the internet. The
+// only host port they reach is sbxd's egress listener. Re-applying them replaces the table.
+func hostRules(egressPort int) string {
+	private := make([]string, len(privateRanges))
+	for i, p := range privateRanges {
+		private[i] = p.String()
+	}
+	return fmt.Sprintf(`table inet sbx
 delete table inet sbx
 table inet sbx {
 	set private {
 		type ipv4_addr; flags interval
-		elements = { 0.0.0.0/8, 10.0.0.0/8, 100.64.0.0/10, 127.0.0.0/8, 169.254.0.0/16,
-			172.16.0.0/12, 192.168.0.0/16, 224.0.0.0/3 }
+		elements = { %s }
 	}
 	chain input {
 		type filter hook input priority filter; policy accept;
 		iifname "sbxv*" ct state established,related accept
+		iifname "sbxv*" meta l4proto { tcp, udp } th dport %d accept
 		iifname "sbxv*" drop
 	}
 	chain forward {
@@ -65,7 +70,8 @@ table inet sbx {
 		ip saddr 10.200.0.0/16 oifname != "sbxv*" masquerade
 	}
 }
-`
+`, strings.Join(private, ", "), egressPort)
+}
 
 const nsRules = `table ip sbx {
 	chain postrouting {
@@ -75,32 +81,36 @@ const nsRules = `table ip sbx {
 }
 `
 
-func setupHostNetwork() error {
+func setupHostNetwork(egressPort int) error {
 	if err := os.WriteFile("/proc/sys/net/ipv4/ip_forward", []byte("1"), 0o644); err != nil {
 		return err
 	}
-	if err := runIn(hostRules, "nft", "-f", "-"); err != nil {
+	if err := runIn(hostRules(egressPort), "nft", "-f", "-"); err != nil {
 		return err
 	}
-	return allowIptablesForward()
+	return allowIptables(egressPort)
 }
 
-// allowIptablesForward lets sandbox traffic through the iptables FORWARD chain. Docker and ufw
-// set its policy to DROP, and a packet must pass every chain on the hook, so hostRules alone
-// cannot let it through. The rules go in even when the policy is ACCEPT, because Docker may
-// start later. hostRules still drops traffic to private ranges.
-func allowIptablesForward() error {
+// allowIptables lets sandbox traffic through the iptables FORWARD chain, and to the egress
+// listener through INPUT. Docker and ufw set FORWARD's policy to DROP, ufw sets INPUT's, and a
+// packet must pass every chain on the hook, so hostRules alone cannot let it through. The
+// rules go in even when the policy is ACCEPT, because Docker may start later. hostRules still
+// drops traffic to private ranges and to other host ports.
+func allowIptables(egressPort int) error {
 	if _, err := exec.LookPath("iptables"); err != nil {
 		return nil
 	}
+	port := strconv.Itoa(egressPort)
 	for _, rule := range [][]string{
-		{"-i", "sbxv+", "-j", "ACCEPT"},
-		{"-o", "sbxv+", "-m", "conntrack", "--ctstate", "ESTABLISHED,RELATED", "-j", "ACCEPT"},
+		{"FORWARD", "-i", "sbxv+", "-j", "ACCEPT"},
+		{"FORWARD", "-o", "sbxv+", "-m", "conntrack", "--ctstate", "ESTABLISHED,RELATED", "-j", "ACCEPT"},
+		{"INPUT", "-i", "sbxv+", "-p", "tcp", "--dport", port, "-j", "ACCEPT"},
+		{"INPUT", "-i", "sbxv+", "-p", "udp", "--dport", port, "-j", "ACCEPT"},
 	} {
-		if run("iptables", append([]string{"-C", "FORWARD"}, rule...)...) == nil {
+		if run("iptables", append([]string{"-C"}, rule...)...) == nil {
 			continue
 		}
-		if err := run("iptables", append([]string{"-I", "FORWARD"}, rule...)...); err != nil {
+		if err := run("iptables", append([]string{"-I"}, rule...)...); err != nil {
 			return err
 		}
 	}

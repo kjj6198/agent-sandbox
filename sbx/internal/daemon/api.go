@@ -119,6 +119,12 @@ func (d *Daemon) handleUpdate(w http.ResponseWriter, r *http.Request, sb *sandbo
 			return
 		}
 	}
+	if req.Egress != nil {
+		if _, err := d.SetEgress(sb.state.ID, req.Egress); err != nil {
+			writeError(w, http.StatusConflict, err)
+			return
+		}
+	}
 	writeJSON(w, http.StatusOK, d.view(sb, d.publicHost(r)))
 }
 

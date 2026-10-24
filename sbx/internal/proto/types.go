@@ -61,6 +61,9 @@ type Sandbox struct {
 	// MemoryUsedMiB is the memory only this sandbox holds: guest pages it wrote plus the VMM's
 	// own. Pages it only read from the template are shared page cache and not counted.
 	MemoryUsedMiB float64 `json:"memory_used_mib,omitempty"`
+	Egress        *Egress `json:"egress,omitempty"`
+	// Blocked lists recent connections Egress refused, newest last.
+	Blocked []Blocked `json:"blocked,omitempty"`
 }
 
 type Port struct {
@@ -85,10 +88,15 @@ type CreateRequest struct {
 	// TTL overrides the daemon's default idle timeout. Nil uses the default, "0" never expires.
 	TTL *Duration         `json:"ttl,omitempty"`
 	Env map[string]string `json:"env,omitempty"`
+	// Egress restricts the network. Nil gives the sandbox the whole internet.
+	Egress *Egress `json:"egress,omitempty"`
 }
 
 type UpdateRequest struct {
 	TTL *Duration `json:"ttl,omitempty"`
+	// Egress replaces the allowlist of a sandbox created with one. A sandbox with the whole
+	// internet cannot be restricted later.
+	Egress *Egress `json:"egress,omitempty"`
 }
 
 type ExposeRequest struct {
