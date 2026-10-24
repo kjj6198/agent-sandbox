@@ -20,7 +20,8 @@ import (
 
 const rootHelp = `sbx gives you disposable Linux machines. Each sandbox is a Firecracker microVM restored
 from a snapshot in tens of milliseconds, with its own kernel, disk, and network. Code inside
-cannot reach the host or the LAN, only the internet.
+cannot reach the host or the LAN, only the internet. "sbx create --allow HOST" narrows that
+to the hosts you name.
 
 The default template is Debian with Node.js, pnpm, Go, Python, uv, Chromium, ffmpeg, and CJK
 fonts. Commands run as "user", who has passwordless sudo, in /home/user.
@@ -69,7 +70,7 @@ func Main() int {
 		SilenceErrors: true,
 	}
 	root.AddCommand(createCmd(), execCmd(), runCmd(), cpCmd(), lsCmd(), inspectCmd(), rmCmd(),
-		ttlCmd(), exposeCmd(), unexposeCmd(), forwardCmd(), viewCmd(), screenshotCmd(), snapshotCmd(), forkCmd(),
+		ttlCmd(), allowCmd(), exposeCmd(), unexposeCmd(), forwardCmd(), viewCmd(), screenshotCmd(), snapshotCmd(), forkCmd(),
 		templateCmd(), statusCmd(), loginCmd(), mcpCmd())
 	err := root.Execute()
 	var ee exitError
@@ -121,8 +122,8 @@ func parseTTL(s string) (*proto.Duration, error) {
 	return &pd, nil
 }
 
-func create(ctx context.Context, c *client, template, ttl string, env []string) (*proto.Sandbox, error) {
-	req := proto.CreateRequest{Template: template}
+func create(ctx context.Context, c *client, template, ttl string, env []string, egress *proto.Egress) (*proto.Sandbox, error) {
+	req := proto.CreateRequest{Template: template, Egress: egress}
 	var err error
 	if req.TTL, err = parseTTL(ttl); err != nil {
 		return nil, err
@@ -138,19 +139,26 @@ func createCmd() *cobra.Command {
 	var ttl string
 	var env []string
 	var asJSON, view bool
+	var ef egressFlags
 	cmd := &cobra.Command{
 		Use:   "create [TEMPLATE]",
 		Short: "Create a sandbox and print its ID",
 		Long: "Create a sandbox from TEMPLATE (default \"default\") and print its ID.\n\n" +
-			"--env sets variables for every command in the sandbox.",
-		Example: "  id=$(sbx create)\n  id=$(sbx create browser --view)\n  id=$(sbx create --ttl 2h -e OPENAI_API_KEY)",
-		Args:    cobra.MaximumNArgs(1),
+			"--env sets variables for every command in the sandbox.\n\n" + egressHelp,
+		Example: "  id=$(sbx create)\n  id=$(sbx create browser --view)\n  id=$(sbx create --ttl 2h -e OPENAI_API_KEY)\n" +
+			"  id=$(sbx create --allow github.com,codeload.github.com --allow registry.npmjs.org)\n" +
+			"  id=$(sbx create --offline)",
+		Args: cobra.MaximumNArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			c, err := newClient()
 			if err != nil {
 				return err
 			}
-			sb, err := create(cmd.Context(), c, strings.Join(args, ""), ttl, env)
+			egress, err := ef.egress()
+			if err != nil {
+				return err
+			}
+			sb, err := create(cmd.Context(), c, strings.Join(args, ""), ttl, env, egress)
 			if err != nil {
 				return err
 			}
@@ -173,6 +181,7 @@ func createCmd() *cobra.Command {
 	cmd.Flags().StringVar(&ttl, "ttl", "", "idle timeout such as 30m or 2d; 0 never expires (default: daemon setting)")
 	cmd.Flags().StringArrayVarP(&env, "env", "e", nil, "NAME=VALUE, or NAME to copy it from your environment")
 	cmd.Flags().BoolVar(&asJSON, "json", false, "print the sandbox as JSON")
+	ef.register(cmd)
 	return cmd
 }
 

@@ -88,6 +88,8 @@ type createArgs struct {
 	Template string `json:"template,omitempty" jsonschema:"template name; default is \"default\". \"browser\" starts with Chromium open"`
 	TTL      string `json:"ttl,omitempty" jsonschema:"idle timeout such as 30m or 2d; 0 never expires"`
 	View     bool   `json:"view,omitempty" jsonschema:"open a window on the user's screen showing the sandbox's desktop"`
+	// No omitempty: an empty list, which allows nothing, must stay distinct from no list.
+	Allow []string `json:"allow" jsonschema:"restrict the network to these host names, such as github.com or *.npmjs.org; an empty list cuts the sandbox off; leave it out for the whole internet"`
 }
 
 type execArgs struct {
@@ -173,7 +175,14 @@ func (m *mcpServer) server() *mcp.Server {
 }
 
 func (m *mcpServer) create(ctx context.Context, _ *mcp.CallToolRequest, in createArgs) (*mcp.CallToolResult, any, error) {
-	sb, err := create(ctx, m.c, in.Template, in.TTL, nil)
+	var egress *proto.Egress
+	if in.Allow != nil {
+		var err error
+		if egress, err = proto.NewEgress(in.Allow); err != nil {
+			return nil, nil, err
+		}
+	}
+	sb, err := create(ctx, m.c, in.Template, in.TTL, nil, egress)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -250,7 +259,7 @@ func (m *mcpServer) exec(ctx context.Context, _ *mcp.CallToolRequest, in execArg
 		return nil, nil, err
 	}
 	var stdout, stderr tailBuffer
-	res, err := execStream(ctx, m.c, "/v1/sandboxes/"+in.ID+"/exec", req, &stdout, &stderr)
+	res, started, err := execStream(ctx, m.c, "/v1/sandboxes/"+in.ID+"/exec", req, &stdout, &stderr)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -262,6 +271,11 @@ func (m *mcpServer) exec(ctx context.Context, _ *mcp.CallToolRequest, in execArg
 	}
 	if res.Error != "" {
 		fmt.Fprintf(&b, "error: %s\n", res.Error)
+	}
+	if res.ExitCode != 0 {
+		if note := blockedNotice(ctx, m.c, in.ID, started); note != "" {
+			fmt.Fprintln(&b, note)
+		}
 	}
 	for _, out := range []struct {
 		name string
