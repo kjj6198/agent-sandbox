@@ -5,3 +5,6 @@ export CHROME_PATH=/usr/bin/chromium
 export PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium
 # The desktop that `sbx view` shows; GUI programs open on it.
 export DISPLAY=:0
+# fcitx5, which sbx-desktop starts, is the desktop's input method for Japanese and Chinese.
+export GTK_IM_MODULE=fcitx QT_IM_MODULE=fcitx XMODIFIERS=@im=fcitx
+export DBUS_SESSION_BUS_ADDRESS=unix:path=/tmp/dbus-session
