@@ -34,6 +34,8 @@ type Config struct {
 	MinFreeMiB int `json:"min_free_mib"`
 	// UIDBase + slot is the unprivileged user each jailed Firecracker runs as.
 	UIDBase int `json:"uid_base"`
+	// EgressPort is where restricted sandboxes' DNS, HTTP, and HTTPS arrive, on TCP and UDP.
+	EgressPort int `json:"egress_port"`
 }
 
 func LoadConfig(path string) (*Config, error) {
@@ -52,6 +54,7 @@ func LoadConfig(path string) (*Config, error) {
 		DefaultTTL:   proto.Duration(time.Hour),
 		MinFreeMiB:   512,
 		UIDBase:      200000,
+		EgressPort:   7071,
 	}
 	b, err := os.ReadFile(path)
 	if errors.Is(err, fs.ErrNotExist) {

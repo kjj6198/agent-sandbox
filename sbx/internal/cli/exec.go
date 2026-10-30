@@ -7,11 +7,13 @@ import (
 	"errors"
 	"fmt"
 	"io"
+	"net/http"
 	"os"
 	"os/signal"
 	"strings"
 	"sync"
 	"syscall"
+	"time"
 
 	"github.com/spf13/cobra"
 	"golang.org/x/term"
@@ -130,6 +132,7 @@ func runCmd() *cobra.Command {
 	var f execFlags
 	var template, ttl string
 	var keep bool
+	var ef egressFlags
 	cmd := &cobra.Command{
 		Use:   "run [flags] [--] COMMAND [ARG...]",
 		Short: "Run one command in a new sandbox, then remove it",
@@ -137,7 +140,8 @@ func runCmd() *cobra.Command {
 			"or you press Ctrl-C. sbx exits with the command's exit code.",
 		Example: "  sbx run -- python3 -c 'import sys; print(sys.version)'\n" +
 			"  curl -sL https://example.com/script.sh | sbx run -i -- bash\n" +
-			"  sbx run --template browser --keep -- 'curl -s localhost:9222/json/version'",
+			"  sbx run --template browser --keep -- 'curl -s localhost:9222/json/version'\n" +
+			"  sbx run --offline -i -- python3 untrusted.py < input.json",
 		Args: cobra.MinimumNArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			c, err := newClient()
@@ -148,9 +152,13 @@ func runCmd() *cobra.Command {
 			if err != nil {
 				return err
 			}
+			egress, err := ef.egress()
+			if err != nil {
+				return err
+			}
 			ctx, stop := signal.NotifyContext(cmd.Context(), os.Interrupt, syscall.SIGTERM)
 			defer stop()
-			sb, err := create(ctx, c, template, ttl, nil)
+			sb, err := create(ctx, c, template, ttl, nil, egress)
 			if err != nil {
 				return err
 			}
@@ -166,17 +174,19 @@ func runCmd() *cobra.Command {
 	cmd.Flags().StringVar(&template, "template", "", `template to start from (default "default")`)
 	cmd.Flags().StringVar(&ttl, "ttl", "", "idle timeout of the sandbox, with --keep")
 	cmd.Flags().BoolVar(&keep, "keep", false, "keep the sandbox and print its ID to stderr")
+	ef.register(cmd)
 	return cmd
 }
 
 func runExec(ctx context.Context, c *client, id string, req proto.ExecRequest) error {
 	path := "/v1/sandboxes/" + id + "/exec"
 	var res proto.ExecResult
+	var started time.Time
 	var err error
 	if req.Interactive() {
 		res, err = execInteractive(ctx, c, path, req)
 	} else {
-		res, err = execStream(ctx, c, path, req, os.Stdout, os.Stderr)
+		res, started, err = execStream(ctx, c, path, req, os.Stdout, os.Stderr)
 	}
 	if err != nil {
 		return err
@@ -192,24 +202,31 @@ func runExec(ctx context.Context, c *client, id string, req proto.ExecRequest) e
 		fmt.Fprintln(os.Stderr, "sbx:", res.Error)
 	}
 	if res.ExitCode != 0 {
+		if note := blockedNotice(ctx, c, id, started); note != "" {
+			fmt.Fprintln(os.Stderr, "sbx:", note)
+		}
 		return exitError{res.ExitCode}
 	}
 	return nil
 }
 
-func execStream(ctx context.Context, c *client, path string, req proto.ExecRequest, stdout, stderr io.Writer) (proto.ExecResult, error) {
+// execStream runs a command and copies its output. started is sbxd's clock when the command
+// began, to the second.
+func execStream(ctx context.Context, c *client, path string, req proto.ExecRequest, stdout, stderr io.Writer) (res proto.ExecResult, started time.Time, err error) {
 	b, _ := json.Marshal(req)
 	hreq, err := c.request(ctx, "POST", path, strings.NewReader(string(b)))
 	if err != nil {
-		return proto.ExecResult{}, err
+		return res, started, err
 	}
 	hreq.Header.Set("Content-Type", "application/json")
 	resp, err := c.send(hreq)
 	if err != nil {
-		return proto.ExecResult{}, err
+		return res, started, err
 	}
 	defer resp.Body.Close()
-	return readFrames(resp.Body, stdout, stderr)
+	started, _ = http.ParseTime(resp.Header.Get("Date"))
+	res, err = readFrames(resp.Body, stdout, stderr)
+	return res, started, err
 }
 
 func execInteractive(ctx context.Context, c *client, path string, req proto.ExecRequest) (proto.ExecResult, error) {

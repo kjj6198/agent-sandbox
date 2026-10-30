@@ -188,6 +188,25 @@ sbxd's nftables table `inet sbx` drops anything a sandbox sends to the host or t
 
 Nothing can connect into a sandbox's network. `sbx expose`, `sbx forward`, and `sbx view` tunnel connections through the agent over vsock, so a server inside may listen on localhost.
 
+### Egress allowlist
+
+By default a sandbox reaches the whole internet, so code inside it can send whatever it reads anywhere. `--allow` limits it to the hosts you name, and `--offline` cuts it off:
+
+```sh
+id=$(sbx create --allow github.com,codeload.github.com --allow '*.npmjs.org')
+sbx exec $id 'curl https://example.com'
+# curl: (6) Could not resolve host: example.com
+# sbx: the sandbox's egress allowlist blocked example.com. ...
+sbx allow $id example.com              # takes effect for new connections at once
+sbx run --offline -- python3 untrusted.py
+```
+
+The rules live in the sandbox's network namespace, outside the VM, so nothing in the guest can opt out, not even root. The namespace sends the guest's DNS, HTTP, and HTTPS to sbxd's egress listener (port 7071) and drops everything else. sbxd answers DNS only for allowed names, whichever resolver the guest asks. It relays a connection only after reading the host name from the HTTP `Host` header or the TLS SNI, and it dials that name itself, refusing private addresses. TLS stays end to end; sbxd never sees the content. A failed `sbx exec`, or an `exec` tool call over MCP, ends with a line naming what was blocked, and `sbx inspect` lists the last 20 blocked hosts.
+
+This is the network half of [Anthropic's sandbox-runtime](https://github.com/anthropics/sandbox-runtime), moved from inside the sandbox to outside the VM. Its limits carry over. A host on the list can carry data out, and so can a CDN that serves other sites under an allowed name (domain fronting). DNS queries for allowed subdomain patterns reach those domains' name servers. Only ports 80 and 443 pass, so `git` over SSH and QUIC do not; HTTP clients fall back to TCP. sbxd hides HTTPS DNS records so browsers do not use Encrypted Client Hello, which would hide the real host name.
+
+The allowlist guards against code in the sandbox, not against whoever holds the API token: `sbx allow` changes it. A sandbox created without `--allow` cannot be restricted later. Forks keep their parent's allowlist.
+
 A guest that escapes Firecracker and its jail is a process on the host. For a second wall, run sbx in a VM whose own firewall blocks the LAN, as the Proxmox setup does.
 
 ## Measured
@@ -213,8 +232,8 @@ sbxd serves HTTP on port 7070. Every request needs `Authorization: Bearer <token
 |---|---|---|
 | `GET /v1/status` | | host capacity |
 | `GET /v1/sandboxes` | | list of sandboxes |
-| `POST /v1/sandboxes` | `{"template", "ttl", "env"}` | the sandbox |
-| `GET`, `PATCH`, `DELETE /v1/sandboxes/{id}` | `PATCH`: `{"ttl"}` | |
+| `POST /v1/sandboxes` | `{"template", "ttl", "env", "egress": {"allow"}}` | the sandbox |
+| `GET`, `PATCH`, `DELETE /v1/sandboxes/{id}` | `PATCH`: `{"ttl", "egress": {"allow"}}` | |
 | `POST /v1/sandboxes/{id}/exec` | `{"script", "env", "cwd", "user", "timeout", "detach", "stdin", "tty"}` | frame stream, see `internal/proto/exec.go` |
 | `GET`, `PUT /v1/sandboxes/{id}/files?path=&user=` | tar | tar |
 | `GET /v1/sandboxes/{id}/tcp?port=` | | `101 Switching Protocols`, then raw TCP. Port 5900 is the screen's VNC |
@@ -242,6 +261,7 @@ Durations are strings such as `"30m"` or `"2d"`. `"0"` disables the idle timeout
 | `min_free_mib` | `512` | Refuse new sandboxes below this much available host memory |
 | `pool_size` | `8` | Network namespaces kept ready |
 | `port_min`, `port_max` | `30000`, `30999` | Host ports for `sbx expose` |
+| `egress_port` | `7071` | TCP and UDP port where restricted sandboxes' DNS, HTTP, and HTTPS arrive. Only sandboxes reach it |
 
 ## Why not Packer
 

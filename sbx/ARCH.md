@@ -206,6 +206,7 @@ flowchart LR
 - Namespaces are built ahead of time (8 by default), so a create never waits for `ip` and `nft`.
 - The guest MAC and the neighbor entry stay fixed. In the lab, a changed MAC cost 30 s of lost traffic and a missing entry a 1 s ARP wait.
 - Docker and ufw set the iptables FORWARD policy to DROP. sbxd adds accept rules for `sbxv+` there, because a packet must pass every chain on the hook. Its own table still drops private ranges.
+- A sandbox created with `--allow` or `--offline` gets one more table in its namespace, `ip egress`. It DNATs the guest's TCP 80 and 443 and UDP 53 to sbxd's egress listener on the slot's host veth address, and drops every other packet from `tap0`. sbxd knows the sandbox by the slot's veth address, which the namespace masquerades to. It answers DNS only for allowed names and relays HTTP and HTTPS by `Host` header or TLS SNI, dialing the name itself and refusing private addresses at connect time. The allowlist lives in sbxd's memory and the sandbox's state file, so `sbx allow` changes no rules.
 - Nothing routes into a sandbox. Inbound traffic arrives through vsock:
   - `expose` binds a host port and tunnels each connection through the agent's `/tcp` upgrade.
   - `forward` and `view` do the same through the API from the client side.
@@ -307,6 +308,7 @@ stateDiagram-v2
 | KVM + Firecracker | Guest code reaching host memory or devices; Firecracker has a minimal device model |
 | Jailer and seccomp | A VMM escape: Firecracker runs as its own uid, chrooted, in its own PID namespace, and filters its own syscalls |
 | Network namespace + nftables | Guest traffic to the host, LAN, cloud metadata, and IPv6 |
+| Egress allowlist, when set | Guest traffic to hosts not on the list, including DNS to them |
 | vsock-only ingress | Inbound connections to the guest, except through sbxd |
 | API token | Anyone on the network driving sbxd |
 | Token in the viewer URL | Other web pages on the user's machine reading a sandbox's screen, driving it, or answering a secret prompt |

@@ -12,6 +12,7 @@ import (
 	"os"
 	"os/exec"
 	"path/filepath"
+	"slices"
 	"strconv"
 	"strings"
 	"sync"
@@ -44,6 +45,9 @@ type sandbox struct {
 	exposures map[int]*exposure
 	destroyed bool
 
+	egressMu sync.Mutex // guards state.Egress and blocked; writers also hold mu
+	blocked  []proto.Blocked
+
 	lastActive atomic.Int64 // unix nanoseconds
 	inflight   atomic.Int32 // open requests and forwarded connections
 }
@@ -62,6 +66,7 @@ type sandboxState struct {
 	CreateMs  float64           `json:"create_ms"`
 	Env       map[string]string `json:"env,omitempty"`
 	Ports     map[int]int       `json:"ports,omitempty"` // guest port -> host port
+	Egress    *proto.Egress     `json:"egress,omitempty"`
 }
 
 func New(cfg *Config) (*Daemon, error) {
@@ -95,8 +100,11 @@ func (d *Daemon) Start(ctx context.Context) error {
 			return err
 		}
 	}
-	if err := setupHostNetwork(); err != nil {
+	if err := setupHostNetwork(d.cfg.EgressPort); err != nil {
 		return fmt.Errorf("host network: %w", err)
+	}
+	if err := d.serveEgress(ctx); err != nil {
+		return fmt.Errorf("egress listener: %w", err)
 	}
 	d.adopt()
 	go d.pool.run(ctx)
@@ -245,10 +253,10 @@ func (d *Daemon) Create(ctx context.Context, req proto.CreateRequest) (*sandbox,
 	if req.TTL != nil {
 		ttl = *req.TTL
 	}
-	return d.createFrom(ctx, d.templateDir(name), tpl, ttl, req.Env)
+	return d.createFrom(ctx, d.templateDir(name), tpl, ttl, req.Env, req.Egress)
 }
 
-func (d *Daemon) createFrom(ctx context.Context, tplDir string, tpl *proto.Template, ttl proto.Duration, env map[string]string) (*sandbox, error) {
+func (d *Daemon) createFrom(ctx context.Context, tplDir string, tpl *proto.Template, ttl proto.Duration, env map[string]string, egress *proto.Egress) (*sandbox, error) {
 	d.mu.Lock()
 	if len(d.sandboxes)+d.pending >= d.cfg.MaxSandboxes {
 		d.mu.Unlock()
@@ -279,6 +287,11 @@ func (d *Daemon) createFrom(ctx context.Context, tplDir string, tpl *proto.Templ
 			d.pool.release(slot)
 		}
 	}()
+	if egress != nil {
+		if err := restrictSlot(slot, d.cfg.EgressPort); err != nil {
+			return nil, err
+		}
+	}
 	if err := os.MkdirAll(v.root(), 0o700); err != nil {
 		return nil, err
 	}
@@ -311,6 +324,7 @@ func (d *Daemon) createFrom(ctx context.Context, tplDir string, tpl *proto.Templ
 			ID: v.id, Template: tpl.Name, Slot: slot, PID: v.pid, PIDStart: v.start,
 			CPUs: tpl.CPUs, MemoryMiB: tpl.MemoryMiB, CreatedAt: time.Now().UTC(), TTL: ttl,
 			CreateMs: float64(time.Since(t0).Microseconds()) / 1000, Env: env, Ports: map[int]int{},
+			Egress: egress,
 		},
 		vm: v, agent: agent, exposures: map[int]*exposure{},
 	}
@@ -463,7 +477,7 @@ func (d *Daemon) Fork(ctx context.Context, id string) (*sandbox, error) {
 	// The clone hard-links what it needs, so the temporary template can go right away.
 	defer os.RemoveAll(dir)
 	tpl.Name = src.state.Template
-	return d.createFrom(ctx, dir, tpl, src.state.TTL, src.state.Env)
+	return d.createFrom(ctx, dir, tpl, src.state.TTL, src.state.Env, src.state.Egress)
 }
 
 func (d *Daemon) SetTTL(id string, ttl proto.Duration) (*sandbox, error) {
@@ -486,6 +500,9 @@ func (d *Daemon) view(sb *sandbox, publicHost string) proto.Sandbox {
 		CreatedAt: sb.state.CreatedAt, TTL: sb.state.TTL, ExpiresAt: sb.expiresAt(),
 		CreateMs: sb.state.CreateMs, MemoryUsedMiB: sb.vm.privateMiB(),
 	}
+	sb.egressMu.Lock()
+	s.Egress, s.Blocked = sb.state.Egress, slices.Clone(sb.blocked)
+	sb.egressMu.Unlock()
 	for port, hostPort := range sb.state.Ports {
 		s.Ports = append(s.Ports, d.portView(port, hostPort, publicHost))
 	}
