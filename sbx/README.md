@@ -59,6 +59,8 @@ Clients need TCP 7070 for the API and 30000 to 30999 for `sbx expose`. If the ho
 
 Every sandbox has a 1280x800 desktop: an X server that serves VNC inside the guest, with openbox, a dark wallpaper, a dock at the bottom (browser, files, terminal), and a terminal window already open. Commands get `DISPLAY=:0`, so any GUI program an agent starts appears there. Right-click the desktop for a terminal, a browser, or files.
 
+fcitx5 handles Japanese and Chinese input: Mozc for Japanese, Chewing (Zhuyin) for Traditional Chinese, and Pinyin for Simplified Chinese. Ctrl+Space turns it on and off, and Ctrl+Shift+Space moves to the next input method. It starts off, so keys type plain ASCII. `fcitx5-remote -s mozc` (or `chewing`, `pinyin`, `keyboard-us`) switches from a command.
+
 `sbx view ID`, or `sbx create --view`, opens a small window at the top right of your screen with a live view. It starts in watch mode, so a stray click cannot disturb the agent; click "Watching" to take over the mouse and keyboard. The viewer is a page served by the CLI on 127.0.0.1, embedding [noVNC](https://github.com/novnc/noVNC), and it reaches the screen through the same API tunnel as `sbx forward`. It opens as an app window of Chrome, Edge, Brave, or Chromium, and falls back to a tab in your default browser.
 
 The viewer runs in the background, so an agent's `sbx create --view` returns at once. It exits a minute after its window closes or its sandbox is removed, and watching does not keep an idle sandbox alive.
@@ -122,7 +124,7 @@ The viewer page can drive the sandbox and answer secret prompts, so its URL carr
 
 | Template | Content |
 |---|---|
-| `default` | Debian 13, Node.js 24 with pnpm, Go 1.27, Python 3.13 with uv, build-essential, git, ripgrep, jq, ffmpeg, ImageMagick, Chromium, Noto CJK fonts (Japanese, Traditional and Simplified Chinese, Korean) and emoji, and the desktop. 2 vCPUs, 2 GiB memory, 16 GiB disk |
+| `default` | Debian 13, Node.js 24 with pnpm, Go 1.27, Python 3.13 with uv, build-essential, git, ripgrep, jq, ffmpeg, ImageMagick, Chromium, Noto CJK fonts (Japanese, Traditional and Simplified Chinese, Korean) and emoji, Japanese and Chinese input methods, and the desktop. 2 vCPUs, 2 GiB memory, 16 GiB disk |
 | `browser` | The same image with Chromium already open on the desktop, its DevTools protocol on port 9222 |
 
 Commands run as `user` (uid 1000, passwordless sudo) in `/home/user`. Versions are pinned at the top of `templates/default/Dockerfile`.

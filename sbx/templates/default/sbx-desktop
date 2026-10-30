@@ -1,12 +1,15 @@
 #!/bin/bash
 # Starts the sandbox's desktop: an X server on :0 that serves VNC on 127.0.0.1:5900, with
 # openbox as the window manager, a wallpaper, a small dock (browser, files, terminal),
-# and a terminal window. Template builds run this before the snapshot, so every sandbox
-# starts with it running; `sbx view` shows it. VNC needs no password because only the
-# guest agent can reach loopback.
+# fcitx5 for Japanese and Chinese input, and a terminal window. Template builds run this
+# before the snapshot, so every sandbox starts with it running; `sbx view` shows it. VNC
+# needs no password because only the guest agent can reach loopback.
 set -eu
 export DISPLAY=:0
+export DBUS_SESSION_BUS_ADDRESS=unix:path=/tmp/dbus-session
 [ -S /tmp/.X11-unix/X0 ] && exit 0
+# fcitx5 reaches GTK programs over the session bus.
+[ -S /tmp/dbus-session ] || dbus-daemon --session --address="$DBUS_SESSION_BUS_ADDRESS" --fork >/dev/null
 setsid Xvnc :0 -geometry "${SBX_SCREEN:-1280x800}" -depth 24 -rfbport 5900 -localhost \
   -SecurityTypes None -AlwaysShared -desktop sbx >/tmp/xvnc.log 2>&1 </dev/null &
 for _ in $(seq 50); do
@@ -26,6 +29,9 @@ else
 fi
 if command -v tint2 >/dev/null && ! pgrep -x tint2 >/dev/null; then
   setsid tint2 -c /usr/local/share/sbx/tint2rc >/tmp/tint2.log 2>&1 </dev/null &
+fi
+if command -v fcitx5 >/dev/null && ! pgrep -x fcitx5 >/dev/null; then
+  setsid fcitx5 >/tmp/fcitx5.log 2>&1 </dev/null &
 fi
 # A terminal in the middle of the screen, like a freshly booted desktop. Set
 # SBX_DESKTOP_TERMINAL=0 during a template warmup to start with an empty desktop.

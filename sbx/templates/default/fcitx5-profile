@@ -1,0 +1,24 @@
+# Ctrl+Space turns the input method on and off, Ctrl+Shift+Space moves to the next one.
+[Groups/0]
+Name=Default
+Default Layout=us
+DefaultIM=mozc
+
+[Groups/0/Items/0]
+Name=keyboard-us
+Layout=
+
+[Groups/0/Items/1]
+Name=mozc
+Layout=
+
+[Groups/0/Items/2]
+Name=chewing
+Layout=
+
+[Groups/0/Items/3]
+Name=pinyin
+Layout=
+
+[GroupOrder]
+0=Default
