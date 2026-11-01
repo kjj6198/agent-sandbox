@@ -40,6 +40,8 @@ To see the screen yourself, or to show it somewhere else, `sbx screenshot $id [F
 
 To click and type on the desktop, or to sign in with the user's password, use the `sbx mcp` server's tools if they are available. Each action returns the screen, and `request_secret` asks the user for a password without you ever seeing it. Never ask the user to paste a password into the chat.
 
+To use a desktop app's menus and buttons by name instead of by pixel, run cua-driver inside the sandbox as an MCP server: `claude mcp add cua -- sbx exec -i $id cua-driver mcp`. Pass `"delivery_mode": "foreground"` to its click and typing tools, because the default background mode cannot type on the sandbox's screen.
+
 ## Browser
 
 ```sh
