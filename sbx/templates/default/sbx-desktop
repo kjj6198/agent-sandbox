@@ -1,9 +1,9 @@
 #!/bin/bash
 # Starts the sandbox's desktop: an X server on :0 that serves VNC on 127.0.0.1:5900, with
 # openbox as the window manager, a wallpaper, a small dock (browser, files, terminal),
-# fcitx5 for Japanese and Chinese input, and a terminal window. Template builds run this
-# before the snapshot, so every sandbox starts with it running; `sbx view` shows it. VNC
-# needs no password because only the guest agent can reach loopback.
+# fcitx5 for Japanese and Chinese input, cua-driver's daemon, and a terminal window.
+# Template builds run this before the snapshot, so every sandbox starts with it running;
+# `sbx view` shows it. VNC needs no password because only the guest agent can reach loopback.
 set -eu
 export DISPLAY=:0
 export DBUS_SESSION_BUS_ADDRESS=unix:path=/tmp/dbus-session
@@ -21,6 +21,16 @@ if [ ! -S /tmp/.X11-unix/X0 ]; then
   echo "Xvnc did not start:" >&2
   tail -20 /tmp/xvnc.log >&2
   exit 1
+fi
+# cua-driver's daemon serves `cua-driver call`, and starting it turns on the session's
+# accessibility switch. Chromium and GTK programs read that switch only when they start, and
+# one started while it was off shows cua-driver no elements, so the daemon goes before them.
+if command -v cua-driver >/dev/null; then
+  setsid cua-driver serve >/tmp/cua-driver.log 2>&1 </dev/null &
+  for _ in $(seq 50); do
+    [ -S "$HOME/.cache/cua-driver/cua-driver.sock" ] && break
+    sleep 0.1
+  done
 fi
 setsid openbox >/tmp/openbox.log 2>&1 </dev/null &
 if command -v feh >/dev/null && [ -f /usr/local/share/sbx/wallpaper.png ]; then

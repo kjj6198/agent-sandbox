@@ -128,6 +128,15 @@ The viewer page can drive the sandbox and answer secret prompts, so its URL carr
 claude mcp add cua -- sbx exec -i $id cua-driver mcp
 ```
 
+`sbx-desktop` also starts cua-driver's daemon, so its tools work from a shell in the sandbox without setup:
+
+```sh
+cua-driver call list_windows
+echo '{"pid":1234}' | cua-driver call get_window_state
+```
+
+Starting the daemon turns on the desktop's accessibility, which Chromium and GTK programs check only when they start. A program started before it shows cua-driver only its window title, with `degraded: true`; restart that program.
+
 Its click and typing tools need `"delivery_mode": "foreground"`. The default background mode keeps a person's pointer free, which a sandbox does not need, and it types through a virtual keyboard that Xvnc cannot add. In the `browser` template, start it as `cua-driver mcp --grant existing-profile` so its browser tools may attach to the open Chromium. The template turns off cua-driver's telemetry.
 
 ## Templates
