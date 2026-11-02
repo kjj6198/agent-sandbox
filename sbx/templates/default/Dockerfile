@@ -6,6 +6,7 @@ ARG NODE_VERSION=24.21.0
 ARG GO_VERSION=1.27.2
 ARG UV_VERSION=0.13.0
 ARG PNPM_VERSION=12.11.2
+ARG CUA_DRIVER_VERSION=0.38.0
 
 ENV DEBIAN_FRONTEND=noninteractive
 RUN apt-get update && apt-get install -y --no-install-recommends \
@@ -38,12 +39,17 @@ RUN set -eux; cd /tmp; \
     curl -fsSLO https://github.com/astral-sh/uv/releases/download/$UV_VERSION/$uv; \
     curl -fsSL https://github.com/astral-sh/uv/releases/download/$UV_VERSION/$uv.sha256 | sha256sum -c -; \
     tar -xzf $uv -C /usr/local/bin --strip-components=1; \
+    cua=cua-driver-rs-$CUA_DRIVER_VERSION-linux-x86_64-binary.tar.gz; \
+    curl -fsSLO https://github.com/trycua/cua/releases/download/cua-driver-rs-v$CUA_DRIVER_VERSION/$cua; \
+    curl -fsSL https://github.com/trycua/cua/releases/download/cua-driver-rs-v$CUA_DRIVER_VERSION/checksums.txt | grep " $cua\$" | sha256sum -c -; \
+    tar -xzf $cua -C /usr/local/bin cua-driver; \
     rm -f /tmp/*.tar.*; \
     npm install -g --no-audit --no-fund pnpm@$PNPM_VERSION; \
     rm -rf /root/.npm
 
 RUN useradd -m -u 1000 -s /bin/bash user \
-    && echo 'user ALL=(ALL) NOPASSWD:ALL' >/etc/sudoers.d/user && chmod 0440 /etc/sudoers.d/user
+    && echo 'user ALL=(ALL) NOPASSWD:ALL' >/etc/sudoers.d/user && chmod 0440 /etc/sudoers.d/user \
+    && runuser -u user -- cua-driver telemetry disable
 
 COPY profile.sh /etc/profile.d/sbx.sh
 COPY sbx-desktop sbx-browser sbx-windows sbx-ocr /usr/local/bin/

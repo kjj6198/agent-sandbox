@@ -120,11 +120,21 @@ The screen is not filtered. A secret typed into a field that shows its text appe
 
 The viewer page can drive the sandbox and answer secret prompts, so its URL carries a random token. Other web pages the user opens cannot guess the address.
 
+### Apps by name with cua-driver
+
+`sbx mcp` sees the screen as pixels. The default template also has [cua-driver](https://github.com/trycua/cua/tree/main/libs/cua-driver), an MCP server that runs inside the sandbox and reads the accessibility tree of the apps on its desktop, so an agent can open a menu by its name instead of its position:
+
+```sh
+claude mcp add cua -- sbx exec -i $id cua-driver mcp
+```
+
+Its click and typing tools need `"delivery_mode": "foreground"`. The default background mode keeps a person's pointer free, which a sandbox does not need, and it types through a virtual keyboard that Xvnc cannot add. In the `browser` template, start it as `cua-driver mcp --grant existing-profile` so its browser tools may attach to the open Chromium. The template turns off cua-driver's telemetry.
+
 ## Templates
 
 | Template | Content |
 |---|---|
-| `default` | Debian 13, Node.js 24 with pnpm, Go 1.27, Python 3.13 with uv, build-essential, git, ripgrep, jq, ffmpeg, ImageMagick, Chromium, Noto CJK fonts (Japanese, Traditional and Simplified Chinese, Korean) and emoji, Japanese and Chinese input methods, and the desktop. 2 vCPUs, 2 GiB memory, 16 GiB disk |
+| `default` | Debian 13, Node.js 24 with pnpm, Go 1.27, Python 3.13 with uv, build-essential, git, ripgrep, jq, ffmpeg, ImageMagick, Chromium, cua-driver, Noto CJK fonts (Japanese, Traditional and Simplified Chinese, Korean) and emoji, Japanese and Chinese input methods, and the desktop. 2 vCPUs, 2 GiB memory, 16 GiB disk |
 | `browser` | The same image with Chromium already open on the desktop, its DevTools protocol on port 9222 |
 
 Commands run as `user` (uid 1000, passwordless sudo) in `/home/user`. Versions are pinned at the top of `templates/default/Dockerfile`.
