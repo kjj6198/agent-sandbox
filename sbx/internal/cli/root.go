@@ -23,8 +23,9 @@ from a snapshot in tens of milliseconds, with its own kernel, disk, and network.
 cannot reach the host or the LAN, only the internet. "sbx create --allow HOST" narrows that
 to the hosts you name.
 
-The default template is Debian with Node.js, pnpm, Go, Python, uv, Chromium, ffmpeg, and CJK
-fonts. Commands run as "user", who has passwordless sudo, in /home/user.
+The default template is Debian with Node.js, pnpm, Go, Python, uv, Chromium, ffmpeg, CJK
+fonts, and the agent CLIs claude, codex, and gh. Commands run as "user", who has passwordless
+sudo, in /home/user.
 
 Typical use:
 

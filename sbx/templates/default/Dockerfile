@@ -7,6 +7,9 @@ ARG GO_VERSION=1.27.2
 ARG UV_VERSION=0.13.0
 ARG PNPM_VERSION=12.11.2
 ARG CUA_DRIVER_VERSION=0.38.0
+ARG CLAUDE_CODE_VERSION=2.1.316
+ARG CODEX_VERSION=0.166.0
+ARG GH_VERSION=2.103.3
 
 ENV DEBIAN_FRONTEND=noninteractive
 RUN apt-get update && apt-get install -y --no-install-recommends \
@@ -43,8 +46,13 @@ RUN set -eux; cd /tmp; \
     curl -fsSLO https://github.com/trycua/cua/releases/download/cua-driver-rs-v$CUA_DRIVER_VERSION/$cua; \
     curl -fsSL https://github.com/trycua/cua/releases/download/cua-driver-rs-v$CUA_DRIVER_VERSION/checksums.txt | grep " $cua\$" | sha256sum -c -; \
     tar -xzf $cua -C /usr/local/bin cua-driver; \
+    gh=gh_${GH_VERSION}_linux_amd64.tar.gz; \
+    curl -fsSLO https://github.com/cli/cli/releases/download/v$GH_VERSION/$gh; \
+    curl -fsSL https://github.com/cli/cli/releases/download/v$GH_VERSION/gh_${GH_VERSION}_checksums.txt | grep " $gh\$" | sha256sum -c -; \
+    tar -xzf $gh -C /usr/local --strip-components=1 --wildcards '*/bin/gh'; \
     rm -f /tmp/*.tar.*; \
-    npm install -g --no-audit --no-fund pnpm@$PNPM_VERSION; \
+    npm install -g --no-audit --no-fund pnpm@$PNPM_VERSION \
+      @anthropic-ai/claude-code@$CLAUDE_CODE_VERSION @openai/codex@$CODEX_VERSION; \
     rm -rf /root/.npm
 
 RUN useradd -m -u 1000 -s /bin/bash user \

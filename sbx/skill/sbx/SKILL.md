@@ -5,7 +5,7 @@ description: Run code, builds, tests, dev servers, or a browser in a disposable,
 
 # sbx
 
-`sbx` creates Firecracker microVMs in about 30 ms. Each one is a Debian machine with Node.js 24 and pnpm, Go, Python 3.13 and uv, build tools, ffmpeg, ImageMagick, Chromium, CJK fonts, and a desktop. It reaches the internet but not the LAN. Commands run as `user` with passwordless sudo, in `/home/user`.
+`sbx` creates Firecracker microVMs in about 30 ms. Each one is a Debian machine with Node.js 24 and pnpm, Go, Python 3.13 and uv, build tools, ffmpeg, ImageMagick, Chromium, CJK fonts, a desktop, and the agent CLIs `claude`, `codex`, and `gh`. It reaches the internet but not the LAN. Commands run as `user` with passwordless sudo, in `/home/user`.
 
 Run `sbx --help` and `sbx <command> --help` for every option.
 

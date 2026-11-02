@@ -134,7 +134,7 @@ Its click and typing tools need `"delivery_mode": "foreground"`. The default bac
 
 | Template | Content |
 |---|---|
-| `default` | Debian 13, Node.js 24 with pnpm, Go 1.27, Python 3.13 with uv, build-essential, git, ripgrep, jq, ffmpeg, ImageMagick, Chromium, cua-driver, Noto CJK fonts (Japanese, Traditional and Simplified Chinese, Korean) and emoji, Japanese and Chinese input methods, and the desktop. 2 vCPUs, 2 GiB memory, 16 GiB disk |
+| `default` | Debian 13, Node.js 24 with pnpm, Go 1.27, Python 3.13 with uv, build-essential, git, ripgrep, jq, ffmpeg, ImageMagick, Chromium, cua-driver, Noto CJK fonts (Japanese, Traditional and Simplified Chinese, Korean) and emoji, Japanese and Chinese input methods, Claude Code, Codex, and the GitHub CLI, and the desktop. 2 vCPUs, 2 GiB memory, 16 GiB disk |
 | `browser` | The same image with Chromium already open on the desktop, its DevTools protocol on port 9222 |
 
 Commands run as `user` (uid 1000, passwordless sudo) in `/home/user`. Versions are pinned at the top of `templates/default/Dockerfile`.
