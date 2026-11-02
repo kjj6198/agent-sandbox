@@ -6,6 +6,7 @@ import (
 	"crypto/subtle"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"net"
 	"net/http"
 	"strconv"
@@ -35,6 +36,9 @@ func (d *Daemon) Handler() http.Handler {
 	mux.HandleFunc("GET /v1/templates", d.handleTemplates)
 	mux.HandleFunc("POST /v1/templates/{name}", d.handleBuild)
 	mux.HandleFunc("DELETE /v1/templates/{name}", d.handleDeleteTemplate)
+	mux.HandleFunc("GET /v1/environments", d.handleEnvironments)
+	mux.HandleFunc("PUT /v1/environments/{name}", d.handlePutEnvironment)
+	mux.HandleFunc("DELETE /v1/environments/{name}", d.handleDeleteEnvironment)
 	return d.auth(mux)
 }
 
@@ -84,9 +88,16 @@ func (d *Daemon) handleStatus(w http.ResponseWriter, r *http.Request) {
 }
 
 func (d *Daemon) handleList(w http.ResponseWriter, r *http.Request) {
+	sel, err := parseLabelSelector(r.URL.Query()["label"])
+	if err != nil {
+		writeDaemonError(w, err)
+		return
+	}
 	out := []proto.Sandbox{}
 	for _, sb := range d.list() {
-		out = append(out, d.view(sb, d.publicHost(r)))
+		if matchLabels(sb.state.Labels, sel) {
+			out = append(out, d.view(sb, d.publicHost(r)))
+		}
 	}
 	writeJSON(w, http.StatusOK, out)
 }
@@ -224,6 +235,31 @@ func (d *Daemon) handleDeleteTemplate(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusNoContent)
 }
 
+func (d *Daemon) handleEnvironments(w http.ResponseWriter, r *http.Request) {
+	writeJSON(w, http.StatusOK, d.Environments())
+}
+
+func (d *Daemon) handlePutEnvironment(w http.ResponseWriter, r *http.Request) {
+	var u proto.EnvironmentUpdate
+	if !decodeLimit(w, r, &u, maxEnvUpdateBody) {
+		return
+	}
+	env, err := d.UpdateEnvironment(r.PathValue("name"), u)
+	if err != nil {
+		writeDaemonError(w, err)
+		return
+	}
+	writeJSON(w, http.StatusOK, env)
+}
+
+func (d *Daemon) handleDeleteEnvironment(w http.ResponseWriter, r *http.Request) {
+	if err := d.DeleteEnvironment(r.PathValue("name")); err != nil {
+		writeDaemonError(w, err)
+		return
+	}
+	w.WriteHeader(http.StatusNoContent)
+}
+
 // publicHost is the host name the client used for the API, which also reaches exposed ports
 // when the API is behind a port forward.
 func (d *Daemon) publicHost(r *http.Request) string {
@@ -240,18 +276,42 @@ func atoiOr(s string, def int) int {
 	return def
 }
 
+const maxBody = 1 << 20
+
 func decode(w http.ResponseWriter, r *http.Request, v any) bool {
-	if err := json.NewDecoder(r.Body).Decode(v); err != nil {
+	return decodeLimit(w, r, v, maxBody)
+}
+
+func decodeLimit(w http.ResponseWriter, r *http.Request, v any, limit int64) bool {
+	if err := json.NewDecoder(http.MaxBytesReader(w, r.Body, limit)).Decode(v); err != nil {
 		writeError(w, http.StatusBadRequest, err)
 		return false
 	}
 	return true
 }
 
+// clientError is an error the request caused, answered with its own status.
+type clientError struct {
+	status int
+	error
+}
+
+func invalid(format string, args ...any) error {
+	return clientError{http.StatusBadRequest, fmt.Errorf(format, args...)}
+}
+
+func conflict(format string, args ...any) error {
+	return clientError{http.StatusConflict, fmt.Errorf(format, args...)}
+}
+
 func writeDaemonError(w http.ResponseWriter, err error) {
 	status := http.StatusInternalServerError
-	if errors.Is(err, errNotFound) {
+	var ce clientError
+	switch {
+	case errors.Is(err, errNotFound):
 		status = http.StatusNotFound
+	case errors.As(err, &ce):
+		status = ce.status
 	}
 	writeError(w, status, err)
 }

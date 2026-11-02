@@ -69,7 +69,7 @@ The main users of `sbx` are LLM agents calling it from a shell, so the design fo
 | Reach inside | `expose`, `unexpose`, `forward`, `view`, `screenshot` |
 | Tools for agents | `mcp` |
 | State | `snapshot`, `fork`, `template ls / build / rm` |
-| Host | `status`, `login` |
+| Host | `status`, `login`, `env ls / set / unset / file / rm` |
 
 ### Configuration lookup
 
@@ -135,7 +135,8 @@ flowchart TD
   jail --> launch["jailer: chroot, uid 200000+slot,<br/>new PID namespace, enter the netns,<br/>exec Firecracker"]
   launch --> load["PUT /snapshot/load<br/>memory mapped privately from mem"]
   load --> init["Agent POST /init:<br/>host clock, hostname, sandbox env"]
-  init --> save["Write sandboxes/ID.json"]
+  init --> files["Agent PUT /archive for each<br/>environment file, owned by user"]
+  files --> save["Write sandboxes/ID.json"]
   save --> done["Return the sandbox, about 35 ms after the request"]
 ```
 
@@ -145,6 +146,8 @@ The design choices behind each step:
 - **Private memory mapping.** Clones read the template's memory through the host page cache and copy only the pages they write. An idle sandbox costs about 5 MiB.
 - **Read-only root, private upper disk.** `rootfs.ext4` is shared read-only by every clone. Each clone gets its own sparse `upper.ext4`, the upper layer of an overlay. Writes cost host disk instead of guest RAM.
 - **Clock reset.** A restored guest wakes with the snapshot's time. `/init` sets the real time before any command runs.
+- **Environment resolved once.** sbxd reads the environment (`base` unless the request names another or `none`), merges its variables under the request's `env`, and stores the result as the sandbox's env in `sandboxes/ID.json`. Forks and the re-init after a snapshot reuse that, so they never read the environment again and a later edit or delete cannot change a running sandbox. Files are written only at create; a fork already has them on its cloned disk.
+- **No templates from secrets.** `POST /snapshot` refuses a sandbox with an environment. A memory snapshot holds every process's copy of the variables and whatever programs cached from the files, so scrubbing the files and variables first would still leak them into every clone. `fork` uses the same snapshot internally but deletes the temporary template at once, and the clone inherits the environment anyway.
 
 ### Inside the guest at boot
 
@@ -297,7 +300,7 @@ stateDiagram-v2
   Destroyed --> [*]: kill VM, remove jail,<br/>release netns and ports
 ```
 
-- sbxd checks every 5 s. A sandbox with an exec or tunnel open never counts as idle.
+- sbxd checks every 5 s. A sandbox with an exec or tunnel open never counts as idle, including each connection through an exposed port. An sbxd restart drops those connections; it re-binds the ports and restarts the idle timer, and clients reconnect.
 - Firecracker processes outlive sbxd (`KillMode=process`). On start, sbxd adopts every VM whose PID and start time match its saved state, re-binds its exposed ports, and removes jails and namespaces nobody claims.
 - Destroy waits until the VM process is gone before releasing its namespace, because the tap stays busy until then.
 
@@ -311,6 +314,7 @@ stateDiagram-v2
 | Egress allowlist, when set | Guest traffic to hosts not on the list, including DNS to them |
 | vsock-only ingress | Inbound connections to the guest, except through sbxd |
 | API token | Anyone on the network driving sbxd |
+| Names-only environment API | A token holder reading stored secrets back; they can still start a sandbox with them and read them inside |
 | Token in the viewer URL | Other web pages on the user's machine reading a sandbox's screen, driving it, or answering a secret prompt |
 | Optional outer VM | A full host escape reaching the LAN, as in `deploy/proxmox` |
 
@@ -320,11 +324,12 @@ The agent inside the guest is unauthenticated. Only the host can reach its vsock
 
 ```
 /etc/sbx/sbxd.json, token          config and API token
+/etc/sbx/environments/NAME.json    environment variables and files, root-only
 /usr/local/bin/sbxd, sbx           binaries
 /usr/local/lib/sbx/sbx-agent       copied into every template
 /var/lib/sbx/kernel/vmlinux        guest kernel
 /var/lib/sbx/templates/NAME/       rootfs.ext4, upper.ext4, vmstate, mem, template.json
 /var/lib/sbx/jail/firecracker/ID/  per-sandbox jail and console.log
-/var/lib/sbx/sandboxes/ID.json     state for adoption after a restart
+/var/lib/sbx/sandboxes/ID.json     state for adoption after a restart, labels included
 /var/lib/sbx/build/                template build scratch
 ```

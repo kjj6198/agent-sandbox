@@ -18,18 +18,20 @@ type Config struct {
 	Listen string `json:"listen"`
 	// PublicHost is the address put in URLs of exposed ports. Empty means the host name the
 	// client used to reach the API, which is right behind a port forward.
-	PublicHost   string         `json:"public_host"`
-	DataDir      string         `json:"data_dir"`
-	TokenFile    string         `json:"token_file"`
-	Firecracker  string         `json:"firecracker"`
-	Jailer       string         `json:"jailer"`
-	Kernel       string         `json:"kernel"`
-	AgentBinary  string         `json:"agent_binary"`
-	MaxSandboxes int            `json:"max_sandboxes"`
-	PoolSize     int            `json:"pool_size"`
-	PortMin      int            `json:"port_min"`
-	PortMax      int            `json:"port_max"`
-	DefaultTTL   proto.Duration `json:"default_ttl"`
+	PublicHost string `json:"public_host"`
+	DataDir    string `json:"data_dir"`
+	TokenFile  string `json:"token_file"`
+	// EnvironmentDir holds the environments, which carry secrets; keep it root-only.
+	EnvironmentDir string         `json:"environment_dir"`
+	Firecracker    string         `json:"firecracker"`
+	Jailer         string         `json:"jailer"`
+	Kernel         string         `json:"kernel"`
+	AgentBinary    string         `json:"agent_binary"`
+	MaxSandboxes   int            `json:"max_sandboxes"`
+	PoolSize       int            `json:"pool_size"`
+	PortMin        int            `json:"port_min"`
+	PortMax        int            `json:"port_max"`
+	DefaultTTL     proto.Duration `json:"default_ttl"`
 	// MinFreeMiB refuses new sandboxes when the host has less memory available.
 	MinFreeMiB int `json:"min_free_mib"`
 	// UIDBase + slot is the unprivileged user each jailed Firecracker runs as.
@@ -40,21 +42,22 @@ type Config struct {
 
 func LoadConfig(path string) (*Config, error) {
 	c := &Config{
-		Listen:       ":7070",
-		DataDir:      "/var/lib/sbx",
-		TokenFile:    "/etc/sbx/token",
-		Firecracker:  "/usr/local/bin/firecracker",
-		Jailer:       "/usr/local/bin/jailer",
-		Kernel:       "/var/lib/sbx/kernel/vmlinux",
-		AgentBinary:  "/usr/local/lib/sbx/sbx-agent",
-		MaxSandboxes: 64,
-		PoolSize:     8,
-		PortMin:      30000,
-		PortMax:      30999,
-		DefaultTTL:   proto.Duration(time.Hour),
-		MinFreeMiB:   512,
-		UIDBase:      200000,
-		EgressPort:   7071,
+		Listen:         ":7070",
+		DataDir:        "/var/lib/sbx",
+		TokenFile:      "/etc/sbx/token",
+		EnvironmentDir: "/etc/sbx/environments",
+		Firecracker:    "/usr/local/bin/firecracker",
+		Jailer:         "/usr/local/bin/jailer",
+		Kernel:         "/var/lib/sbx/kernel/vmlinux",
+		AgentBinary:    "/usr/local/lib/sbx/sbx-agent",
+		MaxSandboxes:   64,
+		PoolSize:       8,
+		PortMin:        30000,
+		PortMax:        30999,
+		DefaultTTL:     proto.Duration(time.Hour),
+		MinFreeMiB:     512,
+		UIDBase:        200000,
+		EgressPort:     7071,
 	}
 	b, err := os.ReadFile(path)
 	if errors.Is(err, fs.ErrNotExist) {

@@ -31,6 +31,7 @@ type Daemon struct {
 	fcVersion  string
 	buildMu    sync.Mutex // one template build at a time
 	templateMu sync.Mutex // template directory changes
+	envMu      sync.Mutex // environment file changes
 	mu         sync.Mutex
 	sandboxes  map[string]*sandbox
 	pending    int // creates in progress, counted against MaxSandboxes
@@ -54,19 +55,22 @@ type sandbox struct {
 
 // sandboxState is persisted to sandboxes/<id>.json so a restarted sbxd can adopt its VMs.
 type sandboxState struct {
-	ID        string            `json:"id"`
-	Template  string            `json:"template"`
-	Slot      int               `json:"slot"`
-	PID       int               `json:"pid"`
-	PIDStart  uint64            `json:"pid_start"`
-	CPUs      int               `json:"cpus"`
-	MemoryMiB int               `json:"memory_mib"`
-	CreatedAt time.Time         `json:"created_at"`
-	TTL       proto.Duration    `json:"ttl"`
-	CreateMs  float64           `json:"create_ms"`
-	Env       map[string]string `json:"env,omitempty"`
-	Ports     map[int]int       `json:"ports,omitempty"` // guest port -> host port
-	Egress    *proto.Egress     `json:"egress,omitempty"`
+	ID        string         `json:"id"`
+	Template  string         `json:"template"`
+	Slot      int            `json:"slot"`
+	PID       int            `json:"pid"`
+	PIDStart  uint64         `json:"pid_start"`
+	CPUs      int            `json:"cpus"`
+	MemoryMiB int            `json:"memory_mib"`
+	CreatedAt time.Time      `json:"created_at"`
+	TTL       proto.Duration `json:"ttl"`
+	CreateMs  float64        `json:"create_ms"`
+	// Env is the sandbox-wide environment: the environment's vars merged with the request's.
+	Env         map[string]string `json:"env,omitempty"`
+	Environment string            `json:"environment,omitempty"`
+	Labels      map[string]string `json:"labels,omitempty"`
+	Ports       map[int]int       `json:"ports,omitempty"` // guest port -> host port
+	Egress      *proto.Egress     `json:"egress,omitempty"`
 }
 
 func New(cfg *Config) (*Daemon, error) {
@@ -241,6 +245,9 @@ func (d *Daemon) get(id string) (*sandbox, error) {
 
 // Create restores a sandbox from a template snapshot.
 func (d *Daemon) Create(ctx context.Context, req proto.CreateRequest) (*sandbox, error) {
+	if err := validLabels(req.Labels); err != nil {
+		return nil, err
+	}
 	name := req.Template
 	if name == "" {
 		name = "default"
@@ -249,14 +256,32 @@ func (d *Daemon) Create(ctx context.Context, req proto.CreateRequest) (*sandbox,
 	if err != nil {
 		return nil, err
 	}
-	ttl := d.cfg.DefaultTTL
-	if req.TTL != nil {
-		ttl = *req.TTL
+	envName, e, err := d.createEnvironment(req.Environment)
+	if err != nil {
+		return nil, err
 	}
-	return d.createFrom(ctx, d.templateDir(name), tpl, ttl, req.Env, req.Egress)
+	spec := launchSpec{
+		TTL: d.cfg.DefaultTTL, Env: proto.MergeEnv(e.Vars, req.Env), Egress: req.Egress,
+		Environment: envName, Labels: req.Labels, Files: e.Files,
+	}
+	if req.TTL != nil {
+		spec.TTL = *req.TTL
+	}
+	return d.createFrom(ctx, d.templateDir(name), tpl, spec)
 }
 
-func (d *Daemon) createFrom(ctx context.Context, tplDir string, tpl *proto.Template, ttl proto.Duration, env map[string]string, egress *proto.Egress) (*sandbox, error) {
+// launchSpec is what a new sandbox starts with besides its template.
+type launchSpec struct {
+	TTL         proto.Duration
+	Env         map[string]string
+	Egress      *proto.Egress
+	Environment string
+	Labels      map[string]string
+	// Files are written once, at create. A fork already has them on its disk.
+	Files map[string]proto.EnvironmentFile
+}
+
+func (d *Daemon) createFrom(ctx context.Context, tplDir string, tpl *proto.Template, spec launchSpec) (*sandbox, error) {
 	d.mu.Lock()
 	if len(d.sandboxes)+d.pending >= d.cfg.MaxSandboxes {
 		d.mu.Unlock()
@@ -287,7 +312,7 @@ func (d *Daemon) createFrom(ctx context.Context, tplDir string, tpl *proto.Templ
 			d.pool.release(slot)
 		}
 	}()
-	if egress != nil {
+	if spec.Egress != nil {
 		if err := restrictSlot(slot, d.cfg.EgressPort); err != nil {
 			return nil, err
 		}
@@ -316,15 +341,20 @@ func (d *Daemon) createFrom(ctx context.Context, tplDir string, tpl *proto.Templ
 		return nil, fmt.Errorf("%w: %s", err, tail(v.console(), 1024))
 	}
 	agent := newAgentClient(v.vsock())
-	if err := agent.init(ctx, v.id, env); err != nil {
+	if err := agent.init(ctx, v.id, spec.Env); err != nil {
 		return nil, err
+	}
+	for p, f := range spec.Files {
+		if err := agent.putFile(ctx, p, f); err != nil {
+			return nil, fmt.Errorf("write environment file %s: %w", p, err)
+		}
 	}
 	sb := &sandbox{
 		state: sandboxState{
 			ID: v.id, Template: tpl.Name, Slot: slot, PID: v.pid, PIDStart: v.start,
-			CPUs: tpl.CPUs, MemoryMiB: tpl.MemoryMiB, CreatedAt: time.Now().UTC(), TTL: ttl,
-			CreateMs: float64(time.Since(t0).Microseconds()) / 1000, Env: env, Ports: map[int]int{},
-			Egress: egress,
+			CPUs: tpl.CPUs, MemoryMiB: tpl.MemoryMiB, CreatedAt: time.Now().UTC(), TTL: spec.TTL,
+			CreateMs: float64(time.Since(t0).Microseconds()) / 1000, Env: spec.Env, Ports: map[int]int{},
+			Egress: spec.Egress, Environment: spec.Environment, Labels: spec.Labels,
 		},
 		vm: v, agent: agent, exposures: map[int]*exposure{},
 	}
@@ -384,9 +414,22 @@ func (d *Daemon) Destroy(id string) error {
 
 // Snapshot saves a running sandbox as a new template. The sandbox pauses for about a second
 // per GiB of guest memory and then continues.
+//
+// A sandbox started with an environment cannot become a template. Deleting its files and
+// variables first would not be enough: every process it started inherited the variables,
+// and programs copy secrets into their own memory and caches, all of which the snapshot
+// keeps. Every sandbox created from the template would hold them.
 func (d *Daemon) Snapshot(ctx context.Context, id, name string) (*proto.Template, error) {
 	if err := validName(name); err != nil {
 		return nil, err
+	}
+	sb, err := d.get(id)
+	if err != nil {
+		return nil, err
+	}
+	if sb.state.Environment != "" {
+		return nil, conflict("sandbox %s started with environment %q, whose secrets a template would keep; "+
+			"snapshot a sandbox created with `sbx create --env-name none`", id, sb.state.Environment)
 	}
 	return d.snapshot(ctx, id, name)
 }
@@ -477,7 +520,10 @@ func (d *Daemon) Fork(ctx context.Context, id string) (*sandbox, error) {
 	// The clone hard-links what it needs, so the temporary template can go right away.
 	defer os.RemoveAll(dir)
 	tpl.Name = src.state.Template
-	return d.createFrom(ctx, dir, tpl, src.state.TTL, src.state.Env, src.state.Egress)
+	return d.createFrom(ctx, dir, tpl, launchSpec{
+		TTL: src.state.TTL, Env: src.state.Env, Egress: src.state.Egress, Environment: src.state.Environment,
+		Labels: src.state.Labels,
+	})
 }
 
 func (d *Daemon) SetTTL(id string, ttl proto.Duration) (*sandbox, error) {
@@ -498,7 +544,8 @@ func (d *Daemon) view(sb *sandbox, publicHost string) proto.Sandbox {
 	s := proto.Sandbox{
 		ID: sb.state.ID, Template: sb.state.Template, CPUs: sb.state.CPUs, MemoryMiB: sb.state.MemoryMiB,
 		CreatedAt: sb.state.CreatedAt, TTL: sb.state.TTL, ExpiresAt: sb.expiresAt(),
-		CreateMs: sb.state.CreateMs, MemoryUsedMiB: sb.vm.privateMiB(),
+		CreateMs: sb.state.CreateMs, MemoryUsedMiB: sb.vm.privateMiB(), Environment: sb.state.Environment,
+		Labels: sb.state.Labels,
 	}
 	sb.egressMu.Lock()
 	s.Egress, s.Blocked = sb.state.Egress, slices.Clone(sb.blocked)

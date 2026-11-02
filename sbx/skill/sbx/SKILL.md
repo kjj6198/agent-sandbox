@@ -5,7 +5,7 @@ description: Run code, builds, tests, dev servers, or a browser in a disposable,
 
 # sbx
 
-`sbx` creates Firecracker microVMs in about 30 ms. Each one is a Debian machine with Node.js 24 and pnpm, Go, Python 3.13 and uv, build tools, ffmpeg, ImageMagick, Chromium, CJK fonts, and a desktop. It reaches the internet but not the LAN. Commands run as `user` with passwordless sudo, in `/home/user`.
+`sbx` creates Firecracker microVMs in about 30 ms. Each one is a Debian machine with Node.js 24 and pnpm, Go, Python 3.13 and uv, build tools, ffmpeg, ImageMagick, Chromium, CJK fonts, a desktop, and the agent CLIs `claude`, `codex`, and `gh`. It reaches the internet but not the LAN. Commands run as `user` with passwordless sudo, in `/home/user`.
 
 Run `sbx --help` and `sbx <command> --help` for every option.
 
@@ -29,8 +29,10 @@ One-off command: `sbx run -- python3 -c 'print(1)'` creates, runs, and removes a
 - To open a server from outside: `sbx expose $id PORT` prints a LAN URL. `sbx forward $id PORT` tunnels it to 127.0.0.1 instead.
 - Use `--timeout` on commands that might hang.
 - For untrusted code, limit the network: `sbx create --allow registry.npmjs.org,github.com`, or `--offline`. A failed command then tells you which hosts were blocked. Ask the user before `sbx allow $id HOST` for a host the task did not call for, because the list is what stops code in the sandbox from sending data elsewhere.
+- To find sandboxes you created later, label them: `sbx create -l task=fix-login`, then `sbx ls -q -l task=fix-login`.
 - Sandboxes are removed after 1 hour without activity. Change it with `sbx ttl $id 4h`, or `0` to keep. Remove sandboxes you no longer need.
-- Save a prepared machine with `sbx snapshot $id NAME`, then `sbx create NAME`. Try alternatives from one state with `sbx fork $id`.
+- Sandboxes start with the host's `base` environment when it exists: stored variables and files such as `CLAUDE_CODE_OAUTH_TOKEN` or `~/.codex/auth.json`, so `claude`, `codex`, and `gh` may already be signed in. `sbx env ls` shows what it holds (names only). Use `sbx create --env-name none` for untrusted code, so it cannot read those secrets.
+- Save a prepared machine with `sbx snapshot $id NAME`, then `sbx create NAME`. Snapshot refuses a sandbox started with an environment, so create the one to snapshot with `--env-name none`. Try alternatives from one state with `sbx fork $id`.
 
 ## Screen
 

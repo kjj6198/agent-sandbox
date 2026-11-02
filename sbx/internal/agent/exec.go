@@ -9,7 +9,6 @@ import (
 	"errors"
 	"fmt"
 	"io"
-	"maps"
 	"net/http"
 	"os"
 	"os/exec"
@@ -56,17 +55,16 @@ func (s *server) command(req proto.ExecRequest, u *account) *exec.Cmd {
 	}
 	cmd := exec.Command(shell, "-lc", req.Script)
 	cmd.Dir = u.resolve(req.Cwd)
-	env := map[string]string{
+	defaults := map[string]string{
 		"PATH": defaultPath, "HOME": u.home, "USER": u.name, "LOGNAME": u.name,
 		"SHELL": shell, "LANG": "C.UTF-8",
 	}
 	if req.TTY {
-		env["TERM"] = "xterm-256color"
+		defaults["TERM"] = "xterm-256color"
 	}
 	s.mu.Lock()
-	maps.Copy(env, s.env)
+	env := proto.MergeEnv(defaults, s.env, req.Env)
 	s.mu.Unlock()
-	maps.Copy(env, req.Env)
 	for k, v := range env {
 		cmd.Env = append(cmd.Env, k+"="+v)
 	}

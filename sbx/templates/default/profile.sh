@@ -8,3 +8,5 @@ export DISPLAY=:0
 # fcitx5, which sbx-desktop starts, is the desktop's input method for Japanese and Chinese.
 export GTK_IM_MODULE=fcitx QT_IM_MODULE=fcitx XMODIFIERS=@im=fcitx
 export DBUS_SESSION_BUS_ADDRESS=unix:path=/tmp/dbus-session
+# The agent CLIs are pinned in the template; updating themselves would make sandboxes differ.
+export DISABLE_AUTOUPDATER=1
