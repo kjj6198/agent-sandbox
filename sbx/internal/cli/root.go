@@ -7,6 +7,7 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"net/url"
 	"os"
 	"path/filepath"
 	"strings"
@@ -111,6 +112,21 @@ func parseEnv(pairs []string) (map[string]string, error) {
 	return env, nil
 }
 
+func parseLabels(pairs []string) (map[string]string, error) {
+	if len(pairs) == 0 {
+		return nil, nil
+	}
+	labels := map[string]string{}
+	for _, p := range pairs {
+		k, v, ok := strings.Cut(p, "=")
+		if !ok || k == "" {
+			return nil, fmt.Errorf("--label %q: use KEY=VALUE", p)
+		}
+		labels[k] = v
+	}
+	return labels, nil
+}
+
 func parseTTL(s string) (*proto.Duration, error) {
 	if s == "" {
 		return nil, nil
@@ -138,7 +154,7 @@ func create(ctx context.Context, c *client, req proto.CreateRequest, ttl string,
 
 func createCmd() *cobra.Command {
 	var ttl, envName string
-	var env []string
+	var env, labels []string
 	var asJSON, view bool
 	var ef egressFlags
 	cmd := &cobra.Command{
@@ -149,7 +165,7 @@ func createCmd() *cobra.Command {
 			"(see sbx env): --env-name, or \"base\" when it exists.\n\n" + egressHelp,
 		Example: "  id=$(sbx create)\n  id=$(sbx create browser --view)\n  id=$(sbx create --ttl 2h -e OPENAI_API_KEY)\n" +
 			"  id=$(sbx create --allow github.com,codeload.github.com --allow registry.npmjs.org)\n" +
-			"  id=$(sbx create --offline)",
+			"  id=$(sbx create --offline)\n  id=$(sbx create -l app=hinacode -l thread=t1)",
 		Args: cobra.MaximumNArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			c, err := newClient()
@@ -160,8 +176,12 @@ func createCmd() *cobra.Command {
 			if err != nil {
 				return err
 			}
+			labelMap, err := parseLabels(labels)
+			if err != nil {
+				return err
+			}
 			sb, err := create(cmd.Context(), c, proto.CreateRequest{
-				Template: strings.Join(args, ""), Egress: egress, Environment: envName,
+				Template: strings.Join(args, ""), Egress: egress, Environment: envName, Labels: labelMap,
 			}, ttl, env)
 			if err != nil {
 				return err
@@ -184,6 +204,7 @@ func createCmd() *cobra.Command {
 	cmd.Flags().BoolVar(&view, "view", false, "open a small window showing the sandbox's screen (see sbx view)")
 	cmd.Flags().StringVar(&ttl, "ttl", "", "idle timeout such as 30m or 2d; 0 never expires (default: daemon setting)")
 	cmd.Flags().StringArrayVarP(&env, "env", "e", nil, "NAME=VALUE, or NAME to copy it from your environment")
+	cmd.Flags().StringArrayVarP(&labels, "label", "l", nil, "KEY=VALUE to find the sandbox by with sbx ls --label")
 	cmd.Flags().StringVar(&envName, "env-name", "", "stored environment to start with (default: base, if it exists); none for no environment")
 	cmd.Flags().BoolVar(&asJSON, "json", false, "print the sandbox as JSON")
 	ef.register(cmd)
@@ -192,6 +213,7 @@ func createCmd() *cobra.Command {
 
 func lsCmd() *cobra.Command {
 	var asJSON, quiet bool
+	var labels []string
 	cmd := &cobra.Command{
 		Use:     "ls",
 		Aliases: []string{"list", "ps"},
@@ -202,8 +224,9 @@ func lsCmd() *cobra.Command {
 			if err != nil {
 				return err
 			}
+			q := url.Values{"label": labels}
 			var list []proto.Sandbox
-			if err := c.call(cmd.Context(), "GET", "/v1/sandboxes", nil, &list); err != nil {
+			if err := c.call(cmd.Context(), "GET", "/v1/sandboxes?"+q.Encode(), nil, &list); err != nil {
 				return err
 			}
 			switch {
@@ -230,6 +253,7 @@ func lsCmd() *cobra.Command {
 	}
 	cmd.Flags().BoolVar(&asJSON, "json", false, "print JSON")
 	cmd.Flags().BoolVarP(&quiet, "quiet", "q", false, "print only IDs")
+	cmd.Flags().StringArrayVarP(&labels, "label", "l", nil, "KEY=VALUE; list only sandboxes with every given label")
 	return cmd
 }
 

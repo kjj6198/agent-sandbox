@@ -68,6 +68,7 @@ type sandboxState struct {
 	// Env is the sandbox-wide environment: the environment's vars merged with the request's.
 	Env         map[string]string `json:"env,omitempty"`
 	Environment string            `json:"environment,omitempty"`
+	Labels      map[string]string `json:"labels,omitempty"`
 	Ports       map[int]int       `json:"ports,omitempty"` // guest port -> host port
 	Egress      *proto.Egress     `json:"egress,omitempty"`
 }
@@ -244,6 +245,9 @@ func (d *Daemon) get(id string) (*sandbox, error) {
 
 // Create restores a sandbox from a template snapshot.
 func (d *Daemon) Create(ctx context.Context, req proto.CreateRequest) (*sandbox, error) {
+	if err := validLabels(req.Labels); err != nil {
+		return nil, err
+	}
 	name := req.Template
 	if name == "" {
 		name = "default"
@@ -258,7 +262,7 @@ func (d *Daemon) Create(ctx context.Context, req proto.CreateRequest) (*sandbox,
 	}
 	spec := launchSpec{
 		TTL: d.cfg.DefaultTTL, Env: proto.MergeEnv(e.Vars, req.Env), Egress: req.Egress,
-		Environment: envName, Files: e.Files,
+		Environment: envName, Labels: req.Labels, Files: e.Files,
 	}
 	if req.TTL != nil {
 		spec.TTL = *req.TTL
@@ -272,6 +276,7 @@ type launchSpec struct {
 	Env         map[string]string
 	Egress      *proto.Egress
 	Environment string
+	Labels      map[string]string
 	// Files are written once, at create. A fork already has them on its disk.
 	Files map[string]proto.EnvironmentFile
 }
@@ -349,7 +354,7 @@ func (d *Daemon) createFrom(ctx context.Context, tplDir string, tpl *proto.Templ
 			ID: v.id, Template: tpl.Name, Slot: slot, PID: v.pid, PIDStart: v.start,
 			CPUs: tpl.CPUs, MemoryMiB: tpl.MemoryMiB, CreatedAt: time.Now().UTC(), TTL: spec.TTL,
 			CreateMs: float64(time.Since(t0).Microseconds()) / 1000, Env: spec.Env, Ports: map[int]int{},
-			Egress: spec.Egress, Environment: spec.Environment,
+			Egress: spec.Egress, Environment: spec.Environment, Labels: spec.Labels,
 		},
 		vm: v, agent: agent, exposures: map[int]*exposure{},
 	}
@@ -517,6 +522,7 @@ func (d *Daemon) Fork(ctx context.Context, id string) (*sandbox, error) {
 	tpl.Name = src.state.Template
 	return d.createFrom(ctx, dir, tpl, launchSpec{
 		TTL: src.state.TTL, Env: src.state.Env, Egress: src.state.Egress, Environment: src.state.Environment,
+		Labels: src.state.Labels,
 	})
 }
 
@@ -539,6 +545,7 @@ func (d *Daemon) view(sb *sandbox, publicHost string) proto.Sandbox {
 		ID: sb.state.ID, Template: sb.state.Template, CPUs: sb.state.CPUs, MemoryMiB: sb.state.MemoryMiB,
 		CreatedAt: sb.state.CreatedAt, TTL: sb.state.TTL, ExpiresAt: sb.expiresAt(),
 		CreateMs: sb.state.CreateMs, MemoryUsedMiB: sb.vm.privateMiB(), Environment: sb.state.Environment,
+		Labels: sb.state.Labels,
 	}
 	sb.egressMu.Lock()
 	s.Egress, s.Blocked = sb.state.Egress, slices.Clone(sb.blocked)

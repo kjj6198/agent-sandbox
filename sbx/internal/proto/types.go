@@ -56,8 +56,9 @@ type Sandbox struct {
 	TTL       Duration   `json:"ttl"`
 	ExpiresAt *time.Time `json:"expires_at,omitempty"`
 	// Environment is the stored environment the sandbox started with, if any.
-	Environment string `json:"environment,omitempty"`
-	Ports       []Port `json:"ports,omitempty"`
+	Environment string            `json:"environment,omitempty"`
+	Labels      map[string]string `json:"labels,omitempty"`
+	Ports       []Port            `json:"ports,omitempty"`
 	// CreateMs is how long the restore took, from request to the guest agent answering.
 	CreateMs float64 `json:"create_ms"`
 	// MemoryUsedMiB is the memory only this sandbox holds: guest pages it wrote plus the VMM's
@@ -95,6 +96,9 @@ type CreateRequest struct {
 	// Environment names the stored environment to start with. Empty means BaseEnvironment
 	// when it exists, and NoEnvironment means none.
 	Environment string `json:"environment,omitempty"`
+	// Labels are for the client's own bookkeeping, such as finding its sandboxes again with
+	// GET /v1/sandboxes?label=KEY=VALUE. Forks copy them.
+	Labels map[string]string `json:"labels,omitempty"`
 }
 
 type UpdateRequest struct {

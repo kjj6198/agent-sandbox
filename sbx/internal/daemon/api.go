@@ -88,9 +88,16 @@ func (d *Daemon) handleStatus(w http.ResponseWriter, r *http.Request) {
 }
 
 func (d *Daemon) handleList(w http.ResponseWriter, r *http.Request) {
+	sel, err := parseLabelSelector(r.URL.Query()["label"])
+	if err != nil {
+		writeDaemonError(w, err)
+		return
+	}
 	out := []proto.Sandbox{}
 	for _, sb := range d.list() {
-		out = append(out, d.view(sb, d.publicHost(r)))
+		if matchLabels(sb.state.Labels, sel) {
+			out = append(out, d.view(sb, d.publicHost(r)))
+		}
 	}
 	writeJSON(w, http.StatusOK, out)
 }

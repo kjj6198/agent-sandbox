@@ -259,8 +259,8 @@ sbxd serves HTTP on port 7070. Every request needs `Authorization: Bearer <token
 | Method and path | Body | Answer |
 |---|---|---|
 | `GET /v1/status` | | host capacity |
-| `GET /v1/sandboxes` | | list of sandboxes |
-| `POST /v1/sandboxes` | `{"template", "ttl", "env", "egress": {"allow"}, "environment"}` | the sandbox |
+| `GET /v1/sandboxes?label=KEY=VALUE` | | list of sandboxes, only those with every given label |
+| `POST /v1/sandboxes` | `{"template", "ttl", "env", "egress": {"allow"}, "environment", "labels"}` | the sandbox |
 | `GET`, `PATCH`, `DELETE /v1/sandboxes/{id}` | `PATCH`: `{"ttl", "egress": {"allow"}}` | |
 | `POST /v1/sandboxes/{id}/exec` | `{"script", "env", "cwd", "user", "timeout", "detach", "stdin", "tty"}` | frame stream, see `internal/proto/exec.go` |
 | `GET`, `PUT /v1/sandboxes/{id}/files?path=&user=` | tar | tar |
@@ -277,9 +277,11 @@ sbxd serves HTTP on port 7070. Every request needs `Authorization: Bearer <token
 | `PUT /v1/environments/{name}` | `{"vars": {NAME: VALUE}, "files": {PATH: {"content": base64, "mode": "0600"}}}` | the environment, as listed |
 | `DELETE /v1/environments/{name}` | | |
 
+`labels` is a string map for the client's own bookkeeping, such as `{"app": "hinacode", "thread": "t1"}`, so it can find its sandboxes again after it restarts. Up to 32, with keys of letters, digits, `.`, `_`, `/`, and `-`, and values up to 256 bytes. They are set at create, kept across sbxd restarts, and copied by fork.
+
 `PUT /v1/environments/{name}` creates the environment or merges into it like a JSON merge patch, so a `null` variable or file removes it. Up to 128 variables of 32 KiB and 32 files of 256 KiB, at absolute, clean guest paths. `"environment"` on create defaults to `base` when it exists; `"none"` starts without one.
 
-Durations are strings such as `"30m"` or `"2d"`. `"0"` disables the idle timeout. Any sandbox request counts as activity unless it has `passive=1`.
+Durations are strings such as `"30m"` or `"2d"`. `"0"` disables the idle timeout. Any sandbox request counts as activity unless it has `passive=1`, and so does every open connection through an exposed port, such as a WebSocket. An exposed port with nothing connected does not.
 
 ## Configuration
 

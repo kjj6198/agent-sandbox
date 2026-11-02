@@ -300,7 +300,7 @@ stateDiagram-v2
   Destroyed --> [*]: kill VM, remove jail,<br/>release netns and ports
 ```
 
-- sbxd checks every 5 s. A sandbox with an exec or tunnel open never counts as idle.
+- sbxd checks every 5 s. A sandbox with an exec or tunnel open never counts as idle, including each connection through an exposed port. An sbxd restart drops those connections; it re-binds the ports and restarts the idle timer, and clients reconnect.
 - Firecracker processes outlive sbxd (`KillMode=process`). On start, sbxd adopts every VM whose PID and start time match its saved state, re-binds its exposed ports, and removes jails and namespaces nobody claims.
 - Destroy waits until the VM process is gone before releasing its namespace, because the tap stays busy until then.
 
@@ -330,6 +330,6 @@ The agent inside the guest is unauthenticated. Only the host can reach its vsock
 /var/lib/sbx/kernel/vmlinux        guest kernel
 /var/lib/sbx/templates/NAME/       rootfs.ext4, upper.ext4, vmstate, mem, template.json
 /var/lib/sbx/jail/firecracker/ID/  per-sandbox jail and console.log
-/var/lib/sbx/sandboxes/ID.json     state for adoption after a restart
+/var/lib/sbx/sandboxes/ID.json     state for adoption after a restart, labels included
 /var/lib/sbx/build/                template build scratch
 ```
