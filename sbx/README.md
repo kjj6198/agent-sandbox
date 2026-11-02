@@ -219,6 +219,22 @@ This is the network half of [Anthropic's sandbox-runtime](https://github.com/ant
 
 The allowlist guards against code in the sandbox, not against whoever holds the API token: `sbx allow` changes it. A sandbox created without `--allow` cannot be restricted later. Forks keep their parent's allowlist.
 
+### Environments
+
+An environment is a named set of variables and files stored on the sbx host, so a client can start a sandbox that is already signed in to Claude Code, Codex, or GitHub without holding the secrets itself. New sandboxes start with the one named `base` when it exists:
+
+```sh
+sbx env set base CLAUDE_CODE_OAUTH_TOKEN GH_TOKEN      # a bare NAME copies it from your shell
+sbx env file base ~/.codex/auth.json --to /home/user/.codex/auth.json
+sbx env ls                                             # names and paths, never values
+id=$(sbx create)                                       # starts with base
+id=$(sbx create --env-name none)                       # starts without any
+```
+
+Each environment is `/etc/sbx/environments/NAME.json`, mode 0600 in a 0700 directory. Values and file contents never leave sbxd: the API lists variable names and file paths only. At create, sbxd passes the variables to the agent with the rest of the sandbox's environment and writes the files, owned by `user` with their mode, before it answers. A command sees the template's defaults, overridden by the environment's variables, then by `create --env`, then by `exec --env`. A sandbox keeps the environment it started with, so changes apply to sandboxes created later.
+
+A fork keeps its parent's environment. `sbx snapshot` refuses a sandbox that started with one, because a template would keep the secrets for every sandbox created from it. Deleting the files and variables first would not be enough: each process in the sandbox inherited the variables, and programs copy credentials into their own memory and caches, which the snapshot also saves. Prepare templates in a sandbox created with `--env-name none`.
+
 A guest that escapes Firecracker and its jail is a process on the host. For a second wall, run sbx in a VM whose own firewall blocks the LAN, as the Proxmox setup does.
 
 ## Measured
@@ -244,7 +260,7 @@ sbxd serves HTTP on port 7070. Every request needs `Authorization: Bearer <token
 |---|---|---|
 | `GET /v1/status` | | host capacity |
 | `GET /v1/sandboxes` | | list of sandboxes |
-| `POST /v1/sandboxes` | `{"template", "ttl", "env", "egress": {"allow"}}` | the sandbox |
+| `POST /v1/sandboxes` | `{"template", "ttl", "env", "egress": {"allow"}, "environment"}` | the sandbox |
 | `GET`, `PATCH`, `DELETE /v1/sandboxes/{id}` | `PATCH`: `{"ttl", "egress": {"allow"}}` | |
 | `POST /v1/sandboxes/{id}/exec` | `{"script", "env", "cwd", "user", "timeout", "detach", "stdin", "tty"}` | frame stream, see `internal/proto/exec.go` |
 | `GET`, `PUT /v1/sandboxes/{id}/files?path=&user=` | tar | tar |
@@ -257,6 +273,11 @@ sbxd serves HTTP on port 7070. Every request needs `Authorization: Bearer <token
 | `GET /v1/templates` | | list of templates |
 | `POST /v1/templates/{name}?cpus=&memory_mib=&disk_gib=&warmup=` | tar of the build context | frame stream of the build log |
 | `DELETE /v1/templates/{name}` | | |
+| `GET /v1/environments` | | `[{"name", "vars": [NAME], "files": [{"path", "mode"}]}]`, never values |
+| `PUT /v1/environments/{name}` | `{"vars": {NAME: VALUE}, "files": {PATH: {"content": base64, "mode": "0600"}}}` | the environment, as listed |
+| `DELETE /v1/environments/{name}` | | |
+
+`PUT /v1/environments/{name}` creates the environment or merges into it like a JSON merge patch, so a `null` variable or file removes it. Up to 128 variables of 32 KiB and 32 files of 256 KiB, at absolute, clean guest paths. `"environment"` on create defaults to `base` when it exists; `"none"` starts without one.
 
 Durations are strings such as `"30m"` or `"2d"`. `"0"` disables the idle timeout. Any sandbox request counts as activity unless it has `passive=1`.
 
@@ -273,6 +294,7 @@ Durations are strings such as `"30m"` or `"2d"`. `"0"` disables the idle timeout
 | `min_free_mib` | `512` | Refuse new sandboxes below this much available host memory |
 | `pool_size` | `8` | Network namespaces kept ready |
 | `port_min`, `port_max` | `30000`, `30999` | Host ports for `sbx expose` |
+| `environment_dir` | `/etc/sbx/environments` | Where environments are stored. sbxd creates it root-only |
 | `egress_port` | `7071` | TCP and UDP port where restricted sandboxes' DNS, HTTP, and HTTPS arrive. Only sandboxes reach it |
 
 ## Why not Packer

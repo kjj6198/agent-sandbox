@@ -182,7 +182,7 @@ func (m *mcpServer) create(ctx context.Context, _ *mcp.CallToolRequest, in creat
 			return nil, nil, err
 		}
 	}
-	sb, err := create(ctx, m.c, in.Template, in.TTL, nil, egress)
+	sb, err := create(ctx, m.c, proto.CreateRequest{Template: in.Template, Egress: egress}, in.TTL, nil)
 	if err != nil {
 		return nil, nil, err
 	}

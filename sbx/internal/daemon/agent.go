@@ -3,6 +3,7 @@
 package daemon
 
 import (
+	"archive/tar"
 	"bufio"
 	"bytes"
 	"context"
@@ -12,6 +13,8 @@ import (
 	"io"
 	"net"
 	"net/http"
+	"net/url"
+	"path/filepath"
 	"time"
 
 	"github.com/kjj6198/agent-sandbox-eval/sbx/internal/proto"
@@ -118,6 +121,40 @@ func (a *agentClient) init(ctx context.Context, hostname string, env map[string]
 		case <-time.After(2 * time.Millisecond):
 		}
 	}
+}
+
+// putFile writes one file owned by proto.DefaultUser through the agent's archive endpoint,
+// creating missing parent directories.
+func (a *agentClient) putFile(ctx context.Context, path string, f proto.EnvironmentFile) error {
+	var buf bytes.Buffer
+	tw := tar.NewWriter(&buf)
+	hdr := &tar.Header{
+		Name: filepath.Base(path), Typeflag: tar.TypeReg, Mode: int64(f.Mode),
+		Size: int64(len(f.Content)), ModTime: time.Now(),
+	}
+	if err := tw.WriteHeader(hdr); err != nil {
+		return err
+	}
+	tw.Write(f.Content)
+	if err := tw.Close(); err != nil {
+		return err
+	}
+	q := url.Values{"path": {path}, "user": {proto.DefaultUser}}
+	req, err := http.NewRequestWithContext(ctx, http.MethodPut, "http://agent/archive?"+q.Encode(), &buf)
+	if err != nil {
+		return err
+	}
+	resp, err := a.hc.Do(req)
+	if err != nil {
+		return err
+	}
+	defer resp.Body.Close()
+	if resp.StatusCode >= 300 {
+		var e proto.Error
+		json.NewDecoder(resp.Body).Decode(&e)
+		return errors.New(e.Error)
+	}
+	return nil
 }
 
 func (a *agentClient) sync(ctx context.Context) error {

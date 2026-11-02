@@ -55,7 +55,9 @@ type Sandbox struct {
 	// TTL is an idle timeout: the sandbox is destroyed after TTL without API activity. 0 keeps it.
 	TTL       Duration   `json:"ttl"`
 	ExpiresAt *time.Time `json:"expires_at,omitempty"`
-	Ports     []Port     `json:"ports,omitempty"`
+	// Environment is the stored environment the sandbox started with, if any.
+	Environment string `json:"environment,omitempty"`
+	Ports       []Port `json:"ports,omitempty"`
 	// CreateMs is how long the restore took, from request to the guest agent answering.
 	CreateMs float64 `json:"create_ms"`
 	// MemoryUsedMiB is the memory only this sandbox holds: guest pages it wrote plus the VMM's
@@ -90,6 +92,9 @@ type CreateRequest struct {
 	Env map[string]string `json:"env,omitempty"`
 	// Egress restricts the network. Nil gives the sandbox the whole internet.
 	Egress *Egress `json:"egress,omitempty"`
+	// Environment names the stored environment to start with. Empty means BaseEnvironment
+	// when it exists, and NoEnvironment means none.
+	Environment string `json:"environment,omitempty"`
 }
 
 type UpdateRequest struct {

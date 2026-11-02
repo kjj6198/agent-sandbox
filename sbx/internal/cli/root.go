@@ -72,7 +72,7 @@ func Main() int {
 	}
 	root.AddCommand(createCmd(), execCmd(), runCmd(), cpCmd(), lsCmd(), inspectCmd(), rmCmd(),
 		ttlCmd(), allowCmd(), exposeCmd(), unexposeCmd(), forwardCmd(), viewCmd(), screenshotCmd(), snapshotCmd(), forkCmd(),
-		templateCmd(), statusCmd(), loginCmd(), mcpCmd())
+		templateCmd(), envCmd(), statusCmd(), loginCmd(), mcpCmd())
 	err := root.Execute()
 	var ee exitError
 	switch {
@@ -123,8 +123,8 @@ func parseTTL(s string) (*proto.Duration, error) {
 	return &pd, nil
 }
 
-func create(ctx context.Context, c *client, template, ttl string, env []string, egress *proto.Egress) (*proto.Sandbox, error) {
-	req := proto.CreateRequest{Template: template, Egress: egress}
+// create sends req after parsing the TTL and env flags into it.
+func create(ctx context.Context, c *client, req proto.CreateRequest, ttl string, env []string) (*proto.Sandbox, error) {
 	var err error
 	if req.TTL, err = parseTTL(ttl); err != nil {
 		return nil, err
@@ -137,7 +137,7 @@ func create(ctx context.Context, c *client, template, ttl string, env []string, 
 }
 
 func createCmd() *cobra.Command {
-	var ttl string
+	var ttl, envName string
 	var env []string
 	var asJSON, view bool
 	var ef egressFlags
@@ -145,7 +145,8 @@ func createCmd() *cobra.Command {
 		Use:   "create [TEMPLATE]",
 		Short: "Create a sandbox and print its ID",
 		Long: "Create a sandbox from TEMPLATE (default \"default\") and print its ID.\n\n" +
-			"--env sets variables for every command in the sandbox.\n\n" + egressHelp,
+			"--env sets variables for every command in the sandbox, on top of the stored environment " +
+			"(see sbx env): --env-name, or \"base\" when it exists.\n\n" + egressHelp,
 		Example: "  id=$(sbx create)\n  id=$(sbx create browser --view)\n  id=$(sbx create --ttl 2h -e OPENAI_API_KEY)\n" +
 			"  id=$(sbx create --allow github.com,codeload.github.com --allow registry.npmjs.org)\n" +
 			"  id=$(sbx create --offline)",
@@ -159,7 +160,9 @@ func createCmd() *cobra.Command {
 			if err != nil {
 				return err
 			}
-			sb, err := create(cmd.Context(), c, strings.Join(args, ""), ttl, env, egress)
+			sb, err := create(cmd.Context(), c, proto.CreateRequest{
+				Template: strings.Join(args, ""), Egress: egress, Environment: envName,
+			}, ttl, env)
 			if err != nil {
 				return err
 			}
@@ -181,6 +184,7 @@ func createCmd() *cobra.Command {
 	cmd.Flags().BoolVar(&view, "view", false, "open a small window showing the sandbox's screen (see sbx view)")
 	cmd.Flags().StringVar(&ttl, "ttl", "", "idle timeout such as 30m or 2d; 0 never expires (default: daemon setting)")
 	cmd.Flags().StringArrayVarP(&env, "env", "e", nil, "NAME=VALUE, or NAME to copy it from your environment")
+	cmd.Flags().StringVar(&envName, "env-name", "", "stored environment to start with (default: base, if it exists); none for no environment")
 	cmd.Flags().BoolVar(&asJSON, "json", false, "print the sandbox as JSON")
 	ef.register(cmd)
 	return cmd

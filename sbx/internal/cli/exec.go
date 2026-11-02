@@ -158,7 +158,7 @@ func runCmd() *cobra.Command {
 			}
 			ctx, stop := signal.NotifyContext(cmd.Context(), os.Interrupt, syscall.SIGTERM)
 			defer stop()
-			sb, err := create(ctx, c, template, ttl, nil, egress)
+			sb, err := create(ctx, c, proto.CreateRequest{Template: template, Egress: egress}, ttl, nil)
 			if err != nil {
 				return err
 			}
