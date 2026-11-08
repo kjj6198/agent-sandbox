@@ -1,5 +1,6 @@
 # An Ubuntu 24.04 template modeled on a boat.dev machine: the default template's tools and
-# desktop, plus Rust, Ruby, PHP, Java, Kotlin, Scala, .NET, Elixir, R, Bun, and Deno.
+# desktop, plus Rust, Ruby, PHP, Java, Kotlin, Scala, .NET, Elixir, R, Bun, Deno, and the
+# HinaCode server, so a sandbox can run as a remote HinaCode machine.
 # Node.js, Go, uv, gh, cua-driver, the agent CLIs, and the desktop's scripts are copied from
 # the default template's image, so both templates pin them in one place. Build `default`
 # first; `sbx template rm default` also removes the image this build copies from.
@@ -21,6 +22,7 @@ ARG SCALA_VERSION=3.3.8
 ARG SBT_VERSION=1.13.0
 ARG OPENCODE_VERSION=1.19.5
 ARG PI_VERSION=1.5.0
+ARG HINACODE_VERSION=0.3.0-alpha.5
 
 ENV DEBIAN_FRONTEND=noninteractive \
     RUSTUP_HOME=/usr/local/rustup CARGO_HOME=/usr/local/cargo \
@@ -110,7 +112,8 @@ RUN set -eux; cd /tmp; \
     tar -xzf $sbt -C /opt; \
     rm -rf /tmp/*; \
     UV_TOOL_DIR=/opt/uv-tools UV_TOOL_BIN_DIR=/usr/local/bin uv tool install poetry==$POETRY_VERSION; \
-    npm install -g --no-audit --no-fund opencode-ai@$OPENCODE_VERSION @earendil-works/pi-coding-agent@$PI_VERSION; \
+    npm install -g --no-audit --no-fund opencode-ai@$OPENCODE_VERSION @earendil-works/pi-coding-agent@$PI_VERSION \
+      hinacode@$HINACODE_VERSION; \
     rm -rf /root/.npm /root/.cache
 
 # The ubuntu image has its own uid 1000; sandboxes run commands as `user` with that uid.
