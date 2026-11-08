@@ -1,0 +1,9 @@
+#!/bin/sh
+# Ubuntu ships Chromium only as a snap, which cannot run in the guest, so Google Chrome stands
+# in for it. Chrome's own default profile is ~/.config/google-chrome; this keeps the profile
+# where the default template's Chromium has it, which `sbx-browser` and HinaCode's saved
+# browser profile both use.
+case " $* " in
+  *" --user-data-dir="*) exec google-chrome-stable "$@" ;;
+esac
+exec google-chrome-stable --user-data-dir="$HOME/.config/chromium" "$@"

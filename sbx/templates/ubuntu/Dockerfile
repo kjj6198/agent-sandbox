@@ -59,7 +59,6 @@ RUN apt-get update && apt-get install -y --no-install-recommends ca-certificates
       dotnet-sdk-8.0 erlang elixir r-base r-base-dev \
       locales tzdata \
     && ln -s /usr/bin/fdfind /usr/local/bin/fd \
-    && ln -s /usr/bin/google-chrome-stable /usr/bin/chromium \
     && locale-gen en_US.UTF-8 ja_JP.UTF-8 zh_TW.UTF-8 \
     && rm -rf /var/lib/apt/lists/* /tmp/chrome.deb
 
@@ -127,4 +126,5 @@ COPY --from=default /etc/xdg/openbox/menu.xml /etc/xdg/openbox/menu.xml
 COPY --from=default /etc/xdg/fcitx5/profile /etc/xdg/fcitx5/config /etc/xdg/fcitx5/
 COPY --from=default /usr/local/share/sbx/ /usr/local/share/sbx/
 COPY profile.sh /etc/profile.d/sbx-ubuntu.sh
+COPY --chmod=755 chromium /usr/bin/chromium
 RUN sed -i 's/^Icon=chromium$/Icon=google-chrome/' /usr/local/share/sbx/launchers/chromium.desktop
