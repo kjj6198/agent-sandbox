@@ -145,8 +145,26 @@ Its click and typing tools need `"delivery_mode": "foreground"`. The default bac
 |---|---|
 | `default` | Debian 13, Node.js 24 with pnpm, Go 1.27, Python 3.13 with uv, build-essential, git, ripgrep, jq, ffmpeg, ImageMagick, Chromium, cua-driver, Noto CJK fonts (Japanese, Traditional and Simplified Chinese, Korean) and emoji, Japanese and Chinese input methods, Claude Code, Codex, and the GitHub CLI, and the desktop. 2 vCPUs, 2 GiB memory, 16 GiB disk |
 | `browser` | The same image with Chromium already open on the desktop, its DevTools protocol on port 9222 |
+| `ubuntu` | Not built by `install.sh`. Ubuntu 24.04 with the tools of a boat.dev machine: everything in `default`, with Google Chrome as `chromium` (same profile directory), plus Rust, Ruby 4, PHP 8.4 with Composer, Java 11 with Maven and Gradle, Kotlin, Scala 3 with sbt, .NET 8, Elixir, R, Bun, Deno, Poetry, clang, opencode, pi, and the HinaCode server |
 
-Commands run as `user` (uid 1000, passwordless sudo) in `/home/user`. Versions are pinned at the top of `templates/default/Dockerfile`.
+Commands run as `user` (uid 1000, passwordless sudo) in `/home/user`. Versions are pinned at the top of `templates/default/Dockerfile` and `templates/ubuntu/Dockerfile`.
+
+The `ubuntu` template copies Node.js, Go, the agent CLIs, and the desktop from the `default` image, so build it after `default`:
+
+```sh
+sbx template build ubuntu /usr/local/share/sbx/templates/ubuntu --warmup sbx-desktop
+```
+
+A sandbox of it can run as a remote [HinaCode](https://github.com/hinadev-ai/hinacode) machine. Nothing routes into a sandbox, so it binds to loopback and is reached through HinaCode's relay, which dials out. Start the server after create, never in a template warmup, or every clone would share one machine id and pairing token:
+
+```sh
+id=$(sbx create ubuntu --ttl 0)        # relay traffic is not sbx activity, so turn off the idle timeout
+sbx exec -d $id 'hinacode serve --host 127.0.0.1 --relay >~/hinacode.log 2>&1'
+sbx exec $id 'sleep 10; cat ~/hinacode.log'   # the relay sign-in URL, then the pairing URLs
+sbx exec $id hinacode pair             # print the pairing URLs again
+```
+
+Sign in to the agent CLIs inside the sandbox (`sbx exec -it $id claude`) before starting threads. Its threads and worktrees live on the sandbox's disk and go away with `sbx rm`.
 
 To drive the browser from outside, and watch it:
 
@@ -175,6 +193,7 @@ sbx fork $id                         # the same, as a one-off clone
 | `sbxd` | sbx host | Daemon. Restores sandboxes, builds templates, publishes ports, removes idle sandboxes |
 | `sbx-agent` | inside every sandbox | PID 1. Builds the root filesystem, then serves exec, files, and TCP over vsock |
 | `templates/default` | sbx host | Dockerfile of the default image |
+| `templates/ubuntu` | sbx host | Dockerfile of the Ubuntu image, built on top of the default image |
 | `kernel/` | sbx host | Guest kernel config and build script |
 | `deploy/` | sbx host | Installer and systemd unit. `deploy/proxmox` holds the optional Proxmox setup |
 | `skill/sbx/SKILL.md` | where agents run | Skill for Claude Code, Grok, and other agents that read `~/.claude/skills` |

@@ -2,7 +2,7 @@
 # sbxd adds its agent as init when it turns the image into a disk, so there is no ENTRYPOINT.
 FROM debian:trixie-slim
 
-ARG NODE_VERSION=24.21.0
+ARG NODE_VERSION=24.22.2
 ARG GO_VERSION=1.27.2
 ARG UV_VERSION=0.13.0
 ARG PNPM_VERSION=12.11.2
