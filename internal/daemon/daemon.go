@@ -74,13 +74,13 @@ type sandboxState struct {
 }
 
 func New(cfg *Config) (*Daemon, error) {
-	token, err := os.ReadFile(cfg.TokenFile)
+	token, err := loadOrCreateToken(cfg.TokenFile)
 	if err != nil {
-		return nil, fmt.Errorf("read token: %w", err)
+		return nil, err
 	}
 	d := &Daemon{
 		cfg:       cfg,
-		token:     strings.TrimSpace(string(token)),
+		token:     token,
 		pool:      newNetPool(cfg.MaxSandboxes+cfg.PoolSize+4, cfg.PoolSize, cfg.UIDBase),
 		sandboxes: map[string]*sandbox{},
 		hostPorts: map[int]bool{},
@@ -94,6 +94,23 @@ func New(cfg *Config) (*Daemon, error) {
 	}
 	d.fcVersion = strings.TrimSpace(strings.SplitN(string(out), "\n", 2)[0])
 	return d, nil
+}
+
+// loadOrCreateToken writes a new API token on first start, so neither the installer nor a
+// container image has to ship one.
+func loadOrCreateToken(path string) (string, error) {
+	b, err := os.ReadFile(path)
+	if errors.Is(err, os.ErrNotExist) {
+		token := rand.Text()
+		if err := os.MkdirAll(filepath.Dir(path), 0o700); err != nil {
+			return "", err
+		}
+		return token, os.WriteFile(path, []byte(token+"\n"), 0o600)
+	}
+	if err != nil {
+		return "", fmt.Errorf("read token: %w", err)
+	}
+	return strings.TrimSpace(string(b)), nil
 }
 
 // Start prepares the host, adopts VMs that survived a restart, and removes everything else
