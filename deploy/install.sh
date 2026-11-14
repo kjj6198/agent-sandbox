@@ -1,44 +1,55 @@
 #!/usr/bin/env bash
 # Installs sbx on an x86_64 Linux host with /dev/kvm: bare metal, or a VM with nested
 # virtualization. Debian and Ubuntu get their packages installed; on other distributions,
-# install the commands listed in step_packages first. Run as root from the directory
-# `make dist` produces, or use `make install`:
+# install the commands listed in step_packages first.
 #
-#   sudo ./install.sh [step...]
+#   curl -fsSL https://github.com/kjj6198/agent-sandbox/releases/latest/download/install.sh | sudo bash
+#   sudo ./install.sh [step...]      # from the directory `make dist` produces, or `make install`
 #
-# Steps run in order and are idempotent: packages firecracker disk sysctl kernel sbx templates.
-# Settings come from the environment:
+# Run with no steps and no bundle beside it, it downloads the release bundle and runs the
+# copy inside.
+# Steps run in order and are idempotent: preflight packages firecracker disk sysctl kernel sbx
+# templates. Settings come from the environment:
+#   SBX_VERSION      release tag to download (default: the latest release)
+#   SBX_BUNDLE_URL   download the host bundle from here instead, such as a mirror
 #   SBX_DATA_DISK    block device to format as XFS for /var/lib/sbx (empty: use the root fs).
 #                    XFS or Btrfs lets sandbox disks be reflinked; any filesystem works.
 #   SBX_PUBLIC_HOST  host name put in URLs of exposed ports (default: the one clients use
 #                    to reach the API, which is right behind a port forward)
+#   SBX_REBUILD=1    rebuild templates that already exist
 set -euo pipefail
 
+REPO=kjj6198/agent-sandbox
 FC_VERSION=v1.17.0
 DATA=/var/lib/sbx
-HERE=$(cd "$(dirname "$0")" && pwd)
+HERE=$(cd "$(dirname "${BASH_SOURCE[0]:-.}")" && pwd)
 ARCH=$(uname -m)
 
 log() { echo "install: $*"; }
+die() { echo "install: $*" >&2; exit 1; }
+
+step_preflight() {
+  [ "$ARCH" = x86_64 ] || die "sbx supports x86_64 only, this is $ARCH"
+  [ -e /dev/kvm ] || die "/dev/kvm missing; enable (nested) virtualization"
+}
 
 step_packages() {
   if command -v apt-get >/dev/null; then
     export DEBIAN_FRONTEND=noninteractive
     apt-get update -q
-    # podman builds template images; the rest is networking, filesystems, and the kernel toolchain.
+    # podman builds template images; the rest is networking and filesystems.
     apt-get install -y -q --no-install-recommends \
-      podman xfsprogs e2fsprogs nftables iproute2 jq curl ca-certificates xz-utils \
-      build-essential flex bison bc libelf-dev libssl-dev
+      podman xfsprogs e2fsprogs nftables iproute2 procps jq curl ca-certificates
   fi
+  require podman mkfs.ext4 nft ip sysctl jq curl sha256sum
+}
+
+require() {
   local missing=()
-  for c in podman mkfs.ext4 nft ip jq curl sha256sum xz make gcc flex bison bc; do
+  for c in "$@"; do
     command -v "$c" >/dev/null || missing+=("$c")
   done
-  if [ ${#missing[@]} -gt 0 ]; then
-    echo "install: missing commands: ${missing[*]}" >&2
-    echo "install: the kernel build also needs the libelf and OpenSSL headers" >&2
-    exit 1
-  fi
+  [ ${#missing[@]} -eq 0 ] || die "missing commands: ${missing[*]}"
 }
 
 step_firecracker() {
@@ -86,11 +97,26 @@ EOF
   sysctl -q --system
 }
 
+# Release bundles carry a prebuilt kernel. A checkout builds one, which takes about 3 minutes.
 step_kernel() {
-  if [ -e "$DATA/kernel/vmlinux" ]; then
+  if [ -e "$DATA/kernel/vmlinux" ] && [ ! -e "$HERE/kernel/vmlinux" ]; then
     log "guest kernel present: $(readlink "$DATA/kernel/vmlinux")"
     return
   fi
+  if [ -e "$HERE/kernel/vmlinux" ]; then
+    local version
+    version=$(readlink "$HERE/kernel/vmlinux")
+    install -D -m 0644 "$HERE/kernel/$version" "$DATA/kernel/$version"
+    ln -sfn "$version" "$DATA/kernel/vmlinux"
+    log "guest kernel $version installed"
+    return
+  fi
+  if command -v apt-get >/dev/null; then
+    apt-get update -q
+    apt-get install -y -q --no-install-recommends \
+      build-essential flex bison bc libelf-dev libssl-dev curl ca-certificates xz-utils
+  fi
+  require make gcc flex bison bc xz curl
   "$HERE/kernel/build.sh" "$DATA/kernel"
 }
 
@@ -98,31 +124,35 @@ step_sbx() {
   install -m 0755 "$HERE/bin/sbxd" "$HERE/bin/sbx" /usr/local/bin/
   install -D -m 0755 "$HERE/bin/sbx-agent" /usr/local/lib/sbx/sbx-agent
   install -d -m 0700 /etc/sbx
-  if [ ! -s /etc/sbx/token ]; then
-    head -c 32 /dev/urandom | od -An -tx1 | tr -d ' \n' >/etc/sbx/token
-    chmod 0600 /etc/sbx/token
-  fi
   if [ ! -e /etc/sbx/sbxd.json ]; then
     jq -n --arg host "${SBX_PUBLIC_HOST:-}" '{public_host: $host}' >/etc/sbx/sbxd.json
   fi
   rm -rf /usr/local/share/sbx/templates
   mkdir -p /usr/local/share/sbx
   cp -R "$HERE/templates" /usr/local/share/sbx/
+  # A container image runs sbxd itself, without systemd.
+  [ -d /run/systemd/system ] || return 0
   install -m 0644 "$HERE/sbxd.service" /etc/systemd/system/sbxd.service
   systemctl daemon-reload
   systemctl enable sbxd.service >/dev/null 2>&1
   systemctl restart sbxd.service
-  for _ in $(seq 50); do sbx status >/dev/null 2>&1 && break; sleep 0.2; done
-  log "sbxd $(sbxd --version) running. API token: /etc/sbx/token"
+  wait_sbxd
+  log "sbxd $(sbxd --version) running. API token: /etc/sbx/token, created on its first start"
   if command -v ufw >/dev/null && ufw status | grep -q 'Status: active'; then
     log "ufw is active: allow 7070/tcp (API) and 30000:30999/tcp (sbx expose) for your clients"
   fi
+}
+
+wait_sbxd() {
+  for _ in $(seq 50); do sbx status >/dev/null 2>&1 && return; sleep 0.2; done
+  die "sbxd is not answering on 127.0.0.1:7070"
 }
 
 # Builds the default template, then the browser template: the same image with Chromium
 # already open when the snapshot is taken. Both start the desktop first, so every sandbox
 # has a screen. Set SBX_REBUILD=1 to rebuild existing ones.
 step_templates() {
+  wait_sbxd
   local have
   have=$(sbx template ls --json | jq -r '.[].name')
   if [ -n "${SBX_REBUILD:-}" ] || ! grep -qx default <<<"$have"; then
@@ -134,12 +164,30 @@ step_templates() {
   sbx template ls
 }
 
-[ "$(id -u)" = 0 ] || { echo "install: run as root" >&2; exit 1; }
-[ "$ARCH" = x86_64 ] || { echo "install: sbx supports x86_64 only, this is $ARCH" >&2; exit 1; }
-[ -e /dev/kvm ] || { echo "install: /dev/kvm missing; enable (nested) virtualization" >&2; exit 1; }
+# Piped from curl, there is no bundle beside this script: fetch the release and run its copy.
+bootstrap() {
+  local url=${SBX_BUNDLE_URL:-} tmp
+  if [ -z "$url" ] && [ -n "${SBX_VERSION:-}" ]; then
+    url=https://github.com/$REPO/releases/download/$SBX_VERSION/sbx-linux-amd64.tar.gz
+  fi
+  url=${url:-https://github.com/$REPO/releases/latest/download/sbx-linux-amd64.tar.gz}
+  tmp=$(mktemp -d)
+  log "downloading $url"
+  curl -fsSL "$url" | tar -xz -C "$tmp"
+  local status=0
+  "$tmp/install.sh" || status=$?
+  rm -rf "$tmp"
+  exit $status
+}
+
+[ "$(id -u)" = 0 ] || die "run as root"
+if [ ! -x "$HERE/bin/sbxd" ] && [ $# -eq 0 ]; then
+  step_preflight
+  bootstrap
+fi
 
 steps=("$@")
-[ ${#steps[@]} -gt 0 ] || steps=(packages firecracker disk sysctl kernel sbx templates)
+[ ${#steps[@]} -gt 0 ] || steps=(preflight packages firecracker disk sysctl kernel sbx templates)
 for s in "${steps[@]}"; do
   log "== $s"
   "step_$s"
