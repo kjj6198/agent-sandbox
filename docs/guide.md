@@ -19,11 +19,30 @@ sbx rm $id
 
 The sbx host is any x86_64 Linux machine with `/dev/kvm`: a desktop or server on bare metal, or a VM with nested virtualization, such as a cloud instance that offers it or a VM on Proxmox. The installer handles Debian and Ubuntu. On other distributions it lists the commands to install first.
 
-The CLI runs on macOS and Linux and only needs to reach the host over HTTP. The host can be the same machine.
+The CLI runs on macOS and Linux and only needs to reach the host over HTTP. The host can be the same machine. A Mac cannot be the host yet; [#16](https://github.com/kjj6198/agent-sandbox/issues/16) tracks what it would take.
 
 ## Install
 
-From a checkout with Go installed:
+On the sbx host, as root:
+
+```sh
+curl -fsSL https://github.com/kjj6198/agent-sandbox/releases/latest/download/install.sh | sudo bash
+```
+
+The installer downloads the release bundle, installs packages and Firecracker, installs the bundle's prebuilt guest kernel, starts `sbxd`, and builds the `default` and `browser` templates (about 5 minutes). Settings go before `bash`, as in `curl ... | sudo SBX_DATA_DISK=/dev/sdb bash`.
+
+| Setting | Meaning |
+|---|---|
+| `SBX_VERSION` | Release tag to install, such as `v0.1.0`. By default the latest release |
+| `SBX_DATA_DISK` | Block device to format as XFS for `/var/lib/sbx`. Without it sbx uses the root filesystem |
+| `SBX_PUBLIC_HOST` | Host name in URLs of exposed ports. By default it is the name the client used to reach the API |
+| `SBX_REBUILD=1` | Rebuild templates that already exist |
+
+On XFS or Btrfs, each sandbox's disk is a reflink of the template's. On other filesystems it is a sparse copy, which takes 3 ms for a fresh template and longer for snapshot templates with many written files.
+
+### From a checkout
+
+With Go installed, `make install` builds the binaries and runs the same installer, which then builds the guest kernel itself (about 3 more minutes):
 
 ```sh
 make install                                   # on the sbx host itself
@@ -31,23 +50,20 @@ make install HOST=me@sbx-host                  # or from another machine, over s
 make install HOST=me@sbx-host INSTALL_ENV=SBX_DATA_DISK=/dev/sdb
 ```
 
-`install.sh` installs packages and Firecracker, builds the guest kernel (about 3 minutes), starts `sbxd`, and builds the `default` and `browser` templates (about 5 minutes). Every step is idempotent and can run alone, for example `make install HOST=me@sbx-host STEPS=sbx` to update the binaries. Sandboxes keep running across an sbxd restart.
+Every step is idempotent and can run alone, for example `make install HOST=me@sbx-host STEPS=sbx` to update the binaries. Sandboxes keep running across an sbxd restart.
 
-| Setting | Meaning |
-|---|---|
-| `SBX_DATA_DISK` | Block device to format as XFS for `/var/lib/sbx`. Without it sbx uses the root filesystem |
-| `SBX_PUBLIC_HOST` | Host name in URLs of exposed ports. By default it is the name the client used to reach the API |
-| `SBX_REBUILD=1` | Rebuild templates that already exist |
+### The CLI
 
-On XFS or Btrfs, each sandbox's disk is a reflink of the template's. On other filesystems it is a sparse copy, which takes 3 ms for a fresh template and longer for snapshot templates with many written files.
-
-Then, on each machine that runs agents:
+On each machine that runs agents, macOS or Linux:
 
 ```sh
-make cli && cp bin/sbx ~/.local/bin/
+curl -fsSL -o ~/.local/bin/sbx "https://github.com/kjj6198/agent-sandbox/releases/latest/download/sbx-$(uname -s)-$(uname -m)"
+chmod +x ~/.local/bin/sbx
 ssh sbx-host sudo cat /etc/sbx/token | sbx login http://sbx-host:7070
 sbx status
 ```
+
+`go install github.com/kjj6198/agent-sandbox/cmd/sbx@latest` or `make cli` builds it instead.
 
 `SBX_URL` and `SBX_TOKEN` override the saved login, which is useful for agents in containers.
 

@@ -128,21 +128,22 @@ Why Firecracker snapshots? Before building `sbx`, we evaluated Firecracker, gVis
 
 The `sbx` host requires an `x86_64` Linux machine with `/dev/kvm`: bare metal, or a VM with nested virtualization such as a supported cloud instance or Proxmox VM. The installer handles Debian and Ubuntu and lists the prerequisite commands on other distributions. The `sbx` CLI runs on macOS and Linux and only needs HTTP access to the host.
 
-From a checkout with Go installed, install the daemon, Firecracker, guest kernel, and `default` and `browser` templates on the host:
+On the host, one line installs the daemon, Firecracker, a prebuilt guest kernel, and the `default` and `browser` templates:
 
 ```sh
-make install                                   # on the sbx host itself
-make install HOST=me@sbx-host                  # or from another machine, over ssh
-make install HOST=me@sbx-host INSTALL_ENV=SBX_DATA_DISK=/dev/sdb
+curl -fsSL https://github.com/kjj6198/agent-sandbox/releases/latest/download/install.sh | sudo bash
 ```
 
 Then, on each machine that runs agents:
 
 ```sh
-make cli && cp bin/sbx ~/.local/bin/
+curl -fsSL -o ~/.local/bin/sbx "https://github.com/kjj6198/agent-sandbox/releases/latest/download/sbx-$(uname -s)-$(uname -m)"
+chmod +x ~/.local/bin/sbx
 ssh sbx-host sudo cat /etc/sbx/token | sbx login http://sbx-host:7070
 sbx status
 ```
+
+[docs/guide.md](docs/guide.md#install) covers installing from a checkout and the installer's settings.
 
 ## Documentation
 

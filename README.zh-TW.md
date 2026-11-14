@@ -128,21 +128,22 @@ sbx exec $id hinacode pair
 
 `sbx` 主機需要具備 `/dev/kvm` 的 `x86_64` Linux 機器，可為實體機，或支援巢狀虛擬化的雲端執行個體與 Proxmox 虛擬機。安裝腳本原生支援 Debian 與 Ubuntu，在其他發行版上則會列出需先安裝的指令。`sbx` CLI 可在 macOS 與 Linux 上執行，只需能透過 HTTP 連線至主機即可。
 
-在已安裝 Go 的專案目錄中，於主機上安裝 daemon、Firecracker、客體機核心，以及 `default` 與 `browser` 範本：
+在主機上執行一行指令，即可安裝 daemon、Firecracker、預先建置的客體機核心，以及 `default` 與 `browser` 範本：
 
 ```sh
-make install                                   # on the sbx host itself
-make install HOST=me@sbx-host                  # or from another machine, over ssh
-make install HOST=me@sbx-host INSTALL_ENV=SBX_DATA_DISK=/dev/sdb
+curl -fsSL https://github.com/kjj6198/agent-sandbox/releases/latest/download/install.sh | sudo bash
 ```
 
 接著，在每台執行 agent 的機器上安裝 CLI：
 
 ```sh
-make cli && cp bin/sbx ~/.local/bin/
+curl -fsSL -o ~/.local/bin/sbx "https://github.com/kjj6198/agent-sandbox/releases/latest/download/sbx-$(uname -s)-$(uname -m)"
+chmod +x ~/.local/bin/sbx
 ssh sbx-host sudo cat /etc/sbx/token | sbx login http://sbx-host:7070
 sbx status
 ```
+
+從原始碼安裝與安裝腳本的設定，請見 [docs/guide.md](docs/guide.md#install)。
 
 ## 文件索引
 
