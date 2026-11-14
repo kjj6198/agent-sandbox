@@ -1,0 +1,19 @@
+services:
+  sbxd:
+    image: ghcr.io/kjj6198/agent-sandbox:latest
+    build: .
+    # sbxd creates network namespaces, nftables rules, and jailed Firecracker processes.
+    privileged: true
+    ports:
+      - "7070:7070"
+      - "30000-30099:30000-30099"
+    volumes:
+      - sbx-data:/var/lib/sbx
+      - sbx-etc:/etc/sbx
+      - sbx-images:/var/lib/containers
+    restart: unless-stopped
+
+volumes:
+  sbx-data:
+  sbx-etc:
+  sbx-images:

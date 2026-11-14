@@ -134,6 +134,8 @@ On the host, one line installs the daemon, Firecracker, a prebuilt guest kernel,
 curl -fsSL https://github.com/kjj6198/agent-sandbox/releases/latest/download/install.sh | sudo bash
 ```
 
+Or run the daemon in Docker, which leaves the host's packages and firewall alone. From a checkout, `docker compose up -d` builds and starts it; [the guide](docs/guide.md#with-docker) has the `docker run` line.
+
 Then, on each machine that runs agents:
 
 ```sh
