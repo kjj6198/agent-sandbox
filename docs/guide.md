@@ -40,6 +40,23 @@ The installer downloads the release bundle, installs packages and Firecracker, i
 
 On XFS or Btrfs, each sandbox's disk is a reflink of the template's. On other filesystems it is a sparse copy, which takes 3 ms for a fresh template and longer for snapshot templates with many written files.
 
+### With Docker
+
+On a Linux host with `/dev/kvm` and Docker, sbxd can run in a container instead, which leaves the host's packages, firewall, and services alone:
+
+```sh
+docker run -d --name sbx --privileged --restart unless-stopped \
+  -p 7070:7070 -p 30000-30099:30000-30099 \
+  -v sbx-data:/var/lib/sbx -v sbx-etc:/etc/sbx -v sbx-images:/var/lib/containers \
+  ghcr.io/kjj6198/agent-sandbox
+docker logs -f sbx                     # the first start builds the templates, about 5 minutes
+docker exec sbx cat /etc/sbx/token | sbx login http://localhost:7070
+```
+
+`docker compose up -d` in a checkout does the same and builds the image if it cannot pull it. Sandboxes, templates, the token, and environments live in the volumes, so they survive a new image. Stopping the container stops its sandboxes.
+
+The container is privileged because sbxd creates network namespaces, nftables rules, and jailed Firecracker processes. A privileged container is not a security boundary, so give it the same trust as a host install. Its sandboxes are isolated the same way. `sbx expose` uses ports 30000 to 30099 here, set in `deploy/docker/sbxd.json`, because Docker starts a proxy process for every published port.
+
 ### From a checkout
 
 With Go installed, `make install` builds the binaries and runs the same installer, which then builds the guest kernel itself (about 3 more minutes):
@@ -211,7 +228,7 @@ sbx fork $id                         # the same, as a one-off clone
 | `templates/default` | sbx host | Dockerfile of the default image |
 | `templates/ubuntu` | sbx host | Dockerfile of the Ubuntu image, built on top of the default image |
 | `kernel/` | sbx host | Guest kernel config and build script |
-| `deploy/` | sbx host | Installer and systemd unit. `deploy/proxmox` holds the optional Proxmox setup |
+| `deploy/` | sbx host | Installer and systemd unit. `deploy/docker` holds the container image's entrypoint and config, `deploy/proxmox` the optional Proxmox setup |
 | `skill/sbx/SKILL.md` | where agents run | Skill for Claude Code, Grok, and other agents that read `~/.claude/skills` |
 
 ## How a sandbox is made

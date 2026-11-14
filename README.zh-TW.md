@@ -134,6 +134,8 @@ sbx exec $id hinacode pair
 curl -fsSL https://github.com/kjj6198/agent-sandbox/releases/latest/download/install.sh | sudo bash
 ```
 
+也可以用 Docker 執行 daemon，不會動到主機的套件與防火牆。在專案目錄中執行 `docker compose up -d` 即可建置並啟動；`docker run` 的寫法請見[使用指南](docs/guide.md#with-docker)。
+
 接著，在每台執行 agent 的機器上安裝 CLI：
 
 ```sh
