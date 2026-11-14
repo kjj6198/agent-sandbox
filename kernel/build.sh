@@ -8,7 +8,7 @@
 # Docker inside the guest, /proc/config.gz).
 set -euo pipefail
 
-VERSION=${KERNEL_VERSION:-6.18.56}
+VERSION=${KERNEL_VERSION:-6.18.63}
 OUT=${1:?usage: build.sh OUT_DIR}
 HERE=$(cd "$(dirname "$0")" && pwd)
 WORK=${WORK:-/var/tmp/sbx-kernel}
