@@ -1,3 +1,5 @@
 .context/
 __pycache__/
 .DS_Store
+/bin/
+/dist/

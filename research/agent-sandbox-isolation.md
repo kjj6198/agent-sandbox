@@ -84,7 +84,7 @@ All three tools ran the same guest on the same hardware, and a harness timed the
 - **Guest.** One Linux 6.18.56 kernel built from Firecracker's 6.18 config, used by both VMMs. One Debian 13 image of 2.3 GB with Chromium 155, Node 20, Python 3.13, git, and gcc, used by every backend: as an ext4 disk for the VMs, as an OCI bundle for raw runsc and runc, and as a Docker image. Every sandbox had 2 vCPUs and 1 GiB of memory.
 - **Timing.** The clock starts right before the harness launches the runtime. It stops when `echo ok` comes back through a small command agent inside the sandbox. Network devices, namespaces, and config files are created before the clock starts, as a sandbox pool would do. Trials run round-robin across backends, 30 per backend after 2 discarded warm-ups unless stated otherwise.
 - **Raw data.** Every record is in [raw/](raw/). [raw/summary.md](raw/summary.md) has the full tables.
-- **Code.** The harness, launch scripts, guest image, and kernel config are in [lab/](../lab/).
+- **Code.** The harness, launch scripts, guest image, and kernel config are in [lab/](lab/).
 
 ### gVisor cold-starts fastest, and nesting hurts Firecracker most
 
